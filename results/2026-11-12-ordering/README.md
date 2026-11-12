@@ -47,7 +47,7 @@ AUC(halflife) − AUC(other), 95% CI: model_p **[−0.064, −0.023]** (half-lif
 
 **Leakage check.** Haiku 5.5's reliable knowledge cutoff is June 2026. On sample claims with as-of ≥ 2026-07-01
 (n = 185, 41 stale) the model still leads: model_p 0.827 vs halflife 0.773, CI [−0.094, −0.021]. So the gap is
-not explained by the model already knowing the answer.
+not explained by the model already knowing the answer. Data: `leakage_check.json`.
 
 **Post-hoc (not pre-registered):** rank-averaging halflife with model_p gives 0.810, below model_p alone
 (CI [−0.028, −0.004]). `posthoc_combination.json`.
@@ -93,7 +93,7 @@ which carry almost no likelihood information. Worst per-class |predicted − obs
 decay-based cache TTL ships **labelled experimental**.
 
 ## Cost
-Model ratings: 300 Haiku 5.5 calls, `reasoning_effort: none`, **$0.0088** measured as the delta of the virtual
+Model ratings: 300 Haiku 5.5 calls, `reasoning_effort: none`, **$0.0088** (`cost.json`) measured as the delta of the virtual
 key's budget usage (`halflife-dev`). The run's own counter printed $0.00 because Bifrost chat responses carry no
 cost field; fixed (`BifrostClient.vk_spend_usd`) after this run.
 

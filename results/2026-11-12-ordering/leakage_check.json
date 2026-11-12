@@ -1,0 +1,51 @@
+{
+  "note": "Leakage check: model sample claims with as-of on/after the model's knowledge cutoff (2026-07-01). Reproduce: this computation over model_ratings.json with eval.ordering functions.",
+  "asof_on_or_after_2026_07_01": {
+    "n": 185,
+    "n_stale": 41,
+    "auc": {
+      "halflife": 0.7728,
+      "class_only": 0.6552,
+      "age_only": 0.6021,
+      "random": 0.4927,
+      "model_ts": 0.7566,
+      "model_p": 0.8267
+    },
+    "ci95_auc_diff_halflife_minus": {
+      "model_ts": [
+        -0.0346,
+        0.0143,
+        0.0647
+      ],
+      "model_p": [
+        -0.0938,
+        -0.055,
+        -0.0214
+      ]
+    }
+  },
+  "asof_before_2026_07_01": {
+    "n": 115,
+    "n_stale": 43,
+    "auc": {
+      "halflife": 0.7655,
+      "class_only": 0.7289,
+      "age_only": 0.5597,
+      "random": 0.4978,
+      "model_ts": 0.7601,
+      "model_p": 0.8019
+    },
+    "ci95_auc_diff_halflife_minus": {
+      "model_ts": [
+        -0.0289,
+        0.0054,
+        0.0395
+      ],
+      "model_p": [
+        -0.0689,
+        -0.0363,
+        -0.0102
+      ]
+    }
+  }
+}

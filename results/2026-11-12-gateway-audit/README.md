@@ -16,5 +16,8 @@ mix time-sensitive and timeless topics, so these stale rates describe this demo 
 | claude-haiku-5-5 | demo-support-bot | 13 | 9 | 7 | 0.778 |
 
 Run cost: 110 model calls, $0.0546 (token estimate), 88 Tavily credits (26 cache hits), 95.6 s wall time for 50
-answers with 60 claims verified (budget). The J2 done-check (`tests/test_gateway.py`, live) confirms the stored
+answers with 51 claims verified (verification budget 60). The J2 done-check (`tests/test_gateway.py`, live) confirms the stored
 ledger stale rate equals the per-answer reports for 10 fresh requests.
+
+This audit ran before the ledger was seeded with fitted half-lives, so `summary.json` lists every class as
+`prior_guess`. Stale rates come from verdicts and are unaffected; only ranking fallbacks and TTLs use half-lives.

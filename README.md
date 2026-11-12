@@ -38,11 +38,13 @@ Tavily API key (free tier: 1,000 credits/month).
 
 ```bash
 git clone <this repo> halflife && cd halflife
-cp .env.example .env    # fill ANTHROPIC_API_KEY, TAVILY_API_KEY, BIFROST_ADMIN_PASSWORD, BIFROST_SETUP_TOKEN
+cp .env.example .env    # fill ANTHROPIC_API_KEY, TAVILY_API_KEY, BIFROST_ADMIN_USERNAME/PASSWORD, BIFROST_SETUP_TOKEN
+                        # (HALFLIFE_CONTACT_URL only for the eval scripts: Wikidata wants a contact URL)
 uv sync
 make bifrost            # stock Bifrost v2.5.1 via npx on :8088 (BIFROST_PORT), admin auth from .env
 make setup              # Anthropic provider, Tavily relay, virtual key "halflife-dev" ($10 budget), fitted half-lives
-make api                # Half-Life API + UI on http://localhost:8091
+make api                # Half-Life API + UI on http://localhost:8091 (stays in the foreground; use a
+                        # second terminal, or `make api-bg`). Other port: make api PORT_API=<port>
 ```
 
 Check one answer:

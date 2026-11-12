@@ -17,3 +17,5 @@ node_modules/
 docs/_ref/
 data/histories/raw/
 .hypothesis/
+data/gateway_summary.json
+data/seeded_requests.json

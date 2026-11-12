@@ -1,0 +1,9 @@
+{
+  "model_rating_cost_usd": 0.0088,
+  "method": "delta of virtual key halflife-dev budget current_usage around the 300 rating calls",
+  "readings": {
+    "before_usd": 0.00031,
+    "after_usd": 0.0091516
+  },
+  "note": "Run-time counter printed 0.00 (Bifrost chat responses carry no cost field); fixed after this run (BifrostClient.vk_spend_usd, token-based estimate)."
+}
