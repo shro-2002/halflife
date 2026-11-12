@@ -1,0 +1,193 @@
+{
+  "eval_date": "2026-11-12",
+  "n_cases": 108,
+  "n_stale": 38,
+  "detector": {
+    "n_time_sensitive": 83,
+    "tp": 37,
+    "fp": 7,
+    "fn": 1,
+    "tn": 38,
+    "precision": 0.8409090909090909,
+    "recall": 0.9736842105263158,
+    "unverifiable_rate": 0.03614457831325301,
+    "timeless_n": 25,
+    "timeless_flagged": 0,
+    "timeless_searched": 0,
+    "precision_ci95_by_url": [
+      0.733,
+      0.944
+    ],
+    "recall_ci95_by_url": [
+      0.912,
+      1.0
+    ],
+    "n_source_urls": 82
+  },
+  "confusion": {
+    "stale": {
+      "changed": 37,
+      "current": 1
+    },
+    "current": {
+      "unverifiable": 3,
+      "current": 26,
+      "not_searched": 9,
+      "changed": 7
+    },
+    "timeless": {
+      "not_searched": 25
+    }
+  },
+  "budget": {
+    "model_p": {
+      "caught_at_25": {
+        "point": 0.477,
+        "ci95_by_url": [
+          0.378,
+          0.588
+        ]
+      },
+      "caught_at_50": {
+        "point": 0.821,
+        "ci95_by_url": [
+          0.7,
+          0.945
+        ]
+      },
+      "caught_at_100": {
+        "point": 0.974,
+        "ci95_by_url": [
+          0.912,
+          1.0
+        ]
+      }
+    },
+    "half_life": {
+      "caught_at_25": {
+        "point": 0.379,
+        "ci95_by_url": [
+          0.267,
+          0.488
+        ]
+      },
+      "caught_at_50": {
+        "point": 0.715,
+        "ci95_by_url": [
+          0.591,
+          0.859
+        ]
+      },
+      "caught_at_100": {
+        "point": 0.974,
+        "ci95_by_url": [
+          0.912,
+          1.0
+        ]
+      }
+    },
+    "random": {
+      "caught_at_25": {
+        "point": 0.246
+      },
+      "caught_at_50": {
+        "point": 0.487
+      },
+      "caught_at_100": {
+        "point": 0.974
+      }
+    }
+  },
+  "cost_latency_by_budget_model_order": {
+    "25%": {
+      "model_cost_usd_per_answer": 0.000306,
+      "tavily_credits_per_answer": 0.48,
+      "latency_s_per_answer_mean": 2.37,
+      "latency_s_per_answer_median": 1.36
+    },
+    "50%": {
+      "model_cost_usd_per_answer": 0.00047,
+      "tavily_credits_per_answer": 0.98,
+      "latency_s_per_answer_mean": 3.55,
+      "latency_s_per_answer_median": 3.36
+    },
+    "100%": {
+      "model_cost_usd_per_answer": 0.000579,
+      "tavily_credits_per_answer": 1.31,
+      "latency_s_per_answer_mean": 4.31,
+      "latency_s_per_answer_median": 4.89
+    }
+  },
+  "per_class": {
+    "law_or_regulation": {
+      "n_time_sensitive": 21,
+      "tp": 10,
+      "fp": 1,
+      "fn": 0,
+      "tn": 10,
+      "precision": 0.9090909090909091,
+      "recall": 1.0,
+      "too_thin_to_read": false
+    },
+    "office_holder": {
+      "n_time_sensitive": 18,
+      "tp": 8,
+      "fp": 1,
+      "fn": 0,
+      "tn": 9,
+      "precision": 0.8888888888888888,
+      "recall": 1.0,
+      "too_thin_to_read": false
+    },
+    "price": {
+      "n_time_sensitive": 13,
+      "tp": 6,
+      "fp": 0,
+      "fn": 0,
+      "tn": 7,
+      "precision": 1.0,
+      "recall": 1.0,
+      "too_thin_to_read": true
+    },
+    "product_spec": {
+      "n_time_sensitive": 5,
+      "tp": 2,
+      "fp": 2,
+      "fn": 0,
+      "tn": 1,
+      "precision": 0.5,
+      "recall": 1.0,
+      "too_thin_to_read": true
+    },
+    "rate_or_statistic": {
+      "n_time_sensitive": 12,
+      "tp": 4,
+      "fp": 1,
+      "fn": 1,
+      "tn": 6,
+      "precision": 0.8,
+      "recall": 0.8,
+      "too_thin_to_read": true
+    },
+    "software_version": {
+      "n_time_sensitive": 14,
+      "tp": 7,
+      "fp": 2,
+      "fn": 0,
+      "tn": 5,
+      "precision": 0.7777777777777778,
+      "recall": 1.0,
+      "too_thin_to_read": true
+    },
+    "timeless": {
+      "n": 25,
+      "flagged": 0,
+      "searched": 0
+    }
+  },
+  "half_lives_used": "J0.5 fitted (results/2026-11-12-ordering) where available, else prior guesses",
+  "live_spend": {
+    "vk_delta_usd": 0.062555,
+    "cases_run": 108
+  }
+}

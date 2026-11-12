@@ -114,3 +114,12 @@ def test_nonpositive_half_life_rejected():  # V1 #12
     with pytest.raises(ValueError):
         p_stale(10, 0)
     assert p_stale(float("nan"), 100) == 0.0
+
+
+async def test_changed_with_numerically_equal_value_is_not_a_change():  # J3 run 1: c-boc-rate
+    claim = Claim(id="c1", text="The Bank of Canada's policy interest rate is 2.5%.", span="The Bank of Canada's policy interest rate is 2.5%.",
+                  volatility_class=VolatilityClass.RATE_OR_STATISTIC, subject="Bank of Canada policy rate", p_outdated_model=0.5)
+    ev = {"url": "https://www.bankofcanada.ca", "content": "Policy interest rate 2.50% Oct 28, 2026"}
+    out = await verify_claim(claim, judge(supports=[{"url": ev["url"], "quote": "Policy interest rate 2.50% Oct 28, 2026"}],
+                                          current_value="2.50%"), FakeSearch({"canada": [ev]}), today=TODAY)
+    assert out.verdict.label is VerdictLabel.UNVERIFIABLE

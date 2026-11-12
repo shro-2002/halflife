@@ -229,10 +229,18 @@ def _tokens(text: str) -> set[str]:
     return {t for t in _TOKEN_RE.findall(_norm(text)) if t not in _STOP}
 
 
+_TRAILING_ZEROS = re.compile(r"(\d+)\.(\d*?)0+(?!\d)")
+
+
+def _num_norm(text: str) -> str:
+    """'2.50%' -> '2.5%', '4.00' -> '4': numerically equal values compare equal."""
+    return _TRAILING_ZEROS.sub(lambda m: m.group(1) + ("." + m.group(2) if m.group(2) else ""), _norm(text))
+
+
 def _contains_token(haystack: str, needle: str) -> bool:
-    """Whole-token match: '75' does not match inside '3.75%'."""
-    n = _norm(needle).strip()
-    return bool(n) and re.search(r"(?<![0-9a-z.])" + re.escape(n) + r"(?![0-9a-z])", _norm(haystack)) is not None
+    """Whole-token match: '75' does not match inside '3.75%'; '2.50%' matches '2.5%'."""
+    n = _num_norm(needle).strip()
+    return bool(n) and re.search(r"(?<![0-9a-z.])" + re.escape(n) + r"(?![0-9a-z])", _num_norm(haystack)) is not None
 
 
 def _relevant(quote: str, claim: Claim, label: VerdictLabel, value: Any) -> bool:
