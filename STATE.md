@@ -51,7 +51,7 @@
 | Lead | everything else (schemas, clients, risk.py, fit.py, results/, STATE.md) |
 
 ## Remains
-- GATE 2: awaiting user approval of labels. Then J3 (J2 may start now; reads M1 only). Done: fan-out W1–W6, V1–V3, GATE 2, M1, J2, J3, J4, J5, V4, GATE 3, J6.
+- GATE 3: awaiting user go for push/deploy/upstream issue. Done: A case fixes, J3, J2 (a-d), J4, J5, V4 (2 rounds: quickstart 133 s, all numbers traceable after fixes). No cuts applied. Earlier: fan-out W1–W6, V1–V3, GATE 2, M1, J2, J3, J4, J5, V4, GATE 3, J6.
 - Item 4: measure cost/latency per check on 10 answers before J3, record here.
 - Item 7: #9748 thread read 2026-11-12 21:03 IST: no maintainer reply, only a CodeRabbit bot comment (links merged relay PR #9170). Its asks: plugin location, `plugin_metadata` on stream chunks, shared plugin cache. UPSTREAM.md must not repeat those; re-read before writing.
 - M1 notes from W3: verbatim-but-weak quote can still count as strong support (UN photo caption on un.org) -> judge prompt must require the quote to state the fact; carry VerifyOutcome.strong_support into the 95/80 score; when both searches fail, searched=True with verdict None -> score as unverified. current_value prompt changed to value-only (untested live).
