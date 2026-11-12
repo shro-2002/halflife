@@ -32,7 +32,7 @@ RESULTS = ROOT / "eval" / "cases_sources" / "search_results.jsonl"
 DATE_CHECKED = "2026-11-12"
 LABELS = {"stale", "current", "timeless"}
 FIELDS = {"id", "claim", "volatility_class", "as_of", "label", "current_truth", "source_url",
-          "supporting_quote", "query", "date_checked", "notes"}
+          "supporting_quote", "query", "date_checked", "notes", "former_value_source"}
 CLASSES = {c.value for c in VolatilityClass}
 SEARCH_CONCURRENCY = 4
 
@@ -117,7 +117,7 @@ def cache_check(cases: list[dict]) -> tuple[int, int, list[str]]:
 
 def case_errors(case: dict, index: dict[tuple[str, str], list[str]]) -> list[str]:
     errs = []
-    missing = FIELDS - set(case) - {"notes"}
+    missing = FIELDS - set(case) - {"notes", "former_value_source"}
     if missing:
         errs.append(f"missing fields {sorted(missing)}")
     if set(case) - FIELDS:

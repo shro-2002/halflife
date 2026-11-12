@@ -127,3 +127,30 @@ independent topics.
 - `cases_sources/specs_batch1-4.json`: the query specs.
 
 Tavily cost: 101 basic searches = 101 credits (all cache misses, 0 repeats).
+
+## Evaluation date (frozen) — 2026-11-12
+
+All labels are judged as of **2026-11-12** and every published result uses that date. "Current" means
+"valid on the eval date"; it is not a promise that the value still holds later. Cases expected to flip
+soon after the eval date (valid on the eval date only):
+
+| Case | Why it may flip |
+|---|---|
+| c-un-sg | UN Secretary-General's term ends 31 Dec 2026 |
+| c-fed-rate | next FOMC meeting in December 2026 |
+| c-boc-rate | next Bank of Canada decision in December 2026 |
+| c-ofgem-cap | next Ofgem price cap announced late November 2026 |
+| c-ecb-president | term ends 7 Feb 2027 |
+
+## Former values
+
+`former_value_source` on every stale case says where the claim's earlier value comes from:
+`source_quote` (the retrieved quote also shows the former value) or `annotator_notes` (the quote shows
+only today's value; the former value is the annotator's record of what held on `as_of`). 22 of 38 stale
+cases are `annotator_notes`. The label rests on the quote showing a different current value.
+
+## Recheck on 2026-11-12 (after Gate 2)
+- `s-us-cpi`: BLS released October 2026 CPI on 10 Nov 2026 **without a 12-month change** (no October
+  2025 data after the shutdown). Truth pinned to the latest published 12-month figure: 3.7% for the 12
+  months ending September 2026.
+- `c-node-lts`: nodejs.org lists Node.js 26.13.1 (LTS, 2026-11-11) as the latest Node 26 release; unchanged.
