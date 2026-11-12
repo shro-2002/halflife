@@ -136,6 +136,7 @@ def test_api_requires_key_when_configured_and_rate_limits(monkeypatch):
     monkeypatch.setenv("HALFLIFE_API_KEY", "k-test")
     monkeypatch.setattr(api, "RATE_LIMIT_PER_MIN", 2)
     api._hits.clear()
+    api._fails.clear()
 
     async def fake_check(answer, **_):
         from halflife.schemas import AnswerReport
@@ -145,4 +146,8 @@ def test_api_requires_key_when_configured_and_rate_limits(monkeypatch):
         assert client.post("/v1/check", json={"answer": "x"}).status_code == 401
         ok = {"x-halflife-key": "k-test"}
         assert client.post("/v1/check", json={"answer": "x"}, headers=ok).status_code == 200
-        assert client.post("/v1/check", json={"answer": "x"}, headers=ok).status_code == 429  # 401 counted too
+        assert client.post("/v1/check", json={"answer": "x"}, headers=ok).status_code == 200
+        assert client.post("/v1/check", json={"answer": "x"}, headers=ok).status_code == 429
+        for _ in range(api.FAILED_AUTH_PER_MIN):
+            client.post("/v1/check", json={"answer": "x"}, headers={"x-halflife-key": "wrong"})
+        assert client.post("/v1/check", json={"answer": "x"}, headers={"x-halflife-key": "wrong"}).status_code == 429

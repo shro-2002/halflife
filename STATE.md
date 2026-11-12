@@ -27,6 +27,9 @@
 - Positioning (README/UPSTREAM/SUBMISSION): lead with (a) traffic audit stale rate per model and VK, (b) budgeted verification with the measured curve, (c) decay-based cache TTL. State plainly the model's rating ranks better; ordering data covers 4 classes only (no prices, laws).
 - Calibration rule: refit on last 24 months before cutoff; keep the better-calibrated fit; if neither within ~0.10 per class, TTL ships "experimental" with the reason in README.
 
+- V1 (correctness) fixed in M1: fail-open on any extract/verify exception, authority by URL on a validated domain only, model_p claims ranked before half-life fallbacks, estimated/unverified scores use the ranking probability, rescore_aged chain-safe, refit ignores age<=0, whole-token current_value that must differ from the claim, quote relevance + min 12 chars + untrusted-evidence judge prompt, guards on non-positive half-lives. Not fixed: #10 silent span dedupe (minor), #11 ledger dupes without request id (moot: only the audit writes the ledger). tests/test_regressions.py.
+- Security fixes: /v1/check optional key + separate per-IP windows for allowed requests and failed auth, idle windows evicted; ad-hoc checks not recorded in the ledger.
+
 ## Fan-out ownership (one writer per file; workers never commit, lead merges)
 | Node | Files it may write |
 |---|---|

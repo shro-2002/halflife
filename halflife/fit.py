@@ -40,7 +40,9 @@ def _neg_log_posterior(log_lam: float, ages_changed: list[float], sum_unchanged:
 
 def fit_half_life(observations: Iterable[tuple[float, bool]], prior_half_life_days: float,
                   prior_shape: float = DEFAULT_PRIOR_SHAPE) -> FitResult:
-    obs = [(float(a), bool(c)) for a, c in observations if a > 0]
+    if not prior_half_life_days > 0 or not prior_shape > 0:
+        raise ValueError("prior half-life and shape must be positive")
+    obs = [(float(a), bool(c)) for a, c in observations if a > 0 and math.isfinite(a)]
     lam0 = LN2 / prior_half_life_days
     rate = prior_shape / lam0
     ages_changed = [a for a, c in obs if c]

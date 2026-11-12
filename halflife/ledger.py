@@ -146,7 +146,7 @@ class Ledger:
         rows = []
         with self.conn:
             for cls, prior in PRIOR_HALF_LIFE_DAYS.items():
-                obs = self.outcomes(cls)
+                obs = [(a, c) for a, c in self.outcomes(cls) if a > 0]  # the fit ignores age <= 0
                 old_h, old_src = current[cls]
                 n_changed = sum(changed for _, changed in obs)
                 if len(obs) < min_outcomes:

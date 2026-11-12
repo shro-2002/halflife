@@ -13,8 +13,10 @@ DEFAULT_EPSILON = 0.05  # tolerated probability that a cached answer is stale
 
 
 def p_stale(age_days: float, half_life_days: float | None) -> float:
-    if half_life_days is None or age_days <= 0:
+    if half_life_days is None or not age_days > 0:  # also catches NaN
         return 0.0
+    if not half_life_days > 0:
+        raise ValueError(f"half-life must be positive, got {half_life_days}")
     return 1.0 - 2.0 ** (-age_days / half_life_days)
 
 

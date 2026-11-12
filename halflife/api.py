@@ -39,22 +39,39 @@ SUMMARY_PATH = ROOT / "data" / "gateway_summary.json"
 MAX_ANSWER_CHARS = 20_000
 MAX_BUDGET = 20
 RATE_LIMIT_PER_MIN = int(os.environ.get("HALFLIFE_RATE_LIMIT_PER_MIN", "10"))
-_hits: dict[str, deque[float]] = defaultdict(deque)
+FAILED_AUTH_PER_MIN = 5
+# ponytail: in-process sliding windows, per replica; use a shared store if scaled out.
+_hits: dict[str, deque[float]] = defaultdict(deque)  # allowed requests, per client
+_fails: dict[str, deque[float]] = defaultdict(deque)  # failed auth attempts, per client
+
+
+def _over_limit(buckets: dict[str, deque[float]], key: str, limit: int, *, record: bool) -> bool:
+    now, window = time.monotonic(), buckets[key]
+    while window and now - window[0] > 60:
+        window.popleft()
+    over = len(window) >= limit
+    if record and not over:
+        window.append(now)
+    if not window:
+        del buckets[key]  # evict idle clients so state stays bounded
+    return over
+
+
+def _too_many(key: str) -> HTTPException:
+    return HTTPException(status_code=429, detail={"code": "RATE_LIMITED", "message": "try again in a minute"},
+                         headers={"Retry-After": "60"})
 
 
 def require_access(request: Request, x_halflife_key: str | None = Header(default=None)) -> None:
-    # ponytail: in-process sliding window, per replica; move to Redis/Bifrost rate limits if scaled out
+    # Client IP as seen by uvicorn; behind a proxy run uvicorn with --proxy-headers --forwarded-allow-ips.
     ip = request.client.host if request.client else "unknown"
-    now, window = time.monotonic(), _hits[ip]
-    while window and now - window[0] > 60:
-        window.popleft()
-    if len(window) >= RATE_LIMIT_PER_MIN:
-        raise HTTPException(status_code=429, detail={"code": "RATE_LIMITED", "message": "try again in a minute"},
-                            headers={"Retry-After": "60"})
-    window.append(now)  # counted before auth, so failed keys are rate-limited too
     expected = os.environ.get("HALFLIFE_API_KEY", "")
     if expected and not hmac.compare_digest((x_halflife_key or "").encode(), expected.encode()):
+        if _over_limit(_fails, ip, FAILED_AUTH_PER_MIN, record=True):
+            raise _too_many(ip)
         raise HTTPException(status_code=401, detail={"code": "UNAUTHORIZED", "message": "missing or bad x-halflife-key"})
+    if _over_limit(_hits, ip, RATE_LIMIT_PER_MIN, record=True):
+        raise _too_many(ip)
 
 
 class CheckRequest(BaseModel):

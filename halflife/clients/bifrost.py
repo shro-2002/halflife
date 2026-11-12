@@ -91,7 +91,10 @@ class BifrostClient:
         latency_ms = (time.perf_counter() - started) * 1000
         if resp.status_code != 200:
             raise ModelError(f"bifrost {resp.status_code}: {resp.text[:300]}")
-        data = resp.json()
+        try:
+            data = resp.json()
+        except ValueError as err:
+            raise ModelError(f"bifrost returned non-JSON body: {resp.text[:120]!r}") from err
         choice = (data.get("choices") or [{}])[0]
         text = (choice.get("message") or {}).get("content")
         if not text:

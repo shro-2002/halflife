@@ -87,8 +87,9 @@ def assess_risk(claim: Claim, opts: CheckOptions, half_lives: HalfLives) -> Risk
 
 
 def select_for_verification(claims: list[Claim], risks: list[RiskScore], budget: int | None) -> list[int]:
+    # model_p and half-life p_stale are different scales: model-ranked claims go first, fallback after.
     eligible = [i for i, c in enumerate(claims) if is_time_sensitive(c)]
-    eligible.sort(key=lambda i: (-risks[i].rank_score, i))
+    eligible.sort(key=lambda i: (risks[i].rank_basis != "model_p", -risks[i].rank_score, i))
     return eligible if budget is None else eligible[: max(budget, 0)]
 
 
@@ -98,7 +99,8 @@ def build_claim_report(claim: Claim, risk: RiskScore, outcome: VerifyOutcome | N
     score, basis = freshness_score(
         volatility_class=VolatilityClass.TIMELESS if not is_time_sensitive(claim) else claim.volatility_class,
         searched=searched, verdict=verdict.label if verdict else None,
-        p=risk.p_stale, authoritative_or_two_sources=bool(outcome and outcome.strong_support),
+        # Same signal that ranked the claim: model probability when present, else half-life.
+        p=risk.rank_score, authoritative_or_two_sources=bool(outcome and outcome.strong_support),
     )
     return ClaimReport(
         claim=claim, risk=risk, searched=searched, evidence=outcome.evidence if outcome else [],
@@ -124,7 +126,7 @@ async def check_answer(answer: str, *, model: ChatModel, searcher: Searcher, opt
         async with sem:
             return i, await verify_claim(claims[i], model, searcher, today=opts.today)
 
-    outcomes: dict[int, VerifyOutcome] = dict(await asyncio.gather(*(run(i) for i in chosen)))
+    outcomes: dict[int, VerifyOutcome] = dict(await asyncio.gather(*(run(i) for i in chosen)))  # verify never raises
     for o in outcomes.values():
         usage.tavily_calls += o.searches
         usage.tavily_credits += o.credits
@@ -158,7 +160,9 @@ def rescore_aged(report: AnswerReport, *, today: date, half_lives: HalfLives | N
             risk = cr.risk.model_copy(update={"age_days": age, "p_stale": round(p, 4)})
             cr = cr.model_copy(update={"risk": risk, "freshness_score": score, "score_basis": basis})
         out.append(cr)
-    return report.model_copy(update={"claims": out, "answer_score": answer_score([c.freshness_score for c in out])})
+    checked_at = datetime.combine(today, report.checked_at.timetz()) if delta > 0 else report.checked_at
+    return report.model_copy(update={"claims": out, "checked_at": checked_at,
+                                     "answer_score": answer_score([c.freshness_score for c in out])})
 
 
 __all__ = ["CheckOptions", "check_answer", "rescore_aged", "assess_risk", "select_for_verification",

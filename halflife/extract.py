@@ -65,6 +65,8 @@ async def extract_claims(answer: str, model: ChatModel, *, as_of: date, today: d
         result = await model.chat(build_messages(answer, as_of=as_of, today=today), max_tokens=MAX_TOKENS)
     except ModelError as err:
         return ExtractResult(claims=[], errors=[f"extract: model error: {err}"], model_calls=1)
+    except Exception as err:  # noqa: BLE001 - fail open: extraction never breaks the report
+        return ExtractResult(claims=[], errors=[f"extract: {type(err).__name__}: {err}"], model_calls=1)
     items = parse_json_list(result.text)
     if items is None:
         return ExtractResult(claims=[], errors=[f"extract: malformed JSON: {result.text[:120]!r}"],
