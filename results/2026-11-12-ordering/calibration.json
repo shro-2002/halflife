@@ -1,0 +1,201 @@
+{
+  "half_lives_full": {
+    "office_holder": {
+      "prior_guess_days": 900.0,
+      "fitted_days": 1626.9,
+      "n": 675,
+      "n_changed": 72
+    },
+    "software_version": {
+      "prior_guess_days": 120.0,
+      "fitted_days": 83.2,
+      "n": 130,
+      "n_changed": 82
+    },
+    "rate_or_statistic": {
+      "prior_guess_days": 150.0,
+      "fitted_days": 55.2,
+      "n": 64,
+      "n_changed": 44
+    }
+  },
+  "half_lives_window_24m": {
+    "office_holder": {
+      "prior_guess_days": 900.0,
+      "fitted_days": 2259.3,
+      "n": 575,
+      "n_changed": 25
+    },
+    "software_version": {
+      "prior_guess_days": 120.0,
+      "fitted_days": 83.2,
+      "n": 111,
+      "n_changed": 63
+    },
+    "rate_or_statistic": {
+      "prior_guess_days": 150.0,
+      "fitted_days": 55.2,
+      "n": 56,
+      "n_changed": 36
+    }
+  },
+  "test_full__halflife_full": {
+    "office_holder": {
+      "n": 670,
+      "observed": 0.039,
+      "predicted": 0.058,
+      "abs_error": 0.019,
+      "within_0_10": true
+    },
+    "rate_or_statistic": {
+      "n": 76,
+      "observed": 0.342,
+      "predicted": 0.609,
+      "abs_error": 0.267,
+      "within_0_10": false
+    },
+    "software_version": {
+      "n": 148,
+      "observed": 0.764,
+      "predicted": 0.515,
+      "abs_error": 0.248,
+      "within_0_10": false
+    },
+    "timeless": {
+      "n": 154,
+      "observed": 0.0,
+      "predicted": 0.0,
+      "abs_error": 0.0,
+      "within_0_10": true
+    }
+  },
+  "test_full__halflife_window_24m": {
+    "office_holder": {
+      "n": 670,
+      "observed": 0.039,
+      "predicted": 0.043,
+      "abs_error": 0.004,
+      "within_0_10": true
+    },
+    "rate_or_statistic": {
+      "n": 76,
+      "observed": 0.342,
+      "predicted": 0.609,
+      "abs_error": 0.267,
+      "within_0_10": false
+    },
+    "software_version": {
+      "n": 148,
+      "observed": 0.764,
+      "predicted": 0.515,
+      "abs_error": 0.248,
+      "within_0_10": false
+    },
+    "timeless": {
+      "n": 154,
+      "observed": 0.0,
+      "predicted": 0.0,
+      "abs_error": 0.0,
+      "within_0_10": true
+    }
+  },
+  "sample__halflife_full": {
+    "office_holder": {
+      "n": 75,
+      "observed": 0.027,
+      "predicted": 0.056,
+      "abs_error": 0.029,
+      "within_0_10": true
+    },
+    "rate_or_statistic": {
+      "n": 75,
+      "observed": 0.347,
+      "predicted": 0.615,
+      "abs_error": 0.268,
+      "within_0_10": false
+    },
+    "software_version": {
+      "n": 75,
+      "observed": 0.747,
+      "predicted": 0.488,
+      "abs_error": 0.259,
+      "within_0_10": false
+    },
+    "timeless": {
+      "n": 75,
+      "observed": 0.0,
+      "predicted": 0.0,
+      "abs_error": 0.0,
+      "within_0_10": true
+    }
+  },
+  "sample__halflife_window_24m": {
+    "office_holder": {
+      "n": 75,
+      "observed": 0.027,
+      "predicted": 0.041,
+      "abs_error": 0.015,
+      "within_0_10": true
+    },
+    "rate_or_statistic": {
+      "n": 75,
+      "observed": 0.347,
+      "predicted": 0.615,
+      "abs_error": 0.268,
+      "within_0_10": false
+    },
+    "software_version": {
+      "n": 75,
+      "observed": 0.747,
+      "predicted": 0.488,
+      "abs_error": 0.259,
+      "within_0_10": false
+    },
+    "timeless": {
+      "n": 75,
+      "observed": 0.0,
+      "predicted": 0.0,
+      "abs_error": 0.0,
+      "within_0_10": true
+    }
+  },
+  "sample__model_p": {
+    "office_holder": {
+      "n": 75,
+      "observed": 0.027,
+      "predicted": 0.156,
+      "abs_error": 0.13,
+      "within_0_10": false
+    },
+    "rate_or_statistic": {
+      "n": 75,
+      "observed": 0.347,
+      "predicted": 0.58,
+      "abs_error": 0.233,
+      "within_0_10": false
+    },
+    "software_version": {
+      "n": 75,
+      "observed": 0.747,
+      "predicted": 0.768,
+      "abs_error": 0.021,
+      "within_0_10": true
+    },
+    "timeless": {
+      "n": 75,
+      "observed": 0.0,
+      "predicted": 0.011,
+      "abs_error": 0.011,
+      "within_0_10": true
+    }
+  },
+  "max_abs_error_time_sensitive": {
+    "test_full__halflife_full": 0.267,
+    "test_full__halflife_window_24m": 0.267,
+    "sample__halflife_full": 0.268,
+    "sample__halflife_window_24m": 0.268,
+    "sample__model_p": 0.233
+  },
+  "kept_half_life_fit": "full",
+  "ttl_status": "experimental"
+}

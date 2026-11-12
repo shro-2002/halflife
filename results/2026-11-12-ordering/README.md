@@ -52,6 +52,17 @@ not explained by the model already knowing the answer.
 **Post-hoc (not pre-registered):** rank-averaging halflife with model_p gives 0.810, below model_p alone
 (CI [−0.028, −0.004]). `posthoc_combination.json`.
 
+## Headline (300-claim model sample, 84 stale) — `headline.json`
+
+Share of stale claims caught when verifying the top k% of claims. Point estimate (ties averaged over 200
+shuffles) with bootstrap 95% CI (1000 resamples). Reproduce: `uv run python -m eval.calibration`.
+
+| Ordering | caught @10% | caught @25% | caught @50% |
+|---|---|---|---|
+| Haiku outdated-probability, given as-of date (**product default**) | **0.357** [0.303, 0.429] | **0.748** [0.670, 0.836] | **0.980** [0.946, 1.000] |
+| Half-life (fitted per class) | 0.298 [0.238, 0.356] | 0.655 [0.556, 0.750] | 0.917 [0.850, 0.975] |
+| Random (expected) | 0.10 | 0.25 | 0.50 |
+
 ## Calibration on test (mean predicted P(stale) vs observed stale rate)
 
 | Class | n | observed | predicted | median age |
@@ -63,6 +74,23 @@ not explained by the model already knowing the answer.
 
 Rates were fitted on 2019–2024 outcomes (incl. the 2022–23 hiking cycle) and changed less often after the
 cutoff; versions changed faster. A single exponential per class drifts with regime.
+
+## Recalibration attempt (time-boxed, `calibration.json`)
+Refit on a rolling window: fit-split outcomes with as-of dates in the 24 months before the cutoff.
+Half-lives: software_version 83.2 d (unchanged), rate_or_statistic 55.2 d (unchanged), office_holder 2259 d
+(was 1627). Version and rate fits do not move because the outcomes dropped by the window are long-age changes,
+which carry almost no likelihood information. Worst per-class |predicted − observed| on the test split:
+0.267 for both fits, so the **full fit is kept**.
+
+| Class (test) | observed | half-life predicted | Haiku p_outdated (sample, n=75 per class) |
+|---|---|---|---|
+| office_holder | 0.039 | 0.058 ✓ | 0.156 (obs 0.027) ✗ |
+| rate_or_statistic | 0.342 | 0.609 ✗ | 0.580 (obs 0.347) ✗ |
+| software_version | 0.764 | 0.515 ✗ | 0.768 (obs 0.747) ✓ |
+| timeless | 0.000 | 0.000 ✓ | 0.011 ✓ |
+
+✓ = within 0.10. Neither the half-life fits nor Haiku's probability are within 0.10 on every class, so the
+decay-based cache TTL ships **labelled experimental**.
 
 ## Cost
 Model ratings: 300 Haiku 5.5 calls, `reasoning_effort: none`, **$0.0088** measured as the delta of the virtual

@@ -8,6 +8,8 @@
 - Relay `tavily` → `/relay/tavily/search`; calls appear in `GET /api/relay-logs` under `halflife-dev` (status, latency, cost $0). Repeat queries served from disk cache: 0 credits, no relay row.
 - Reasoning: Haiku 5.5 defaults to `medium` effort with adaptive thinking (Anthropic effort docs). `thinking:{type:disabled}` allowed at ≤high effort. Through Bifrost's OpenAI endpoint `reasoning_effort:"none"` → 5 output tokens vs 288 default on a yes/no probe; `"low"` barely helps (282). Default for extract/judge: `"none"`; quality to be checked on 10 answers.
 - J0.5 (results/2026-11-12-ordering): half-life ordering beats random/age/class (AUC 0.856 vs 0.502/0.642/0.812, all CIs exclude 0) but **loses to Haiku's own P(outdated) given the as-of date** (0.826 vs 0.782 on n=300, CI [-0.064,-0.023]); holds after model cutoff too. Fitted h: version 83 d, rate 55 d, office 1627 d.
+- Headline (n=300): Haiku-with-date caught@10/25/50 = 0.357 [0.303,0.429] / 0.748 [0.670,0.836] / 0.980 [0.946,1.0]; half-life 0.298 / 0.655 / 0.917. results/2026-11-12-ordering/headline.json.
+- Calibration: 24-month window refit does not improve (worst class error 0.267 both) -> full fit kept; neither half-life nor Haiku within 0.10 on all classes -> **cache TTL ships labelled experimental**. calibration.json.
 - Bifrost chat responses carry no cost; spend = VK budget `current_usage` delta (`vk_spend_usd`).
 - Wikidata needs contact URL in User-Agent: `HALFLIFE_CONTACT_URL` (set to user's GitHub profile).
 - **Overlap:** maximhq/bifrost#9748 "FreshGuard" (inline Go plugin, Tavily relay, verdicts).
