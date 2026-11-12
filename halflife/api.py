@@ -111,6 +111,9 @@ async def check(req: CheckRequest) -> AnswerReport:
     opts = CheckOptions(as_of=req.as_of or s.model_cutoff, today=today, age_basis=AgeBasis(req.age_basis),
                         budget=req.budget, mode="check", answer_model=req.answer_model)
     model = app.state.bifrost
+    if req.simulate_primary_down and os.environ.get("HALFLIFE_DEMO_MODE") != "1":
+        raise HTTPException(status_code=403, detail={"code": "DEMO_MODE_OFF",
+                                                     "message": "simulate_primary_down needs HALFLIFE_DEMO_MODE=1"})
     if req.simulate_primary_down:
         model = BifrostClient(replace(s, model=s.model + "-unavailable"))
     try:
