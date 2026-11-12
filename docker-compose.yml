@@ -1,0 +1,12 @@
+# Optional. Only the cache-TTL proxy needs this: Bifrost's cache plugin stores entries in a
+# RediSearch-compatible vector store even in direct (no-embedding) mode.
+# Check mode and the audit run on stock Bifrost without it.
+#   docker compose up -d redis
+#   scripts/bifrost.sh cache
+services:
+  redis:
+    image: redis/redis-stack-server:7.4.0-v3
+    container_name: halflife-redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped

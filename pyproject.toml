@@ -1,0 +1,26 @@
+[project]
+name = "halflife"
+version = "0.1.0"
+description = "Facts decay. Half-Life tells an AI gateway which answers to re-check, and when."
+requires-python = ">=3.11"
+license = "Apache-2.0"
+dependencies = [
+  "fastapi==0.121.2",
+  "uvicorn==0.38.0",
+  "httpx==0.28.1",
+  "pydantic==2.12.4",
+  "scipy==1.16.3",
+  "python-dotenv==1.2.1",
+]
+
+[dependency-groups]
+dev = ["pytest==9.0.1", "pytest-asyncio==1.3.0", "hypothesis==6.148.2", "respx==0.22.0"]
+
+[build-system]
+requires = ["hatchling==1.27.0"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+markers = ["live: needs running Bifrost and real keys (deselected by default)"]
+addopts = "-m 'not live'"

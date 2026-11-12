@@ -1,0 +1,264 @@
+{
+  "answer": "Python's latest stable release is Python 3.12. The ECB deposit facility rate is 4.00%. Satya Nadella is the CEO of Microsoft. The EU AI Act entered into force in August 2024. A Netflix Standard plan costs $15.49 per month. Water boils at 100 degrees Celsius at sea level.",
+  "model": "anthropic/claude-haiku-5-5",
+  "mode": "check",
+  "checked_at": "2026-11-12T15:00:00Z",
+  "verification_budget": 4,
+  "claims": [
+    {
+      "claim": {
+        "id": "c1",
+        "text": "Python's latest stable release is Python 3.12.",
+        "span": "Python's latest stable release is Python 3.12.",
+        "volatility_class": "software_version",
+        "explicit_date": null,
+        "is_past_event": false,
+        "subject": "Python",
+        "authoritative_domain": "python.org"
+      },
+      "risk": {
+        "claim_id": "c1",
+        "age_days": 135.0,
+        "age_basis": "model_cutoff",
+        "half_life_days": 120.0,
+        "half_life_source": "prior_guess",
+        "p_stale": 0.541,
+        "recommended_ttl_days": 8.9
+      },
+      "searched": true,
+      "evidence": [
+        {
+          "url": "https://www.python.org/downloads/",
+          "title": "www.python.org",
+          "content": "Download the latest release for your platform: Python 3.14.0 ... Active Python releases",
+          "published_date": null,
+          "query": "Python latest stable release",
+          "is_authoritative": true,
+          "retrieved_at": "2026-11-12T15:00:00Z"
+        }
+      ],
+      "verdict": {
+        "claim_id": "c1",
+        "label": "changed",
+        "supporting_quote": "Python 3.14.0",
+        "supporting_url": "https://www.python.org/downloads/",
+        "current_value": "Python 3.14.0",
+        "source_urls": [
+          "https://www.python.org/downloads/"
+        ],
+        "reasoning": "The official downloads page lists a newer release than 3.12.",
+        "quote_verified": true
+      },
+      "freshness_score": 5.0,
+      "score_basis": "changed",
+      "errors": []
+    },
+    {
+      "claim": {
+        "id": "c2",
+        "text": "The ECB deposit facility rate is 4.00%.",
+        "span": "The ECB deposit facility rate is 4.00%.",
+        "volatility_class": "rate_or_statistic",
+        "explicit_date": null,
+        "is_past_event": false,
+        "subject": "ECB deposit facility rate",
+        "authoritative_domain": "ecb.europa.eu"
+      },
+      "risk": {
+        "claim_id": "c2",
+        "age_days": 135.0,
+        "age_basis": "model_cutoff",
+        "half_life_days": 150.0,
+        "half_life_source": "prior_guess",
+        "p_stale": 0.462,
+        "recommended_ttl_days": 11.1
+      },
+      "searched": true,
+      "evidence": [
+        {
+          "url": "https://example-news.com/markets",
+          "title": "example-news.com",
+          "content": "Markets expect the ECB to hold rates at its next meeting.",
+          "published_date": null,
+          "query": "ECB deposit facility rate",
+          "is_authoritative": false,
+          "retrieved_at": "2026-11-12T15:00:00Z"
+        }
+      ],
+      "verdict": {
+        "claim_id": "c2",
+        "label": "unverifiable",
+        "supporting_quote": null,
+        "supporting_url": null,
+        "current_value": null,
+        "source_urls": [],
+        "reasoning": "Evidence does not state the current rate.",
+        "quote_verified": false
+      },
+      "freshness_score": 50.0,
+      "score_basis": "unverified",
+      "errors": []
+    },
+    {
+      "claim": {
+        "id": "c3",
+        "text": "Satya Nadella is the CEO of Microsoft.",
+        "span": "Satya Nadella is the CEO of Microsoft.",
+        "volatility_class": "office_holder",
+        "explicit_date": null,
+        "is_past_event": false,
+        "subject": "Microsoft CEO",
+        "authoritative_domain": "microsoft.com"
+      },
+      "risk": {
+        "claim_id": "c3",
+        "age_days": 135.0,
+        "age_basis": "model_cutoff",
+        "half_life_days": 900.0,
+        "half_life_source": "prior_guess",
+        "p_stale": 0.098,
+        "recommended_ttl_days": 66.6
+      },
+      "searched": true,
+      "evidence": [
+        {
+          "url": "https://news.microsoft.com/exec/satya-nadella/",
+          "title": "news.microsoft.com",
+          "content": "Satya Nadella is Chairman and Chief Executive Officer of Microsoft.",
+          "published_date": null,
+          "query": "Microsoft CEO",
+          "is_authoritative": true,
+          "retrieved_at": "2026-11-12T15:00:00Z"
+        }
+      ],
+      "verdict": {
+        "claim_id": "c3",
+        "label": "current",
+        "supporting_quote": "Satya Nadella is Chairman and Chief Executive Officer of Microsoft",
+        "supporting_url": "https://news.microsoft.com/exec/satya-nadella/",
+        "current_value": null,
+        "source_urls": [
+          "https://news.microsoft.com/exec/satya-nadella/"
+        ],
+        "reasoning": "Official bio confirms the role.",
+        "quote_verified": true
+      },
+      "freshness_score": 95.0,
+      "score_basis": "verified_current_authoritative",
+      "errors": []
+    },
+    {
+      "claim": {
+        "id": "c4",
+        "text": "The EU AI Act entered into force in August 2024.",
+        "span": "The EU AI Act entered into force in August 2024.",
+        "volatility_class": "law_or_regulation",
+        "explicit_date": "2024-08-01",
+        "is_past_event": true,
+        "subject": "EU AI Act",
+        "authoritative_domain": null
+      },
+      "risk": {
+        "claim_id": "c4",
+        "age_days": 833.0,
+        "age_basis": "explicit_date",
+        "half_life_days": 700.0,
+        "half_life_source": "prior_guess",
+        "p_stale": 0.562,
+        "recommended_ttl_days": 51.8
+      },
+      "searched": true,
+      "evidence": [
+        {
+          "url": "https://example-law.eu/ai-act",
+          "title": "example-law.eu",
+          "content": "The AI Act entered into force on 1 August 2024.",
+          "published_date": null,
+          "query": "EU AI Act entry into force",
+          "is_authoritative": false,
+          "retrieved_at": "2026-11-12T15:00:00Z"
+        }
+      ],
+      "verdict": {
+        "claim_id": "c4",
+        "label": "current",
+        "supporting_quote": "The AI Act entered into force on 1 August 2024",
+        "supporting_url": "https://example-law.eu/ai-act",
+        "current_value": null,
+        "source_urls": [
+          "https://example-law.eu/ai-act"
+        ],
+        "reasoning": "Single non-official source confirms the date.",
+        "quote_verified": true
+      },
+      "freshness_score": 80.0,
+      "score_basis": "verified_current_single_source",
+      "errors": []
+    },
+    {
+      "claim": {
+        "id": "c5",
+        "text": "A Netflix Standard plan costs $15.49 per month.",
+        "span": "A Netflix Standard plan costs $15.49 per month.",
+        "volatility_class": "price",
+        "explicit_date": null,
+        "is_past_event": false,
+        "subject": "Netflix Standard plan price",
+        "authoritative_domain": "netflix.com"
+      },
+      "risk": {
+        "claim_id": "c5",
+        "age_days": 135.0,
+        "age_basis": "model_cutoff",
+        "half_life_days": 240.0,
+        "half_life_source": "prior_guess",
+        "p_stale": 0.323,
+        "recommended_ttl_days": 17.8
+      },
+      "searched": false,
+      "evidence": [],
+      "verdict": null,
+      "freshness_score": 67.7,
+      "score_basis": "estimated",
+      "errors": []
+    },
+    {
+      "claim": {
+        "id": "c6",
+        "text": "Water boils at 100 degrees Celsius at sea level.",
+        "span": "Water boils at 100 degrees Celsius at sea level.",
+        "volatility_class": "timeless",
+        "explicit_date": null,
+        "is_past_event": false,
+        "subject": null,
+        "authoritative_domain": null
+      },
+      "risk": {
+        "claim_id": "c6",
+        "age_days": 135.0,
+        "age_basis": "model_cutoff",
+        "half_life_days": null,
+        "half_life_source": "prior_guess",
+        "p_stale": 0.0,
+        "recommended_ttl_days": null
+      },
+      "searched": false,
+      "evidence": [],
+      "verdict": null,
+      "freshness_score": null,
+      "score_basis": "not_time_sensitive",
+      "errors": []
+    }
+  ],
+  "answer_score": 59.5,
+  "usage": {
+    "model_calls": 5,
+    "model_cost_usd": 0.0012,
+    "tavily_calls": 4,
+    "tavily_credits": 4,
+    "tavily_cache_hits": 0,
+    "latency_ms": 6400.0
+  },
+  "errors": [],
+  "bifrost_request_id": null
+}
