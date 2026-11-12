@@ -2,7 +2,8 @@
   "$schema": "https://www.getbifrost.ai/schema",
   "client": {
     "enable_logging": true,
-    "drop_excess_requests": false
+    "drop_excess_requests": false,
+    "enforce_auth_on_inference": true
   },
   "vector_store": {
     "enabled": true,
@@ -28,7 +29,7 @@
       "is_enabled": true,
       "admin_username": "env.BIFROST_ADMIN_USERNAME",
       "admin_password": "env.BIFROST_ADMIN_PASSWORD",
-      "disable_auth_on_inference": true
+      "disable_auth_on_inference": false
     }
   }
 }
