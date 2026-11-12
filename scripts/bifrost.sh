@@ -5,9 +5,11 @@
 # Reads BIFROST_PORT (default 8088) and admin credentials from .env. Waits for /health.
 set -euo pipefail
 cd "$(dirname "$0")/.."
+CALLER_PORT="${BIFROST_PORT:-}"  # an explicit BIFROST_PORT from the caller wins over .env
 set -a; source .env; set +a
 PROFILE="${1:-base}"
-PORT="${BIFROST_PORT:-8088}"
+PORT="${CALLER_PORT:-${BIFROST_PORT:-8088}}"
+export BIFROST_PORT="$PORT"
 BIFROST_VERSION="${BIFROST_VERSION:-v2.5.1}"
 mkdir -p .cache
 if curl -sf "http://localhost:$PORT/health" >/dev/null; then

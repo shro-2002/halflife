@@ -76,3 +76,15 @@ async def test_live_ten_questions_audit_matches_per_answer_reports(tmp_path):
         summary_by_model[r.model] = (v + r.claims_verified, ch + r.claims_changed)
     assert summary_by_model == from_reports
     (tmp_path / "e2e.json").write_text(json.dumps({"checked_at": datetime.now(UTC).isoformat(), "by_model": from_reports}))
+
+
+def test_proxy_ttl_follows_half_life_and_bounds():
+    from halflife.gateway.proxy import MAX_TTL_S, MIN_TTL_S, cache_key, ttl_seconds
+    from halflife.schemas import VolatilityClass as V
+    hl = {V.SOFTWARE_VERSION: (120.0, "prior_guess"), V.OFFICE_HOLDER: (900.0, "prior_guess"), V.PRICE: (0.0001, "fitted")}
+    assert ttl_seconds(V.TIMELESS, hl) == MAX_TTL_S
+    assert ttl_seconds(V.SOFTWARE_VERSION, hl) < ttl_seconds(V.OFFICE_HOLDER, hl)
+    assert ttl_seconds(V.SOFTWARE_VERSION, hl) == int(-120 * __import__("math").log2(0.95) * 86400)
+    assert ttl_seconds(V.PRICE, hl) == MIN_TTL_S
+    a = cache_key({"model": "m", "messages": [{"role": "user", "content": "q"}], "temperature": 0.2})
+    assert a == cache_key({"model": "m", "messages": [{"role": "user", "content": "q"}]}) and a.startswith("halflife:")

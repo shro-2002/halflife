@@ -91,10 +91,11 @@ async def main() -> int:
         print(await _ensure_relay(bf))
         value, msg = await _ensure_vk(bf)
         print(msg)
-        vk_file = ROOT / ".cache" / "vk.txt"
-        vk_file.parent.mkdir(exist_ok=True)
-        vk_file.write_text(value)
-        vk_file.chmod(0o600)
+        port = os.environ.get("BIFROST_PORT", "8088")
+        for vk_file in {ROOT / ".cache" / f"vk-{port}.txt", ROOT / ".cache" / "vk.txt"} if port == "8088" else {ROOT / ".cache" / f"vk-{port}.txt"}:
+            vk_file.parent.mkdir(exist_ok=True)
+            vk_file.write_text(value)
+            vk_file.chmod(0o600)
     finally:
         await bf.aclose()
     return 0

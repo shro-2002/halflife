@@ -28,8 +28,11 @@ class Settings:
 def _virtual_key() -> str:
     if os.environ.get("HALFLIFE_VK"):
         return os.environ["HALFLIFE_VK"]
-    vk_file = ROOT / ".cache" / "vk.txt"
-    return vk_file.read_text().strip() if vk_file.exists() else ""
+    port = os.environ.get("BIFROST_PORT", "8088")
+    for vk_file in (ROOT / ".cache" / f"vk-{port}.txt", ROOT / ".cache" / "vk.txt"):
+        if vk_file.exists():
+            return vk_file.read_text().strip()
+    return ""
 
 
 def load_settings() -> Settings:

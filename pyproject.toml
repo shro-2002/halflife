@@ -12,6 +12,7 @@ dependencies = [
   "scipy==1.16.3",
   "python-dotenv==1.2.1",
   "packaging==25.0",
+  "mcp==2.3.0",
 ]
 
 [dependency-groups]
