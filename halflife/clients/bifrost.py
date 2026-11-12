@@ -36,9 +36,20 @@ class ChatModel(Protocol):
     async def chat(self, messages: list[dict[str, str]], *, max_tokens: int = 1500) -> ChatResult: ...
 
 
-def _cost(usage: dict[str, Any]) -> float:
-    cost = usage.get("cost") or {}
-    return float(cost.get("total_cost") or 0.0) if isinstance(cost, dict) else 0.0
+# USD per million tokens (input, output), Anthropic list prices from the models overview, 2026-11-12.
+# Bifrost's logged cost for claude-haiku-5-5 matched these exactly (docs/SPIKE.md live run).
+LIST_PRICE_PER_MTOK = {"claude-haiku-5-5": (0.10, 0.50), "claude-haiku-4-5": (1.0, 5.0)}
+
+
+def _cost(usage: dict[str, Any], model: str | None) -> float:
+    """Bifrost puts cost in the log row, not the chat response; estimate from tokens at list price."""
+    cost = usage.get("cost")
+    if isinstance(cost, dict) and cost.get("total_cost") is not None:
+        return float(cost["total_cost"])
+    price = LIST_PRICE_PER_MTOK.get((model or "").split("/")[-1])
+    if not price:
+        return 0.0
+    return (usage.get("prompt_tokens", 0) * price[0] + usage.get("completion_tokens", 0) * price[1]) / 1e6
 
 
 class BifrostClient:
@@ -86,12 +97,13 @@ class BifrostClient:
         if not text:
             raise ModelError(f"empty completion (finish_reason={choice.get('finish_reason')})")
         usage = data.get("usage") or {}
+        served_model = resp.headers.get("x-bifrost-resolved-model") or data.get("model") or self._s.model
         return ChatResult(
             text=text,
             request_id=resp.headers.get("x-bifrost-request-id"),
             provider=resp.headers.get("x-bifrost-provider"),
-            model=resp.headers.get("x-bifrost-resolved-model") or data.get("model"),
-            cost_usd=_cost(usage),
+            model=served_model,
+            cost_usd=_cost(usage, served_model),
             latency_ms=latency_ms,
             cache_hit=resp.headers.get("x-bifrost-cache-hit", "").lower() == "true",
             is_fallback=resp.headers.get("x-bifrost-routing-info-is-fallback", "").lower() == "true",

@@ -10,6 +10,7 @@
 - J0.5 (results/2026-11-12-ordering): half-life ordering beats random/age/class (AUC 0.856 vs 0.502/0.642/0.812, all CIs exclude 0) but **loses to Haiku's own P(outdated) given the as-of date** (0.826 vs 0.782 on n=300, CI [-0.064,-0.023]); holds after model cutoff too. Fitted h: version 83 d, rate 55 d, office 1627 d.
 - Headline (n=300): Haiku-with-date caught@10/25/50 = 0.357 [0.303,0.429] / 0.748 [0.670,0.836] / 0.980 [0.946,1.0]; half-life 0.298 / 0.655 / 0.917. results/2026-11-12-ordering/headline.json.
 - Calibration: 24-month window refit does not improve (worst class error 0.267 both) -> full fit kept; neither half-life nor Haiku within 0.10 on all classes -> **cache TTL ships labelled experimental**. calibration.json.
+- First live end-to-end check (pipeline draft): Node 20 LTS -> changed, BoE 5.25% -> changed (3.75%, verified quote), timeless skipped. 3 model calls, 4 credits, 7.0 s, **$0.0015 per check** (token estimate == sum of Bifrost log costs; judge prompts 4-5k input tokens). VK current_usage lags >3 s after calls.
 - Bifrost chat responses carry no cost; spend = VK budget `current_usage` delta (`vk_spend_usd`).
 - Wikidata needs contact URL in User-Agent: `HALFLIFE_CONTACT_URL` (set to user's GitHub profile).
 - **Overlap:** maximhq/bifrost#9748 "FreshGuard" (inline Go plugin, Tavily relay, verdicts).
@@ -40,7 +41,9 @@
 ## Remains
 - J0.5 gate: awaiting user decision on the model_p result. Then fan-out W1–W6, V1–V3, GATE 2, M1, J2, J3, J4, J5, V4, GATE 3, J6.
 - Item 4: measure cost/latency per check on 10 answers before J3, record here.
-- Item 7: read #9748 thread before UPSTREAM.md.
+- Item 7: #9748 thread read 2026-11-12 21:03 IST: no maintainer reply, only a CodeRabbit bot comment (links merged relay PR #9170). Its asks: plugin location, `plugin_metadata` on stream chunks, shared plugin cache. UPSTREAM.md must not repeat those; re-read before writing.
+- M1 notes from W3: verbatim-but-weak quote can still count as strong support (UN photo caption on un.org) -> judge prompt must require the quote to state the fact; carry VerifyOutcome.strong_support into the 95/80 score; when both searches fail, searched=True with verdict None -> score as unverified. current_value prompt changed to value-only (untested live).
+- M1 notes from W1: treat `is_past_event` claims as non-decaying in the half-life fallback; year-only dates stored as YYYY-01-01 (no precision field).
 
 ## Spend
-- Model: $0.0092 (current VK) + $0.00007 (pre-reset VK) ≈ $0.0093 / $10. Tavily: 5 / 1000 credits by own count (4 spike searches + 1 relay test); Tavily /usage endpoint reported 0 at 20:57 IST.
+- Model: $0.0127 (current VK) + $0.00007 (pre-reset VK) ≈ $0.0128 / $10. Tavily: 13 / 1000 credits by own count (4 spike + 1 relay test + 4 W3 live + 4 smoke; W5 running separately); Tavily /usage endpoint reported 0 at 20:57 IST.
