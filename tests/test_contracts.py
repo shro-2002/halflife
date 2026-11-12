@@ -75,7 +75,7 @@ async def test_chat_sends_vk_fallbacks_and_disables_reasoning(settings):
     await bf.aclose()
     sent = json.loads(route.calls[0].request.content)
     assert route.calls[0].request.headers["x-bf-vk"] == "sk-bf-test"
-    assert sent["reasoning_effort"] == "none"
+    assert sent["reasoning"] == {"effort": "none"} and "max_completion_tokens" in sent
     assert sent["fallbacks"] == ["anthropic/claude-haiku-4-5"]
     assert (result.text, result.request_id, result.cost_usd) == ("pong", "req-1", 4.1e-06)
 

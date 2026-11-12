@@ -1,0 +1,23 @@
+{
+  "n_answers": 10,
+  "model": "anthropic/claude-haiku-5-5",
+  "reasoning_effort": "none",
+  "claims_total": 17,
+  "claims_searched": 14,
+  "verdicts": {
+    "current": 4,
+    "changed": 10,
+    "unverifiable": 0
+  },
+  "model_cost_usd_token_estimate": 0.010954,
+  "model_cost_usd_vk_delta": 0.010955,
+  "cost_per_check_usd": 0.001095,
+  "tavily_credits": 28,
+  "credits_per_check": 2.8,
+  "latency_s": {
+    "mean": 6.06,
+    "median": 5.87,
+    "max": 9.31
+  },
+  "errors": []
+}

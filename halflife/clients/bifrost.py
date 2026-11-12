@@ -77,8 +77,10 @@ class BifrostClient:
         body: dict[str, Any] = {
             "model": self._s.model,
             "messages": messages,
-            "max_tokens": max_tokens,
-            "reasoning_effort": reasoning_effort,
+            # Documented fields (V2): max_completion_tokens and reasoning.effort. "none" turns Haiku 5.5
+            # thinking off (probe: 288 -> 5 output tokens); also accepted by the Haiku 4.5 fallback.
+            "max_completion_tokens": max_tokens,
+            "reasoning": {"effort": reasoning_effort},
         }
         if self._s.fallback_models:
             body["fallbacks"] = list(self._s.fallback_models)
@@ -100,11 +102,12 @@ class BifrostClient:
         if not text:
             raise ModelError(f"empty completion (finish_reason={choice.get('finish_reason')})")
         usage = data.get("usage") or {}
-        served_model = resp.headers.get("x-bifrost-resolved-model") or data.get("model") or self._s.model
+        served_model = (resp.headers.get("x-bifrost-routing-info-model") or resp.headers.get("x-bifrost-resolved-model")
+                        or data.get("model") or self._s.model)
         return ChatResult(
             text=text,
             request_id=resp.headers.get("x-bifrost-request-id"),
-            provider=resp.headers.get("x-bifrost-provider"),
+            provider=resp.headers.get("x-bifrost-routing-info-provider") or resp.headers.get("x-bifrost-provider"),
             model=served_model,
             cost_usd=_cost(usage, served_model),
             latency_ms=latency_ms,
@@ -113,11 +116,23 @@ class BifrostClient:
             raw_usage=usage,
         )
 
-    async def list_logs(self, *, limit: int = 50, offset: int = 0, **filters: str) -> list[dict[str, Any]]:
-        params = {"limit": limit, "offset": offset, "sort_by": "timestamp", "order": "desc", **filters}
-        resp = await self._http.get("/api/logs", params=params, auth=self._admin)
-        resp.raise_for_status()
-        return resp.json().get("logs") or []
+    async def list_logs(self, *, max_rows: int = 200, page_size: int = 100, **filters: str) -> list[dict[str, Any]]:
+        """Newest first. roots_only collapses fallback chains (each retry is its own row, linked by
+        parent_request_id) so a request counts once. Pages until max_rows or total_count (limit <= 1000)."""
+        rows: list[dict[str, Any]] = []
+        offset = 0
+        while len(rows) < max_rows:
+            params = {"limit": min(page_size, max_rows - len(rows)), "offset": offset, "sort_by": "timestamp",
+                      "order": "desc", "roots_only": "true", **filters}
+            resp = await self._http.get("/api/logs", params=params, auth=self._admin)
+            resp.raise_for_status()
+            data = resp.json()
+            page = data.get("logs") or []
+            rows += page
+            offset += len(page)
+            if not page or offset >= (data.get("pagination") or {}).get("total_count", 0):
+                break
+        return rows
 
     async def get_log(self, log_id: str) -> dict[str, Any]:
         """Full row incl. output_message (the list view omits it). Concurrency-limited."""

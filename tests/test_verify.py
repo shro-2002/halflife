@@ -168,7 +168,8 @@ async def test_both_searches_issued_with_domain_filter_only_on_second():
     params = [p for _, p in searcher.queries]
     assert sum("include_domains" in p for p in params) == 1
     assert next(p for p in params if "include_domains" in p)["include_domains"] == ["python.org"]
-    assert all(p["time_range"] == "year" for p in params)
+    # Recency filter on the open web only; the official-site search has none (V2: prices/rates keep old dates).
+    assert [p.get("time_range") for p in params] == ["year", None]
     assert all("2026" in q for q, _ in searcher.queries)
 
 

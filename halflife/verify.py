@@ -22,7 +22,7 @@ from halflife.schemas import Claim, Evidence, Verdict, VerdictLabel, VolatilityC
 JUDGE_MAX_TOKENS = 1500
 SEARCH_SHARE = 0.6  # fraction of timeout_s the parallel searches may use; the judge gets the rest
 MIN_QUOTE_CHARS = 12  # shorter "quotes" match almost anything
-MAX_QUERY_CHARS = 380  # Tavily rejects queries over 400 chars
+MAX_QUERY_CHARS = 380  # Tavily recommends keeping queries short (< 1500 chars); short queries search better
 OPEN_WEB_PARAMS: dict[str, Any] = {
     "topic": "general",
     "time_range": "year",
@@ -137,7 +137,10 @@ async def _search_all(claim: Claim, searcher: Searcher, query: str, timeout: flo
     jobs: list[tuple[str, bool, dict[str, Any]]] = [("open-web", False, dict(OPEN_WEB_PARAMS))]
     domain = valid_domain(claim.authoritative_domain)
     if domain:
-        jobs.append(("authoritative", True, {**OPEN_WEB_PARAMS, "include_domains": [domain]}))
+        # No date filter on the official site: continuously updated pages (prices, rates) keep old
+        # publish dates and a time_range would drop them (Tavily search best practices).
+        official = {k: v for k, v in OPEN_WEB_PARAMS.items() if k != "time_range"}
+        jobs.append(("authoritative", True, {**official, "include_domains": [domain]}))
 
     async def one(params: dict[str, Any]) -> SearchResult:
         return await asyncio.wait_for(searcher.search(query, **params), timeout)

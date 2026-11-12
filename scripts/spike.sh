@@ -26,9 +26,10 @@ if curl -sf "${ADMIN[@]}" "$B/api/providers/anthropic" >/dev/null; then
   pass "anthropic provider already configured"
 else
   # env. reference: Bifrost reads the key from its own environment; the raw key never crosses the API.
-  code=$(curl -s -o "$OUT/provider.json" -w '%{http_code}' "${ADMIN[@]}" -X POST "$B/api/providers" \
+  curl -s -o "$OUT/provider.json" "${ADMIN[@]}" -X POST "$B/api/providers" -H 'Content-Type: application/json' -d '{"provider":"anthropic"}'
+  code=$(curl -s -o "$OUT/provider_key.json" -w '%{http_code}' "${ADMIN[@]}" -X POST "$B/api/providers/anthropic/keys" \
     -H 'Content-Type: application/json' \
-    -d '{"provider":"anthropic","keys":[{"name":"anthropic-primary","value":"env.ANTHROPIC_API_KEY","models":["*"],"weight":1.0}]}')
+    -d '{"name":"anthropic-primary","value":"env.ANTHROPIC_API_KEY","models":["*"],"weight":1.0}')
   [[ "$code" =~ ^2 ]] && pass "anthropic provider added ($code)" || { fail "add provider -> $code (see $OUT/provider.json)"; exit 1; }
 fi
 
@@ -41,7 +42,7 @@ if [[ -z "$VK" ]]; then
   curl -s "${ADMIN[@]}" -X POST "$B/api/governance/virtual-keys" -H 'Content-Type: application/json' -d '{
     "name":"halflife-dev","description":"Half-Life build budget",
     "provider_configs":[{"provider":"anthropic","weight":1.0,"allowed_models":["*"],"key_ids":["*"]}],
-    "budgets":[{"max_limit":10.00,"reset_duration":"1M"}],"is_active":true}' > "$OUT/vk.json"
+    "budgets":[{"max_limit":10.00,"reset_duration":"1M"}],"relay_grants":[{"relay_name":"tavily"}],"is_active":true}' > "$OUT/vk.json"
   VK=$(python3 -c 'import json;d=json.load(open(".cache/spike/vk.json"));v=d.get("virtual_key",d);print(v.get("value",""))')
 fi
 [[ -n "$VK" ]] && pass "virtual key halflife-dev ready (value hidden)" || { fail "no VK (see $OUT/vk.json)"; exit 1; }
@@ -49,7 +50,7 @@ echo "$VK" > .cache/vk.txt; chmod 600 .cache/vk.txt
 
 echo "4. chat completion through the VK"
 curl -s "$B/v1/chat/completions" -H 'Content-Type: application/json' -H "x-bf-vk: $VK" \
-  -d "{\"model\":\"$MODEL\",\"max_tokens\":40,\"messages\":[{\"role\":\"user\",\"content\":\"Spike check: reply with the word pong.\"}]}" \
+  -d "{\"model\":\"$MODEL\",\"max_completion_tokens\":40,\"reasoning\":{\"effort\":\"none\"},\"messages\":[{\"role\":\"user\",\"content\":\"Spike check: reply with the word pong.\"}]}" \
   -D "$OUT/chat.headers" -o "$OUT/chat.json"
 python3 -c 'import json;d=json.load(open(".cache/spike/chat.json"));print("  reply:",d["choices"][0]["message"]["content"][:60])' \
   && pass "chat ok" || fail "chat failed (see $OUT/chat.json)"

@@ -34,10 +34,13 @@ RELAY: dict[str, Any] = {
 async def _ensure_provider(bf: BifrostClient) -> str:
     if (await bf.admin("GET", "/api/providers/anthropic")).status_code == 200:
         return "anthropic provider present"
-    body = {"provider": "anthropic", "keys": [{"name": "anthropic-primary", "value": "env.ANTHROPIC_API_KEY", "models": ["*"], "weight": 1.0}]}
-    resp = await bf.admin("POST", "/api/providers", json=body)
+    # Add-provider takes no keys; keys go to /api/providers/{provider}/keys (V2, Bifrost API reference).
+    resp = await bf.admin("POST", "/api/providers", json={"provider": "anthropic"})
     resp.raise_for_status()
-    return "anthropic provider added"
+    key = {"name": "anthropic-primary", "value": "env.ANTHROPIC_API_KEY", "models": ["*"], "weight": 1.0}
+    resp = await bf.admin("POST", "/api/providers/anthropic/keys", json=key)
+    resp.raise_for_status()
+    return "anthropic provider and key added"
 
 
 async def _ensure_relay(bf: BifrostClient) -> str:

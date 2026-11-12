@@ -11,6 +11,9 @@
 - Headline (n=300): Haiku-with-date caught@10/25/50 = 0.357 [0.303,0.429] / 0.748 [0.670,0.836] / 0.980 [0.946,1.0]; half-life 0.298 / 0.655 / 0.917. results/2026-11-12-ordering/headline.json.
 - Calibration: 24-month window refit does not improve (worst class error 0.267 both) -> full fit kept; neither half-life nor Haiku within 0.10 on all classes -> **cache TTL ships labelled experimental**. calibration.json.
 - First live end-to-end check (pipeline draft): Node 20 LTS -> changed, BoE 5.25% -> changed (3.75%, verified quote), timeless skipped. 3 model calls, 4 credits, 7.0 s, **$0.0015 per check** (token estimate == sum of Bifrost log costs; judge prompts 4-5k input tokens). VK current_usage lags >3 s after calls.
+- Item 4 done (results/2026-11-12-checks10): 10 answers, **$0.0011 and 2.8 credits per check, median 5.9 s** (max 9.3), reasoning effort none; token estimate == VK delta. Haiku 4.5 fallback accepts reasoning.effort none but answered a prime check wrong without reasoning (weaker fallback).
+- V2 fixed: documented `max_completion_tokens` + `reasoning.effort`, provider then key on setup, no time_range on official-site search, logs `roots_only` + paging, routing-info headers, Tavily `include_usage` for actual credits, spike VK relay grant. Disk-cache key now includes include_usage (old entries not reused).
+- M1 done: real answers end to end through Bifrost + Tavily return valid AnswerReports.
 - Bifrost chat responses carry no cost; spend = VK budget `current_usage` delta (`vk_spend_usd`).
 - Wikidata needs contact URL in User-Agent: `HALFLIFE_CONTACT_URL` (set to user's GitHub profile).
 - **Overlap:** maximhq/bifrost#9748 "FreshGuard" (inline Go plugin, Tavily relay, verdicts).
@@ -51,4 +54,4 @@
 - M1 notes from W1: treat `is_past_event` claims as non-decaying in the half-life fallback; year-only dates stored as YYYY-01-01 (no precision field).
 
 ## Spend
-- Model: $0.0127 (current VK) + $0.00007 (pre-reset VK) ≈ $0.0128 / $10. Tavily: 13 / 1000 credits by own count (4 spike + 1 relay test + 4 W3 live + 4 smoke; W5 running separately); Tavily /usage endpoint reported 0 at 20:57 IST.
+- Model: ~$0.025 / $10 (VK). Tavily: ~145 / 1000 credits by own count (13 earlier + 101 W5 + 1 V2 + 28 checks10 + V3 pending ≤30); Tavily /usage endpoint reported 0 at 20:57 IST.

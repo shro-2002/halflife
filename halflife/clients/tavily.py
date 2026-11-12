@@ -62,7 +62,7 @@ class TavilyViaRelay:
         self._offline = offline  # True: cache only, never spend credits (make eval)
 
     async def search(self, query: str, **params: Any) -> SearchResult:
-        payload = {"query": query, "search_depth": "basic", "max_results": 5, **params}
+        payload = {"query": query, "search_depth": "basic", "max_results": 5, "include_usage": True, **params}
         key = DiskCache.key(payload, datetime.now(UTC).date())
         cached = self._cache.get(key)
         if cached is not None:
@@ -79,5 +79,6 @@ class TavilyViaRelay:
             raise SearchError(f"relay {resp.status_code}: {resp.text[:200]}")
         data = resp.json()
         self._cache.put(key, {"payload": payload, "results": data.get("results", []), "fetched_at": datetime.now(UTC).isoformat()})
-        credits = CREDITS_PER_DEPTH.get(payload["search_depth"], 1)
+        usage = data.get("usage") or {}
+        credits = int(usage.get("credits", CREDITS_PER_DEPTH.get(payload["search_depth"], 1)))  # actual, from Tavily
         return SearchResult(payload, data.get("results", []), False, credits, latency_ms)
