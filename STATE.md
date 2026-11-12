@@ -13,6 +13,7 @@
 - First live end-to-end check (pipeline draft): Node 20 LTS -> changed, BoE 5.25% -> changed (3.75%, verified quote), timeless skipped. 3 model calls, 4 credits, 7.0 s, **$0.0015 per check** (token estimate == sum of Bifrost log costs; judge prompts 4-5k input tokens). VK current_usage lags >3 s after calls.
 - Item 4 done (results/2026-11-12-checks10): 10 answers, **$0.0011 and 2.8 credits per check, median 5.9 s** (max 9.3), reasoning effort none; token estimate == VK delta. Haiku 4.5 fallback accepts reasoning.effort none but answered a prime check wrong without reasoning (weaker fallback).
 - V2 fixed: documented `max_completion_tokens` + `reasoning.effort`, provider then key on setup, no time_range on official-site search, logs `roots_only` + paging, routing-info headers, Tavily `include_usage` for actual credits, spike VK relay grant. Disk-cache key now includes include_usage (old entries not reused).
+- V3: 0/30 wrong (Wilson 95% 0–11.4%); s-au-super weak (original ATO URL 403). Systemic risks: ~18 stale cases' quotes show only the current value (former value from notes); approximate stale as_of dates; 52/83 time-sensitive cases share 26 URLs (pairs) so per-case CIs are too narrow; product_spec only 5 cases; single annotator. GATE 2 hand-check list: eval/GATE2_HANDCHECK.md.
 - M1 done: real answers end to end through Bifrost + Tavily return valid AnswerReports.
 - Bifrost chat responses carry no cost; spend = VK budget `current_usage` delta (`vk_spend_usd`).
 - Wikidata needs contact URL in User-Agent: `HALFLIFE_CONTACT_URL` (set to user's GitHub profile).
@@ -45,7 +46,7 @@
 | Lead | everything else (schemas, clients, risk.py, fit.py, results/, STATE.md) |
 
 ## Remains
-- J0.5 gate: awaiting user decision on the model_p result. Then fan-out W1–W6, V1–V3, GATE 2, M1, J2, J3, J4, J5, V4, GATE 3, J6.
+- GATE 2: awaiting user approval of labels. Then J3 (J2 may start now; reads M1 only). Done: fan-out W1–W6, V1–V3, GATE 2, M1, J2, J3, J4, J5, V4, GATE 3, J6.
 - Item 4: measure cost/latency per check on 10 answers before J3, record here.
 - Item 7: #9748 thread read 2026-11-12 21:03 IST: no maintainer reply, only a CodeRabbit bot comment (links merged relay PR #9170). Its asks: plugin location, `plugin_metadata` on stream chunks, shared plugin cache. UPSTREAM.md must not repeat those; re-read before writing.
 - M1 notes from W3: verbatim-but-weak quote can still count as strong support (UN photo caption on un.org) -> judge prompt must require the quote to state the fact; carry VerifyOutcome.strong_support into the 95/80 score; when both searches fail, searched=True with verdict None -> score as unverified. current_value prompt changed to value-only (untested live).
@@ -54,4 +55,4 @@
 - M1 notes from W1: treat `is_past_event` claims as non-decaying in the half-life fallback; year-only dates stored as YYYY-01-01 (no precision field).
 
 ## Spend
-- Model: ~$0.025 / $10 (VK). Tavily: ~145 / 1000 credits by own count (13 earlier + 101 W5 + 1 V2 + 28 checks10 + V3 pending ≤30); Tavily /usage endpoint reported 0 at 20:57 IST.
+- Model: ~$0.025 / $10 (VK). Tavily: ~145 / 1000 credits by own count (13 earlier + 101 W5 + 1 V2 + 28 checks10 + 9 V3); Tavily /usage endpoint reported 0 at 20:57 IST.
