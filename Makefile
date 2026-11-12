@@ -1,4 +1,4 @@
-.PHONY: dev bifrost bifrost-cache setup api test spike eval
+.PHONY: dev demo bifrost bifrost-cache setup api api-bg seed audit test spike eval
 
 PORT_API ?= 8091
 
@@ -27,3 +27,15 @@ spike:
 
 eval:
 	uv run python -m eval.run --offline
+
+api-bg:
+	uv run python -m halflife.serve_bg --port $(PORT_API)
+
+seed:
+	uv run python -m halflife.gateway.seed
+
+audit:
+	uv run python -m halflife.gateway.audit --hours 6 --sample-cap 50 --budget 60
+
+# One command: stock Bifrost (no Redis) + setup + demo traffic + audit + API/UI in the background.
+demo: bifrost setup seed audit api-bg

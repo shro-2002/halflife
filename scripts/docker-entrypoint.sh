@@ -5,4 +5,7 @@ npx -y @maximhq/bifrost --transport-version v2.5.1 -app-dir /app/bifrost/base -h
   -port "$BIFROST_PORT" -log-style json &
 for _ in $(seq 1 60); do curl -sf "http://127.0.0.1:$BIFROST_PORT/health" >/dev/null && break; sleep 1; done
 uv run --no-dev python -m halflife.clients.setup_gateway
-exec uv run --no-dev uvicorn halflife.api:app --host 0.0.0.0 --port 8091 --proxy-headers --forwarded-allow-ips="*"
+# Trust X-Forwarded-For only from a known proxy (the rate limiter keys on client IP). Exposed directly, keep
+# the default; behind a load balancer set FORWARDED_ALLOW_IPS to its address or CIDR.
+exec uv run --no-dev uvicorn halflife.api:app --host 0.0.0.0 --port 8091 --proxy-headers \
+  --forwarded-allow-ips="${FORWARDED_ALLOW_IPS:-127.0.0.1}"
