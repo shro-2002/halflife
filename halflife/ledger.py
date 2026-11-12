@@ -8,6 +8,7 @@ CLI: uv run python -m halflife.ledger refit [--db PATH] [--min N]
 """
 
 import argparse
+import json
 import sqlite3
 import uuid
 from collections.abc import Sequence
@@ -189,12 +190,28 @@ def _format_refit(rows: list[RefitRow]) -> str:
     return "\n".join(lines)
 
 
+def import_fit(ledger: "Ledger", summary_path: Path) -> list[str]:
+    """Seed class_params from the J0.5 time-travel fit (results/.../summary.json `half_lives`)."""
+    fits = json.loads(summary_path.read_text())["half_lives"]
+    done = []
+    with ledger.conn:
+        for cls, f in fits.items():
+            ledger.conn.execute(
+                "INSERT OR REPLACE INTO class_params (volatility_class, half_life_days, source, n, n_changed, fitted_at)"
+                " VALUES (?, ?, 'fitted', ?, ?, ?)", (cls, float(f["fitted_days"]), int(f["n"]), int(f["n_changed"]), _now()))
+            done.append(f"{cls}: {f['fitted_days']} d (n={f['n']})")
+    return done
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="python -m halflife.ledger")
     sub = parser.add_subparsers(dest="command", required=True)
     refit_p = sub.add_parser("refit", help="refit per-class half-lives from stored outcomes")
     refit_p.add_argument("--db", type=Path, default=None, help="ledger path (default: settings db_path)")
     refit_p.add_argument("--min", type=int, default=DEFAULT_MIN_OUTCOMES, dest="min_outcomes")
+    imp = sub.add_parser("import-fit", help="seed half-lives from the time-travel fit (J0.5 summary.json)")
+    imp.add_argument("summary", type=Path)
+    imp.add_argument("--db", type=Path, default=None)
     args = parser.parse_args(argv)
     db = args.db
     if db is None:
@@ -202,7 +219,10 @@ def main(argv: Sequence[str] | None = None) -> int:
 
         db = load_settings().db_path
     with Ledger(db) as ledger:
-        print(_format_refit(ledger.refit(min_outcomes=args.min_outcomes)))
+        if args.command == "import-fit":
+            print("\n".join(import_fit(ledger, args.summary)))
+        else:
+            print(_format_refit(ledger.refit(min_outcomes=args.min_outcomes)))
     return 0
 
 

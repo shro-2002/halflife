@@ -17,6 +17,8 @@
 - J3 done (results/2026-11-12-detector): run 2 precision 0.854 [0.742,0.950], recall 0.921 [0.828,1.0] (CIs by URL); budget @25/50%: model 0.462/0.842, half-life 0.387/0.708, random 0.233/0.460. Run 1 found bug (numeric value equality), fixed, rerun once; no prompt change. Cost/answer (cold, run 1): $0.00058, 1.31 credits, 4.3 s mean.
 - J2 (a)(b) done: audit + seed; live e2e (10 questions) stale rate matches reports (2nd attempt; 1st failed because internal J3 logs crowded the newest-rows scan -> read ids directly). Audit of 50 demo answers: stale rate 0.27–0.78 per (model, key); $0.055, 88 credits.
 - J2 (c) proxy (experimental, cache profile on :8089 + Redis): question class -> TTL from half-life, x-bf-cache-key/ttl to Bifrost, 2nd identical request = Bifrost direct cache hit, background report joined by x-bifrost-request-id. (d) MCP tool `check_freshness` (mcp 2.3.0 MCPServer, :8092) registered in Bifrost MCP gateway, healthy, callable via /v1/mcp/tool/execute after VK mcp_configs grant. J2 done.
+- Failover demo: /v1/check simulate_primary_down (needs HALFLIFE_DEMO_MODE=1) -> Bifrost falls back to claude-haiku-4-5; Usage.models_used/fallback_used. MCP tool granted to demo keys only (granting halflife-dev made Bifrost inject the tool into internal calls -> internal calls now send x-bf-mcp-include-clients with a non-matching name).
+- J5 (in progress): README, UPSTREAM, CONTRIBUTING, SUBMISSION, LICENSE (Apache-2.0), CI (actions pinned by SHA), Dockerfile (node 24.22.1, uv 0.11.21, forwarded IPs default 127.0.0.1), make demo. DEMO_SCRIPT done. Docker image builds and smoke-runs (health ok, UI 200). J4 done: UI live by default, Gateway/Check/Evidence, demo path verified in browser by worker (3 live checks). Ledger seeded with J0.5 fit via `ledger import-fit` in make setup.
 - M1 done: real answers end to end through Bifrost + Tavily return valid AnswerReports.
 - Bifrost chat responses carry no cost; spend = VK budget `current_usage` delta (`vk_spend_usd`).
 - Wikidata needs contact URL in User-Agent: `HALFLIFE_CONTACT_URL` (set to user's GitHub profile).
@@ -58,4 +60,4 @@
 - M1 notes from W1: treat `is_past_event` claims as non-decaying in the half-life fallback; year-only dates stored as YYYY-01-01 (no precision field).
 
 ## Spend
-- Model: ~$0.025 / $10 (VK). Tavily: ~145 / 1000 credits by own count (13 earlier + 101 W5 + 1 V2 + 28 checks10 + 9 V3); Tavily /usage endpoint reported 0 at 20:57 IST.
+- Model: $0.245 / $10 measured 22:20 IST (halflife-dev $0.233, demo keys $0.011, cache-profile gateway $0.001). Tavily: ~430 / 1000 by own count (Tavily /usage reports 152 at 22:20 IST; its counter lags) (154 to Gate 2 + ~5 recheck + 141 J3 run1 + 33 J3 run2 + 88 audit + ~10 e2e/proxy/MCP); Tavily /usage endpoint reported 0 at 20:57 IST.

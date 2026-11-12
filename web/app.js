@@ -1,28 +1,33 @@
 "use strict";
 
-// "fixture" builds against checked-in sample files; "api" uses the FastAPI endpoints. Wiring = flip this.
-const DATA_SOURCE = "fixture";
+// Live API by default; `?fixtures=1` renders checked-in samples for offline demos.
+const DATA_SOURCE = new URLSearchParams(location.search).has("fixtures") ? "fixture" : "api";
 
-// Relative paths work both from /web/index.html (http.server at repo root) and from "/" (FastAPI).
+// Absolute paths: the page is served at "/" and at "/web/index.html".
 const ENDPOINTS = {
-  fixture: {
-    check: "../tests/fixtures/report.json",
-    gateway: "../tests/fixtures/gateway.json",
-  },
-  api: {
-    check: "/v1/check",
-    gateway: "/v1/gateway/summary",
-  },
+  fixture: { check: "/fixtures/report.json", gateway: "/fixtures/gateway.json" },
+  api: { check: "/v1/check", gateway: "/v1/gateway/summary" },
 };
+const HEALTH_URL = "/health";
+const DETECTOR_DIR = "/results/2026-11-12-detector";
+const ORDERING_DIR = "/results/2026-11-12-ordering";
 const RESULTS = {
-  summary: "../results/2026-11-12-ordering/summary.json",
-  curves: "../results/2026-11-12-ordering/curves.json",
-  // ponytail: J3 output path is a guess until J3 lands; change here when it does.
-  j3: "../results/j3-live/summary.json",
+  detectorSummary: `${DETECTOR_DIR}/summary.json`,
+  detectorCurves: `${DETECTOR_DIR}/curves.json`,
+  orderingSummary: `${ORDERING_DIR}/summary.json`,
+  orderingCurves: `${ORDERING_DIR}/curves.json`,
+  orderingHeadline: `${ORDERING_DIR}/headline.json`,
 };
 
 const TTL_EPSILON = 0.05;
-const TABS = ["check", "gateway", "evidence"];
+const TABS = ["gateway", "check", "evidence"];
+const DEMO_KEY_PREFIX = "demo-";
+
+const EXAMPLES = {
+  stale: "The Bank of England base rate is 5.25%. The latest LTS release of Node.js is Node 20.",
+  timeless: "Water boils at 100 degrees Celsius at sea level, and the speed of light is about 299,792 km/s.",
+  mixed: "Satya Nadella is the CEO of Microsoft. A Netflix Standard plan costs $15.49 per month.",
+};
 
 const SCORE_BASIS = {
   verified_current_authoritative: "Verified current, authoritative source",
@@ -39,18 +44,22 @@ const RANK_BASIS = {
 const METHODS = {
   model_p: "Model P(outdated)",
   halflife: "Half-life model",
+  half_life: "Half-life model",
   model_ts: "Model time-sensitivity",
   class_only: "Class only",
   age_only: "Age only",
   random: "Random",
+  oracle_upper_bound: "Oracle (upper bound)",
 };
 const METHOD_STYLE = {
   model_p: { color: "--accent", width: 3 },
   halflife: { color: "--info", width: 3 },
+  half_life: { color: "--info", width: 3 },
   model_ts: { color: "--warn", width: 2 },
   class_only: { color: "--ok", width: 2 },
   age_only: { color: "--neutral", width: 2 },
   random: { color: "--ink-2", width: 1.5, dash: [4, 4] },
+  oracle_upper_bound: { color: "--ok", width: 1.5, dash: [2, 3] },
 };
 
 const charts = {};
@@ -76,7 +85,7 @@ function h(tag, attrs, ...children) {
 
 function safeLink(url, label) {
   let parsed = null;
-  try { parsed = new URL(url); } catch (_) { parsed = null; }
+  try { parsed = new URL(url, location.origin); } catch (_) { parsed = null; }
   if (!parsed || !["http:", "https:"].includes(parsed.protocol)) return h("span", { class: "muted" }, label || String(url));
   return h("a", { href: parsed.href, target: "_blank", rel: "noopener noreferrer" }, label || parsed.href);
 }
@@ -87,7 +96,7 @@ function domainOf(url) {
 
 function stateBox(kind, title, ...lines) {
   return h("div", { class: `state ${kind}`, role: kind === "error" ? "alert" : null },
-    h("h3", null, title), ...lines.map((line) => h("p", null, line)));
+    h("h3", null, title), ...lines.map((line) => (line instanceof Node ? line : h("p", null, line))));
 }
 
 function errorList(title, errors) {
@@ -96,12 +105,14 @@ function errorList(title, errors) {
     h("ul", null, errors.map((e) => h("li", null, String(e)))));
 }
 
+const isNil = (x) => x === null || x === undefined;
 const fmt = {
-  pct: (x, d = 0) => (x === null || x === undefined ? "—" : `${(x * 100).toFixed(d)}%`),
-  num: (x, d = 0) => (x === null || x === undefined ? "—" : Number(x).toFixed(d)),
-  usd: (x) => (x === null || x === undefined ? "—" : `$${Number(x).toFixed(4)}`),
+  pct: (x, d = 0) => (isNil(x) ? "—" : `${(x * 100).toFixed(d)}%`),
+  num: (x, d = 0) => (isNil(x) ? "—" : Number(x).toFixed(d)),
+  usd: (x) => (isNil(x) ? "—" : `$${Number(x).toFixed(4)}`),
   ms: (x) => (!x ? "—" : x >= 1000 ? `${(x / 1000).toFixed(1)} s` : `${Math.round(x)} ms`),
-  days: (x) => (x === null || x === undefined ? "—" : `${Number(x).toFixed(x < 10 ? 1 : 0)} d`),
+  days: (x) => (isNil(x) ? "—" : `${Number(x).toFixed(x < 10 ? 1 : 0)} d`),
+  ci: (ci) => (Array.isArray(ci) && ci.length === 2 ? `[${fmt.pct(ci[0])}, ${fmt.pct(ci[1])}]` : ""),
   when: (iso) => {
     const d = new Date(iso);
     return Number.isNaN(d.getTime()) ? String(iso ?? "—") : d.toISOString().replace("T", " ").slice(0, 16) + " UTC";
@@ -112,14 +123,26 @@ function cssVar(name) {
   return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 }
 
+const stat = (label, value, note) => h("div", { class: "stat" }, h("dt", null, label), h("dd", null, value),
+  note ? h("dd", { class: "stat-note" }, note) : null);
+
 // ---------- data access ----------
 
 class FetchError extends Error {
-  constructor(message, { status = null, missing = false } = {}) {
+  constructor(message, { status = null, code = null, network = false } = {}) {
     super(message);
     this.status = status;
-    this.missing = missing;
+    this.code = code;
+    this.network = network;
   }
+}
+
+function detailOf(body) {
+  const detail = body && body.detail;
+  if (!detail) return {};
+  if (typeof detail === "string") return { message: detail };
+  if (Array.isArray(detail)) return { code: "VALIDATION_ERROR", message: detail.map((d) => d.msg || String(d)).join("; ") };
+  return { code: detail.code || null, message: detail.message || null };
 }
 
 async function getJSON(url, options) {
@@ -127,19 +150,21 @@ async function getJSON(url, options) {
   try {
     res = await fetch(url, options);
   } catch (err) {
-    throw new FetchError(`Could not reach ${url} (${err.message}).`);
+    throw new FetchError(`Could not reach ${url} (${err.message}).`, { network: true });
   }
-  if (!res.ok) throw new FetchError(`${url} returned HTTP ${res.status}.`, { status: res.status, missing: res.status === 404 });
-  try {
-    return await res.json();
-  } catch (_) {
-    throw new FetchError(`${url} did not return valid JSON.`);
+  let body = null;
+  try { body = await res.json(); } catch (_) { body = null; }
+  if (!res.ok) {
+    const { code, message } = detailOf(body);
+    throw new FetchError(message || `${url} returned HTTP ${res.status}.`, { status: res.status, code });
   }
+  if (body === null) throw new FetchError(`${url} did not return valid JSON.`);
+  return body;
 }
 
-function runCheck({ answer, asOf, budget }) {
+function runCheck({ answer, asOf, budget, simulateDown }) {
   if (DATA_SOURCE === "fixture") return getJSON(ENDPOINTS.fixture.check);
-  const body = { answer };
+  const body = { answer, simulate_primary_down: simulateDown };
   if (asOf) body.as_of = asOf;
   if (budget !== null) body.budget = budget;
   return getJSON(ENDPOINTS.api.check, {
@@ -149,20 +174,37 @@ function runCheck({ answer, asOf, budget }) {
   });
 }
 
+// ---------- header status ----------
+
+async function loadHealth() {
+  const pill = document.getElementById("health-pill");
+  try {
+    const health = await getJSON(HEALTH_URL);
+    const bifrost = health && health.checks ? health.checks.bifrost : null;
+    const ok = bifrost === "ok";
+    pill.textContent = ok ? "Bifrost ok" : "Bifrost unreachable";
+    pill.title = ok ? "Gateway answered /health" : String(bifrost || "no status");
+    pill.className = `pill ${ok ? "ok" : "bad"}`;
+  } catch (err) {
+    pill.textContent = "API unreachable";
+    pill.title = err.message;
+    pill.className = "pill bad";
+  }
+}
+
 // ---------- tabs ----------
 
 function selectTab(name, { focus = false } = {}) {
-  const active = TABS.includes(name) ? name : "check";
+  const active = TABS.includes(name) ? name : TABS[0];
   for (const tab of TABS) {
-    const button = document.getElementById(`tab-${tab}`);
-    const panel = document.getElementById(`panel-${tab}`);
     const isActive = tab === active;
+    const button = document.getElementById(`tab-${tab}`);
     button.setAttribute("aria-selected", String(isActive));
     button.tabIndex = isActive ? 0 : -1;
-    panel.hidden = !isActive;
+    document.getElementById(`panel-${tab}`).hidden = !isActive;
   }
   if (focus) document.getElementById(`tab-${active}`).focus();
-  if (location.hash.slice(1) !== active) history.replaceState(null, "", `#${active}`);
+  if (location.hash.slice(1) !== active) history.replaceState(null, "", `${location.search}#${active}`);
   if (active === "gateway" && !loaded.gateway) loadGateway();
   if (active === "evidence" && !loaded.evidence) loadEvidence();
 }
@@ -188,11 +230,8 @@ function initTabs() {
 // ---------- Check view ----------
 
 function verdictInfo(report) {
-  if (report.verdict) {
-    const label = report.verdict.label;
-    return { key: label, text: label === "unverifiable" ? "unverifiable" : label };
-  }
-  if (report.score_basis === "not_time_sensitive") return { key: "not-time-sensitive", text: "not time-sensitive" };
+  if (report.verdict) return { key: report.verdict.label, text: report.verdict.label };
+  if (report.score_basis === "not_time_sensitive") return { key: "not-time-sensitive", text: "skipped: not time-sensitive" };
   return { key: "not-searched", text: "not searched" };
 }
 
@@ -205,12 +244,10 @@ function annotatedAnswer(answer, claims) {
   claims.forEach((report, i) => {
     const span = report.claim && report.claim.span;
     if (!span) return;
-    let from = 0;
-    let start = answer.indexOf(span, from);
+    let start = answer.indexOf(span);
     // skip occurrences already taken by an earlier claim with the same span
     while (start >= 0 && ranges.some((r) => start < r.end && start + span.length > r.start)) {
-      from = start + 1;
-      start = answer.indexOf(span, from);
+      start = answer.indexOf(span, start + 1);
     }
     if (start >= 0) ranges.push({ start, end: start + span.length, index: i, info: verdictInfo(report) });
   });
@@ -226,53 +263,70 @@ function annotatedAnswer(answer, claims) {
     cursor = r.end;
   }
   block.append(answer.slice(cursor));
-  const unmatched = claims.length - ranges.length;
-  return { block, unmatched };
+  return { block, unmatched: claims.length - ranges.length };
 }
 
 function legend() {
-  const item = (cls, text) => h("li", null, h("span", { class: `sw ${cls}`, "aria-hidden": "true" }), text);
-  const swatches = h("ul", { class: "legend", "aria-label": "Highlight legend" },
-    item("v-changed", "changed"), item("v-current", "current"), item("v-unverifiable", "unverifiable"),
-    item("v-other", "not searched / not time-sensitive"));
-  // swatch colours reuse the mark backgrounds
-  const map = { "v-changed": "--mark-changed", "v-current": "--mark-current", "v-unverifiable": "--mark-unverifiable", "v-other": "--mark-other" };
-  swatches.querySelectorAll(".sw").forEach((sw) => {
-    const key = [...sw.classList].find((c) => c in map);
-    sw.style.background = `var(${map[key]})`;
-  });
-  return swatches;
+  const item = (cssName, text) => h("li", null,
+    h("span", { class: "sw", "aria-hidden": "true", style: { background: `var(${cssName})` } }), text);
+  return h("ul", { class: "legend", "aria-label": "Highlight legend" },
+    item("--mark-changed", "changed"), item("--mark-current", "current"), item("--mark-unverifiable", "unverifiable"),
+    item("--mark-other", "not searched / not time-sensitive"));
+}
+
+function servedByBadges(usage) {
+  const models = Array.isArray(usage.models_used) ? usage.models_used : [];
+  const badges = [];
+  if (usage.fallback_used) {
+    badges.push(h("span", { class: "badge failover" }, `FAILOVER: served by ${models.join(", ") || "fallback model"}`));
+  }
+  return h("div", { class: "served-by" },
+    h("span", { class: "kicker" }, "Models that served this check"),
+    h("div", { class: "badges" }, ...badges,
+      models.length ? models.map((m) => h("span", { class: "badge class" }, m)) : h("span", { class: "muted" }, "not reported")));
+}
+
+function searchSpendNote(report) {
+  const usage = report.usage || {};
+  const claims = report.claims || [];
+  if ((usage.tavily_calls || 0) > 0 || usage.tavily_credits > 0) return null;
+  const allTimeless = claims.length > 0 && claims.every((c) => c.score_basis === "not_time_sensitive");
+  const why = allTimeless || !claims.length ? "not time-sensitive" : "no claim needed a search within the budget";
+  return h("div", { class: "skip-note", role: "status" },
+    h("strong", null, `Skipped — ${why}.`),
+    ` 0 searches, ${fmt.num(usage.tavily_credits || 0)} Tavily credits. Only the extraction call ran.`);
 }
 
 function summaryStrip(report) {
   const usage = report.usage || {};
   const score = report.answer_score;
-  const stat = (label, value) => h("div", { class: "stat" }, h("dt", null, label), h("dd", null, value));
+  const claims = report.claims || [];
+  const budget = isNil(report.verification_budget) ? "" : ` / budget ${report.verification_budget}`;
   return h("div", { class: "summary" },
     h("div", { class: "score-plate" },
       h("div", { class: "kicker" }, "Answer freshness"),
-      h("div", { class: "big" }, score === null || score === undefined ? "—" : fmt.num(score)),
-      h("div", { class: "of" }, score === null || score === undefined ? "no time-sensitive claims scored" : "of 100, mean of scored claims")),
+      h("div", { class: "big" }, isNil(score) ? "—" : fmt.num(score)),
+      h("div", { class: "of" }, isNil(score) ? "no time-sensitive claims scored" : "of 100, mean of scored claims")),
     h("dl", { class: "stats" },
-      stat("Claims", String((report.claims || []).length)),
-      stat("Searched", `${(report.claims || []).filter((c) => c.searched).length}${report.verification_budget !== null && report.verification_budget !== undefined ? ` / budget ${report.verification_budget}` : ""}`),
-      stat("Model cost", fmt.usd(usage.model_cost_usd)),
+      stat("Claims", String(claims.length)),
+      stat("Searched", `${claims.filter((c) => c.searched).length}${budget}`),
       stat("Model calls", fmt.num(usage.model_calls)),
+      stat("Model cost", fmt.usd(usage.model_cost_usd), "estimated from tokens at list price"),
+      stat("Tavily searches", fmt.num(usage.tavily_calls)),
       stat("Tavily credits", fmt.num(usage.tavily_credits)),
       stat("Cache hits", fmt.num(usage.tavily_cache_hits)),
-      stat("Latency", fmt.ms(usage.latency_ms)),
-      stat("Model", report.model || "unknown")));
+      stat("Latency", fmt.ms(usage.latency_ms))));
 }
 
 function decayBar(risk) {
   const p = Math.min(1, Math.max(0, Number(risk.p_stale) || 0));
   const fill = h("span", { style: { width: `${p * 100}%` } });
   if (p > 0) fill.style.setProperty("--full", `${100 / p}%`);
-  const hl = risk.half_life_days === null || risk.half_life_days === undefined
+  const hl = isNil(risk.half_life_days)
     ? "no half-life (timeless)"
     : `h = ${fmt.days(risk.half_life_days)} (${risk.half_life_source === "fitted" ? "fitted" : "prior guess"}), age ${fmt.days(risk.age_days)} via ${String(risk.age_basis || "").replace(/_/g, " ")}`;
   return h("div", { class: "metric" },
-    h("span", { class: "kicker", id: null }, "P(stale), half-life model"),
+    h("span", { class: "kicker" }, "P(stale), half-life model"),
     h("div", { class: "decay", role: "img", "aria-label": `P(stale) ${fmt.pct(p)}` }, fill),
     h("div", { class: "decay-caption" }, `${fmt.pct(p)} · ${hl}`));
 }
@@ -280,11 +334,11 @@ function decayBar(risk) {
 function freshnessBlock(report) {
   const score = report.freshness_score;
   let tone = "none";
-  if (score !== null && score !== undefined) tone = score >= 80 ? "hi" : score >= 40 ? "mid" : "lo";
+  if (!isNil(score)) tone = score >= 80 ? "hi" : score >= 40 ? "mid" : "lo";
   return h("div", { class: "metric" },
     h("span", { class: "kicker" }, "Freshness score"),
     h("div", { class: "fresh" },
-      h("span", { class: `num ${tone}` }, score === null || score === undefined ? "no score" : fmt.num(score)),
+      h("span", { class: `num ${tone}` }, isNil(score) ? "no score" : fmt.num(score)),
       h("span", { class: "basis" }, SCORE_BASIS[report.score_basis] || report.score_basis || "")));
 }
 
@@ -322,8 +376,9 @@ function claimCard(report, index) {
   const info = verdictInfo(report);
   const verdict = report.verdict;
   const sources = verdict && verdict.source_urls ? verdict.source_urls : [];
+  const timeless = report.score_basis === "not_time_sensitive";
 
-  return h("li", { class: "claim", id: `claim-${claim.id || index}`, "aria-label": `Claim ${index + 1}` },
+  return h("li", { class: `claim${timeless ? " claim-skipped" : ""}`, id: `claim-${claim.id || index}`, "aria-label": `Claim ${index + 1}` },
     h("div", { class: "claim-head" },
       h("span", { class: "claim-num", "aria-hidden": "true" }, String(index + 1)),
       h("div", { style: { flex: "1", minWidth: "0" } },
@@ -333,17 +388,19 @@ function claimCard(report, index) {
           h("span", { class: `badge ${info.key}` }, info.text),
           claim.is_past_event ? h("span", { class: "badge class" }, "past event") : null,
           claim.explicit_date ? h("span", { class: "badge class" }, `as of ${claim.explicit_date}`) : null))),
-    h("div", { class: "claim-grid" },
-      decayBar(risk),
-      freshnessBlock(report),
-      h("div", { class: "metric" },
-        h("span", { class: "kicker" }, "Verification rank"),
-        h("div", { class: "decay-caption" },
-          `rank score ${fmt.num(risk.rank_score, 2)} · from ${RANK_BASIS[risk.rank_basis] || risk.rank_basis || "unknown"}`,
-          claim.p_outdated_model !== null && claim.p_outdated_model !== undefined ? ` · model P(outdated) ${fmt.pct(claim.p_outdated_model)}` : "")),
-      h("div", { class: "metric" },
-        h("span", { class: "kicker" }, "Cache TTL (5% stale risk)"),
-        h("div", { class: "decay-caption" }, risk.recommended_ttl_days === null || risk.recommended_ttl_days === undefined ? "none (does not decay)" : fmt.days(risk.recommended_ttl_days)))),
+    timeless
+      ? h("p", { class: "hint" }, "Skipped — not time-sensitive. No search, no credits, no score.")
+      : h("div", { class: "claim-grid" },
+        decayBar(risk),
+        freshnessBlock(report),
+        h("div", { class: "metric" },
+          h("span", { class: "kicker" }, "Verification rank"),
+          h("div", { class: "decay-caption" },
+            `rank score ${fmt.num(risk.rank_score, 2)} · from ${RANK_BASIS[risk.rank_basis] || risk.rank_basis || "unknown"}`,
+            isNil(claim.p_outdated_model) ? "" : ` · model P(outdated) ${fmt.pct(claim.p_outdated_model)}`)),
+        h("div", { class: "metric" },
+          h("span", { class: "kicker" }, "Cache TTL (5% stale risk, experimental)"),
+          h("div", { class: "decay-caption" }, isNil(risk.recommended_ttl_days) ? "none (does not decay)" : fmt.days(risk.recommended_ttl_days)))),
     verdict && verdict.label === "changed" && verdict.current_value
       ? h("div", { class: "correction" }, h("span", { class: "kicker" }, "Current value, per evidence"),
         h("p", null, h("s", null, claim.span || claim.text || ""), " → ", h("strong", null, verdict.current_value)))
@@ -359,60 +416,91 @@ function claimCard(report, index) {
 
 function renderReport(report, typedAnswer) {
   const out = document.getElementById("check-out");
-  out.replaceChildren();
   if (!report || typeof report !== "object" || !Array.isArray(report.claims)) {
-    out.append(stateBox("error", "Report is malformed", "The response did not contain a claims list."));
+    out.replaceChildren(stateBox("error", "Report is malformed", "The response did not contain a claims list."));
     return;
   }
   const notes = [];
-  if (DATA_SOURCE === "fixture" && typedAnswer && typedAnswer.trim() !== report.answer.trim()) {
-    notes.push(stateBox("", "Fixture mode", "Showing the sample report, not a check of the text you typed. Switch DATA_SOURCE to \"api\" in app.js to check live."));
+  if (DATA_SOURCE === "fixture" && typedAnswer && typedAnswer.trim() !== String(report.answer || "").trim()) {
+    notes.push(stateBox("", "Fixture mode", "Showing the sample report, not a check of the text you typed. Remove ?fixtures=1 from the URL to check live."));
   }
   const { block, unmatched } = annotatedAnswer(report.answer || "", report.claims);
-  out.append(...[...notes, summaryStrip(report),
+  out.replaceChildren(...[...notes,
+    searchSpendNote(report),
+    summaryStrip(report),
+    servedByBadges(report.usage || {}),
     errorList("Errors for the whole check:", report.errors),
     h("h2", null, "The answer, annotated"),
     block, legend(),
     unmatched ? h("p", { class: "hint" }, `${unmatched} claim span(s) not found verbatim in the answer.`) : null,
     h("h2", null, "Claims"),
-    h("p", { class: "section-note" }, `Checked ${fmt.when(report.checked_at)}. Claims are searched in order of rank score until the budget runs out.`)].filter(Boolean));
-  if (!report.claims.length) {
-    out.append(stateBox("", "No claims found", "The extractor found no factual claims in this answer."));
-    return;
-  }
-  out.append(h("ol", { class: "claims" }, report.claims.map(claimCard)));
+    h("p", { class: "section-note" }, `Checked ${fmt.when(report.checked_at)}. Claims are searched in order of rank score until the budget runs out.`),
+    report.claims.length
+      ? h("ol", { class: "claims" }, report.claims.map(claimCard))
+      : stateBox("", "No claims found", "The extractor found no factual claims in this answer.")].filter(Boolean));
+}
+
+function checkErrorBox(err) {
+  if (err.status === 401) return stateBox("error", "Not authorised (401)", err.message, "This server requires an x-halflife-key; the UI does not send one.");
+  if (err.status === 429) return stateBox("error", "Rate limited (429)", err.message);
+  if (err.status === 502) return stateBox("error", "Check failed upstream (502)", `The pipeline raised ${err.message}. Bifrost or a model call may be down; try again.`);
+  if (err.network) return stateBox("error", "Server unreachable", err.message, "Is the API running on this host?");
+  return stateBox("error", `Check failed${err.status ? ` (${err.status})` : ""}`, err.message);
+}
+
+function loadingBox() {
+  const seconds = h("span", null, "0");
+  const box = stateBox("loading", "Checking…",
+    h("p", null, "Extracting claims, ranking them, searching the riskiest. ", seconds, " s elapsed (a live check takes about 3–10 s)."));
+  const started = Date.now();
+  const timer = setInterval(() => { seconds.textContent = String(Math.floor((Date.now() - started) / 1000)); }, 250);
+  return { box, stop: () => clearInterval(timer) };
 }
 
 function initCheck() {
   const form = document.getElementById("check-form");
   const input = document.getElementById("answer-input");
   const button = document.getElementById("check-btn");
-  const hint = document.getElementById("check-hint");
   const out = document.getElementById("check-out");
-  hint.textContent = DATA_SOURCE === "fixture"
+  document.getElementById("check-hint").textContent = DATA_SOURCE === "fixture"
     ? "Fixture mode: Check loads the sample report (tests/fixtures/report.json)."
-    : "Posts to /v1/check. Budget = max claims searched with Tavily.";
-  out.replaceChildren(stateBox("", "Nothing checked yet", "Paste an answer and press Check to see each claim's freshness."));
+    : "Posts to /v1/check. Budget = max claims searched with Tavily; empty = all time-sensitive claims.";
+  out.replaceChildren(stateBox("", "Nothing checked yet", "Pick an example or paste an answer, then press Check."));
+
+  form.querySelectorAll("[data-example]").forEach((chip) => chip.addEventListener("click", () => {
+    input.value = EXAMPLES[chip.dataset.example];
+    input.focus();
+  }));
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+    if (button.disabled) return;
     const answer = input.value;
     if (DATA_SOURCE === "api" && !answer.trim()) {
-      out.replaceChildren(stateBox("error", "No answer to check", "Paste an answer first."));
+      out.replaceChildren(stateBox("error", "No answer to check", "Paste an answer or pick an example first."));
       return;
     }
     const rawBudget = document.getElementById("budget-input").value;
-    const budget = rawBudget === "" ? null : Math.max(0, Math.floor(Number(rawBudget)));
+    const budget = rawBudget === "" ? null : Math.min(20, Math.max(0, Math.floor(Number(rawBudget))));
+    const loading = loadingBox();
     button.disabled = true;
-    out.replaceChildren(stateBox("", "Checking…", "Extracting claims, ranking them, and searching the riskiest."));
+    button.textContent = "Checking…";
+    out.replaceChildren(loading.box);
     try {
-      const report = await runCheck({ answer, asOf: document.getElementById("asof-input").value, budget });
+      const report = await runCheck({
+        answer,
+        asOf: document.getElementById("asof-input").value,
+        budget,
+        simulateDown: document.getElementById("failover-input").checked,
+      });
       if (!answer.trim() && report && report.answer) input.value = report.answer;
       renderReport(report, answer);
     } catch (err) {
-      out.replaceChildren(stateBox("error", "Check failed", err.message, "Nothing was scored. Try again, or check that the server is running."));
+      out.replaceChildren(checkErrorBox(err));
     } finally {
+      loading.stop();
       button.disabled = false;
+      button.textContent = "Check";
     }
   });
 }
@@ -449,156 +537,256 @@ function drawChart(id, config) {
   charts[id] = new window.Chart(canvas, config);
 }
 
+function curveChartOptions(xLabel) {
+  const options = baseChartOptions("Stale claims caught (%)", xLabel);
+  options.scales.y.min = 0;
+  options.scales.y.max = 100;
+  options.scales.x.ticks.maxTicksLimit = 11;
+  options.interaction = { mode: "index", intersect: false };
+  options.plugins.tooltip = { callbacks: { title: (items) => `verify top ${items[0].label}%`, label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(0)}% caught` } };
+  return options;
+}
+
+function curveDatasets(set, order) {
+  return order.filter((m) => Array.isArray(set[m])).map((m) => {
+    const style = METHOD_STYLE[m];
+    const color = cssVar(style.color);
+    return {
+      label: METHODS[m], data: set[m].map((y) => y * 100), borderColor: color, backgroundColor: color,
+      borderWidth: style.width, borderDash: style.dash || [], pointRadius: 0, tension: 0,
+    };
+  });
+}
+
+function table(caption, headers, rows) {
+  return h("div", { class: "table-wrap" }, h("table", null,
+    h("caption", null, caption),
+    h("thead", null, h("tr", null, headers.map((col) => h("th", { scope: "col", class: col.num ? "num" : null }, col.label)))),
+    h("tbody", null, rows)));
+}
+
 // ---------- Gateway view ----------
 
 function ttlDays(halfLife) {
   return -halfLife * Math.log2(1 - TTL_EPSILON);
 }
 
-function rowLabel(row) {
-  return `${row.model} · ${row.virtual_key || "no virtual key"}`;
+const isDemoKey = (key) => typeof key === "string" && key.startsWith(DEMO_KEY_PREFIX);
+const demoBadge = () => h("span", { class: "badge demo" }, "DEMO TRAFFIC");
+
+function staleRateRow(r) {
+  return h("tr", null,
+    h("th", { scope: "row" }, r.model),
+    h("td", null, r.virtual_key || h("span", { class: "muted" }, "none"), isDemoKey(r.virtual_key) ? [" ", demoBadge()] : null),
+    h("td", { class: "num" }, fmt.num(r.answers_seen)), h("td", { class: "num" }, fmt.num(r.answers_checked)),
+    h("td", { class: "num" }, fmt.num(r.claims_found)), h("td", { class: "num" }, fmt.num(r.claims_verified)),
+    h("td", { class: "num" }, fmt.num(r.claims_changed)),
+    h("td", { class: "num" }, isNil(r.stale_rate) ? h("span", { class: "muted" }, "— nothing verified") : fmt.pct(r.stale_rate, 1)),
+    h("td", { class: "num" }, fmt.num(r.mean_answer_score, 1)));
+}
+
+function halfLifeTable(summary) {
+  const sourceOf = summary.half_life_source || {};
+  const hlRows = Object.entries(summary.half_lives || {}).sort((a, b) => a[1] - b[1]);
+  if (!hlRows.length) return stateBox("", "No half-lives reported", "The summary did not include half-life values.");
+  const source = (cls) => {
+    if (sourceOf[cls] === "fitted") return h("span", { class: "src-fitted" }, "fitted");
+    return h("span", { class: "src-prior" }, sourceOf[cls] === "prior_guess" ? "prior guess" : "unknown");
+  };
+  return table(`Half-lives in use and cache TTL at ε = ${TTL_EPSILON} (TTL = −h · log₂(1 − ε))`,
+    [{ label: "Class" }, { label: "Half-life", num: true }, { label: "Source" }, { label: "TTL (experimental)", num: true }],
+    [...hlRows.map(([cls, hl]) => h("tr", null,
+      h("th", { scope: "row" }, cls.replace(/_/g, " ")), h("td", { class: "num" }, fmt.days(hl)),
+      h("td", null, source(cls)), h("td", { class: "num" }, fmt.days(ttlDays(hl))))),
+    h("tr", null, h("th", { scope: "row" }, "timeless"), h("td", { class: "num muted" }, "—"), h("td", { class: "muted" }, "never decays"), h("td", { class: "num muted" }, "no expiry"))]);
+}
+
+function drawGatewayChart(charted) {
+  if (!charted.length) return;
+  const options = baseChartOptions(null, "Stale rate (%)");
+  options.indexAxis = "y";
+  options.plugins.legend.display = false;
+  options.scales.x.min = 0;
+  options.scales.x.max = 100;
+  options.plugins.tooltip = { callbacks: { label: (ctx) => `${ctx.parsed.x.toFixed(1)}% of verified claims changed` } };
+  drawChart("gateway-chart", {
+    type: "bar",
+    data: {
+      labels: charted.map((r) => [r.model.replace(/^anthropic\//, ""), `${r.virtual_key || "no key"}${isDemoKey(r.virtual_key) ? " (DEMO)" : ""}`]),
+      datasets: [{ label: "Stale rate", data: charted.map((r) => r.stale_rate * 100), backgroundColor: cssVar("--accent"), borderRadius: 2, maxBarThickness: 40 }],
+    },
+    options,
+  });
 }
 
 function renderGateway(summary) {
   const out = document.getElementById("gateway-out");
   const rows = Array.isArray(summary.rows) ? summary.rows : [];
   const usage = summary.usage || {};
-  const totals = rows.reduce((t, r) => ({
-    seen: t.seen + (r.answers_seen || 0), checked: t.checked + (r.answers_checked || 0),
-    verified: t.verified + (r.claims_verified || 0), changed: t.changed + (r.claims_changed || 0),
-  }), { seen: 0, checked: 0, verified: 0, changed: 0 });
-  const stat = (label, value) => h("div", { class: "stat" }, h("dt", null, label), h("dd", null, value));
+  const sum = (field) => rows.reduce((t, r) => t + (r[field] || 0), 0);
+  const verified = sum("claims_verified");
+  const changed = sum("claims_changed");
+  const allDemo = rows.length > 0 && rows.every((r) => isDemoKey(r.virtual_key));
+  const charted = rows.filter((r) => !isNil(r.stale_rate));
 
-  const table = h("div", { class: "table-wrap" }, h("table", null,
-    h("caption", null, "Stale rate = claims changed / claims verified, per model and virtual key"),
-    h("thead", null, h("tr", null,
-      h("th", { scope: "col" }, "Model"), h("th", { scope: "col" }, "Virtual key"),
-      h("th", { scope: "col", class: "num" }, "Answers seen"), h("th", { scope: "col", class: "num" }, "Checked"),
-      h("th", { scope: "col", class: "num" }, "Claims"), h("th", { scope: "col", class: "num" }, "Verified"),
-      h("th", { scope: "col", class: "num" }, "Changed"), h("th", { scope: "col", class: "num" }, "Stale rate"),
-      h("th", { scope: "col", class: "num" }, "Mean score"))),
-    h("tbody", null, rows.map((r) => h("tr", null,
-      h("th", { scope: "row" }, r.model), h("td", null, r.virtual_key || h("span", { class: "muted" }, "none")),
-      h("td", { class: "num" }, fmt.num(r.answers_seen)), h("td", { class: "num" }, fmt.num(r.answers_checked)),
-      h("td", { class: "num" }, fmt.num(r.claims_found)), h("td", { class: "num" }, fmt.num(r.claims_verified)),
-      h("td", { class: "num" }, fmt.num(r.claims_changed)),
-      h("td", { class: "num" }, r.stale_rate === null || r.stale_rate === undefined ? h("span", { class: "muted" }, "— nothing verified") : fmt.pct(r.stale_rate, 1)),
-      h("td", { class: "num" }, fmt.num(r.mean_answer_score, 1)))))));
-
-  const halfLives = summary.half_lives || {};
-  const sourceOf = summary.half_life_source || {};
-  const hlRows = Object.entries(halfLives).sort((a, b) => a[1] - b[1]);
-  const hlTable = h("div", { class: "table-wrap" }, h("table", null,
-    h("caption", null, `Half-lives in use and recommended cache TTL at ε = ${TTL_EPSILON} (TTL = −h · log₂(1 − ε))`),
-    h("thead", null, h("tr", null,
-      h("th", { scope: "col" }, "Class"), h("th", { scope: "col", class: "num" }, "Half-life"),
-      h("th", { scope: "col" }, "Source"), h("th", { scope: "col", class: "num" }, "TTL"))),
-    h("tbody", null, hlRows.map(([cls, hl]) => h("tr", null,
-      h("th", { scope: "row" }, cls.replace(/_/g, " ")), h("td", { class: "num" }, fmt.days(hl)),
-      h("td", null, sourceOf[cls] === "fitted" ? h("span", { class: "src-fitted" }, "fitted") : h("span", { class: "src-prior" }, sourceOf[cls] === "prior_guess" ? "prior guess" : "unknown")),
-      h("td", { class: "num" }, fmt.days(ttlDays(hl))))),
-    h("tr", null, h("th", { scope: "row" }, "timeless"), h("td", { class: "num muted" }, "—"), h("td", { class: "muted" }, "never decays"), h("td", { class: "num muted" }, "no expiry")))));
-
-  const charted = rows.filter((r) => r.stale_rate !== null && r.stale_rate !== undefined);
   out.replaceChildren(...[
     h("h2", null, "Stale rate across gateway traffic"),
+    h("p", { class: "section-note" }, "Half-Life samples answers from Bifrost's own logs, extracts the time-sensitive claims, and verifies them with Tavily. Stale rate = claims whose current value changed / claims verified."),
+    allDemo ? h("div", { class: "demo-banner", role: "note" }, demoBadge(),
+      " Every row below comes from seeded demo virtual keys (demo-*), not real user traffic.") : null,
     h("div", { class: "meta-row" },
       h("span", null, `window ${fmt.when(summary.window_start)} → ${fmt.when(summary.window_end)}`),
       h("span", null, `generated ${fmt.when(summary.generated_at)}`)),
     h("dl", { class: "stats", style: { marginTop: "14px" } },
+      stat("Overall stale rate", verified ? fmt.pct(changed / verified, 1) : "—"),
       stat("Logs scanned", fmt.num(summary.logs_scanned)),
-      stat("Answers seen", fmt.num(totals.seen)),
-      stat("Answers checked", fmt.num(totals.checked)),
-      stat("Sample cap", fmt.num(summary.sample_cap)),
-      stat("Claims verified", fmt.num(totals.verified)),
-      stat("Claims changed", fmt.num(totals.changed)),
-      stat("Search budget", fmt.num(summary.verification_budget)),
-      stat("Overall stale rate", totals.verified ? fmt.pct(totals.changed / totals.verified, 1) : "—")),
+      stat("Answers seen", fmt.num(sum("answers_seen"))),
+      stat("Answers checked", fmt.num(sum("answers_checked"))),
+      stat("Claims verified", fmt.num(verified)),
+      stat("Claims changed", fmt.num(changed)),
+      stat("Sample cap", fmt.num(summary.sample_cap), "answers per audit run"),
+      stat("Verification budget", fmt.num(summary.verification_budget), "claims searched per run")),
     errorList("Audit errors:", summary.errors),
     rows.length ? chartSlot("gateway-chart", "Bar chart of stale rate by model and virtual key") : stateBox("", "No traffic in this window", "The audit found no gateway logs to sample."),
     charted.length < rows.length ? h("p", { class: "hint" }, `${rows.length - charted.length} slice(s) not charted: nothing verified there.`) : null,
-    rows.length ? table : null,
-    h("h3", { style: { marginTop: "18px" } }, "Usage for this audit"),
+    rows.length ? table("Stale rate per model and virtual key",
+      ["Model", "Virtual key", "Answers seen", "Checked", "Claims", "Verified", "Changed", "Stale rate", "Mean score"]
+        .map((label, i) => ({ label, num: i >= 2 })),
+      rows.map(staleRateRow)) : null,
+    h("h3", { style: { marginTop: "18px" } }, "Cost of this audit"),
     h("dl", { class: "stats" },
-      stat("Model calls", fmt.num(usage.model_calls)), stat("Model cost", fmt.usd(usage.model_cost_usd)),
-      stat("Tavily calls", fmt.num(usage.tavily_calls)), stat("Tavily credits", fmt.num(usage.tavily_credits)),
-      stat("Cache hits", fmt.num(usage.tavily_cache_hits)), stat("Latency", fmt.ms(usage.latency_ms))),
+      stat("Model calls", fmt.num(usage.model_calls)),
+      stat("Model cost", fmt.usd(usage.model_cost_usd), "estimated from tokens at list price"),
+      stat("Tavily searches", fmt.num(usage.tavily_calls)),
+      stat("Tavily credits", fmt.num(usage.tavily_credits)),
+      stat("Cache hits", fmt.num(usage.tavily_cache_hits)),
+      stat("Wall time", fmt.ms(usage.latency_ms))),
     h("h2", null, "Half-lives and cache TTLs"),
-    h("p", { class: "section-note" }, "A cached answer stays under 5% chance of staleness for TTL days. Fitted values come from dated public histories; prior guesses are placeholders until outcomes exist."),
-    hlRows.length ? hlTable : stateBox("", "No half-lives reported", "The summary did not include half-life values.")].filter(Boolean));
+    h("p", { class: "ttl-warning" }, h("strong", null, "TTL: experimental"), " — half-lives are not calibrated, see Evidence."),
+    h("p", { class: "section-note" }, "A cached answer stays under 5% chance of staleness for TTL days. Prior guesses are placeholders until fitted values replace them."),
+    halfLifeTable(summary)].filter(Boolean));
+  drawGatewayChart(charted);
+}
 
-  if (charted.length) {
-    const accent = cssVar("--accent");
-    drawChart("gateway-chart", {
-      type: "bar",
-      data: {
-        labels: charted.map(rowLabel),
-        datasets: [{ label: "Stale rate", data: charted.map((r) => r.stale_rate * 100), backgroundColor: accent, borderRadius: 2, maxBarThickness: 48 }],
-      },
-      options: (() => {
-        const o = baseChartOptions("Stale rate (%)", null);
-        o.indexAxis = "y";
-        o.plugins.legend.display = false;
-        o.scales.x.min = 0;
-        o.scales.x.max = 100;
-        o.scales.x.title = { display: true, text: "Stale rate (%)", color: cssVar("--ink-2") };
-        o.scales.y.title = { display: false };
-        o.plugins.tooltip = { callbacks: { label: (ctx) => `${ctx.parsed.x.toFixed(1)}% of verified claims changed` } };
-        return o;
-      })(),
-    });
-  }
+function noAuditBox() {
+  return h("div", { class: "state" },
+    h("h3", null, "No gateway audit yet"),
+    h("p", null, "The audit reads Bifrost's request logs. Seed some demo traffic, then run one audit:"),
+    h("pre", { class: "cmd" }, "uv run python -m halflife.gateway.seed\nuv run python -m halflife.gateway.audit"),
+    h("p", null, "Then reopen this tab."));
 }
 
 async function loadGateway() {
   loaded.gateway = true;
   const out = document.getElementById("gateway-out");
-  out.replaceChildren(stateBox("", "Loading gateway summary…"));
+  out.replaceChildren(stateBox("loading", "Loading gateway summary…"));
   try {
     const summary = await getJSON(ENDPOINTS[DATA_SOURCE].gateway);
-    if (!summary || typeof summary !== "object") throw new FetchError("Gateway summary is empty.");
     renderGateway(summary);
   } catch (err) {
     loaded.gateway = false;
-    out.replaceChildren(stateBox("error", err.missing ? "No gateway audit yet" : "Gateway summary failed to load", err.message,
-      "Run an audit, then reopen this tab."));
+    if (err.status === 404) out.replaceChildren(noAuditBox());
+    else out.replaceChildren(stateBox("error", "Gateway summary failed to load", err.message));
   }
 }
 
-// ---------- Evidence view ----------
+// ---------- Evidence view: (A) live detector ----------
 
-function curveDatasets(curves, split) {
-  const set = curves[split] || {};
-  const order = ["model_p", "halflife", "model_ts", "class_only", "age_only", "random"];
-  return order.filter((m) => Array.isArray(set[m])).map((m) => {
-    const style = METHOD_STYLE[m];
-    const color = cssVar(style.color);
-    return {
-      label: METHODS[m],
-      data: set[m].map((y) => y * 100),
-      borderColor: color,
-      backgroundColor: color,
-      borderWidth: style.width,
-      borderDash: style.dash || [],
-      pointRadius: 0,
-      tension: 0,
-    };
+const ciCell = (point, ci) => h("td", { class: "num" }, fmt.pct(point), ci ? h("span", { class: "ci" }, ` ${fmt.ci(ci)}`) : null);
+
+function confusionTable(confusion) {
+  const cols = ["changed", "current", "unverifiable", "not_searched"];
+  const truths = Object.keys(confusion);
+  return table("Confusion: labelled truth (rows) against detector outcome (columns)",
+    [{ label: "Truth" }, ...cols.map((c) => ({ label: c.replace(/_/g, " "), num: true }))],
+    truths.map((t) => h("tr", null, h("th", { scope: "row" }, t),
+      cols.map((c) => h("td", { class: "num" }, fmt.num(confusion[t][c] || 0))))));
+}
+
+function budgetTable(budget) {
+  const methods = ["model_p", "half_life", "random"].filter((m) => budget[m]);
+  const ks = ["caught_at_25", "caught_at_50", "caught_at_100"];
+  return table("Stale claims caught when verifying the top 25 / 50 / 100% of answers (95% CI by source URL)",
+    [{ label: "Ordering" }, { label: "@25%", num: true }, { label: "@50%", num: true }, { label: "@100%", num: true }],
+    methods.map((m) => h("tr", { class: m === "model_p" ? "best" : null }, h("th", { scope: "row" }, METHODS[m]),
+      ks.map((k) => (budget[m][k] ? ciCell(budget[m][k].point, budget[m][k].ci95_by_url) : h("td", { class: "num" }, "—"))))));
+}
+
+function costTable(costs) {
+  return table("Cost and latency per answer by verification budget (model ordering)",
+    [{ label: "Budget" }, { label: "Model cost", num: true }, { label: "Tavily credits", num: true }, { label: "Latency mean", num: true }, { label: "Latency median", num: true }],
+    Object.entries(costs).map(([k, v]) => h("tr", null, h("th", { scope: "row" }, k),
+      h("td", { class: "num" }, `$${Number(v.model_cost_usd_per_answer).toFixed(6)}`),
+      h("td", { class: "num" }, fmt.num(v.tavily_credits_per_answer, 2)),
+      h("td", { class: "num" }, `${fmt.num(v.latency_s_per_answer_mean, 2)} s`),
+      h("td", { class: "num" }, `${fmt.num(v.latency_s_per_answer_median, 2)} s`))));
+}
+
+function perClassTable(perClass) {
+  return table("Per class (precision and recall on time-sensitive cases)",
+    [{ label: "Class" }, { label: "n", num: true }, { label: "TP", num: true }, { label: "FP", num: true }, { label: "FN", num: true }, { label: "Precision", num: true }, { label: "Recall", num: true }, { label: "Read?" }],
+    Object.entries(perClass).map(([cls, v]) => {
+      if (isNil(v.n_time_sensitive)) {
+        return h("tr", null, h("th", { scope: "row" }, cls.replace(/_/g, " ")), h("td", { class: "num" }, fmt.num(v.n)),
+          h("td", { colspan: "5", class: "muted" }, `${fmt.num(v.flagged)} flagged, ${fmt.num(v.searched)} searched`), h("td", null, "control"));
+      }
+      return h("tr", null, h("th", { scope: "row" }, cls.replace(/_/g, " ")), h("td", { class: "num" }, fmt.num(v.n_time_sensitive)),
+        h("td", { class: "num" }, fmt.num(v.tp)), h("td", { class: "num" }, fmt.num(v.fp)), h("td", { class: "num" }, fmt.num(v.fn)),
+        h("td", { class: "num" }, fmt.pct(v.precision)), h("td", { class: "num" }, fmt.pct(v.recall)),
+        h("td", null, v.too_thin_to_read ? h("span", { class: "badge thin" }, "too thin to read") : "ok"));
+    }));
+}
+
+function detectorSection(summary, curves) {
+  if (!summary) return stateBox("error", "Live detector results failed to load", `${RESULTS.detectorSummary} did not load.`);
+  const det = summary.detector || {};
+  return h("section", { "aria-labelledby": "det-h" },
+    h("h2", { id: "det-h" }, `Live detector (${summary.n_cases} labelled cases)`),
+    h("p", { class: "section-note" }, `${summary.n_cases} hand-labelled answers (${summary.n_stale} stale) run end to end through Bifrost and Tavily on ${summary.eval_date}. CIs are bootstrapped by source URL because many cases share a URL.`),
+    h("dl", { class: "stats" },
+      stat("Precision", fmt.pct(det.precision, 1), `95% CI ${fmt.ci(det.precision_ci95_by_url)}`),
+      stat("Recall", fmt.pct(det.recall, 1), `95% CI ${fmt.ci(det.recall_ci95_by_url)}`),
+      stat("Unverifiable", fmt.pct(det.unverifiable_rate, 1)),
+      stat("Timeless searched", `${fmt.num(det.timeless_searched)} / ${fmt.num(det.timeless_n)}`)),
+    summary.confusion ? confusionTable(summary.confusion) : null,
+    h("h3", { style: { marginTop: "18px" } }, "Budget curve"),
+    curves ? chartSlot("detector-chart", "Line chart of stale claims caught against answers verified, for model, half-life, random and oracle orderings") : stateBox("error", "Curve unavailable", `${RESULTS.detectorCurves} did not load.`),
+    h("div", { class: "caption-box" }, h("p", null, "Haiku's own outdated-probability ranks better than the half-life model; it is the product default."), h("p", null, `Labelled set: ${summary.n_cases} cases, one annotator; eval date ${summary.eval_date}. CIs resample source URLs.`)),
+    summary.budget ? budgetTable(summary.budget) : null,
+    summary.cost_latency_by_budget_model_order ? costTable(summary.cost_latency_by_budget_model_order) : null,
+    summary.per_class ? perClassTable(summary.per_class) : null,
+    h("p", { class: "hint" }, "Details: ", safeLink(`${DETECTOR_DIR}/errors.md`, "errors.md"), " · ", safeLink(`${DETECTOR_DIR}/README.md`, "README.md")));
+}
+
+function drawDetectorChart(curves) {
+  if (!curves) return;
+  const grid = (curves.grid || []).map((x) => Math.round(x * 100));
+  drawChart("detector-chart", {
+    type: "line",
+    data: { labels: grid, datasets: curveDatasets(curves, ["model_p", "half_life", "random", "oracle_upper_bound"]) },
+    options: curveChartOptions("Answers verified, riskiest first (%)"),
   });
 }
 
-function summaryTable(summary, split) {
-  const set = summary[split] || {};
-  const entries = Object.entries(set).sort((a, b) => b[1].auc - a[1].auc);
+// ---------- Evidence view: (B) ordering test ----------
+
+function orderingTable(summary, split) {
+  const entries = Object.entries(summary[split] || {}).sort((a, b) => b[1].auc - a[1].auc);
   const best = entries.length ? entries[0][0] : null;
-  return h("div", { class: "table-wrap" }, h("table", null,
-    h("caption", null, "Area under the risk-coverage curve, and share of stale claims caught when searching the top 10 / 25 / 50% of claims"),
-    h("thead", null, h("tr", null,
-      h("th", { scope: "col" }, "Ranking"), h("th", { scope: "col", class: "num" }, "AUC"),
-      h("th", { scope: "col", class: "num" }, "Caught @10%"), h("th", { scope: "col", class: "num" }, "@25%"), h("th", { scope: "col", class: "num" }, "@50%"))),
-    h("tbody", null, entries.map(([m, v]) => h("tr", { class: m === best ? "best" : null },
-      h("th", { scope: "row" }, METHODS[m] || m),
-      h("td", { class: "num" }, fmt.num(v.auc, 3)),
-      h("td", { class: "num" }, fmt.pct(v.catch_at_10)), h("td", { class: "num" }, fmt.pct(v.catch_at_25)), h("td", { class: "num" }, fmt.pct(v.catch_at_50)))))));
+  return table("Area under the risk-coverage curve, and share of stale claims caught when verifying the top 10 / 25 / 50% of claims",
+    [{ label: "Ranking" }, { label: "AUC", num: true }, { label: "Caught @10%", num: true }, { label: "@25%", num: true }, { label: "@50%", num: true }],
+    entries.map(([m, v]) => h("tr", { class: m === best ? "best" : null },
+      h("th", { scope: "row" }, METHODS[m] || m), h("td", { class: "num" }, fmt.num(v.auc, 3)),
+      h("td", { class: "num" }, fmt.pct(v.catch_at_10)), h("td", { class: "num" }, fmt.pct(v.catch_at_25)), h("td", { class: "num" }, fmt.pct(v.catch_at_50)))));
+}
+
+function headlineTable(headline) {
+  const ks = ["caught_at_10", "caught_at_25", "caught_at_50"];
+  const cell = (triple) => (Array.isArray(triple) && triple.length === 3 ? ciCell(triple[1], [triple[0], triple[2]]) : h("td", { class: "num" }, "—"));
+  return table(`Headline on the model sample (n = ${headline.n}, ${headline.n_stale} stale): caught @10 / 25 / 50% with 95% CIs`,
+    [{ label: "Ordering" }, { label: "@10%", num: true }, { label: "@25%", num: true }, { label: "@50%", num: true }],
+    ["model_p", "halflife"].filter((m) => headline[m]).map((m) => h("tr", { class: m === "model_p" ? "best" : null },
+      h("th", { scope: "row" }, METHODS[m]), ks.map((k) => cell(headline[m][k])))));
 }
 
 function splitCounts(summary, split) {
@@ -612,85 +800,63 @@ function splitCounts(summary, split) {
   return n ? `all test claims, n = ${n} (${stale} stale), no model baselines` : "all test claims";
 }
 
-function renderJ3(slot, result) {
-  if (result.status === "missing") {
-    slot.replaceChildren(stateBox("", "Live detector (J3): not yet measured", "Results appear here once the live check run writes its summary file."));
-    return;
-  }
-  if (result.status === "error") {
-    slot.replaceChildren(stateBox("error", "Live detector (J3) results failed to load", result.message));
-    return;
-  }
-  const scalars = Object.entries(result.data || {}).filter(([, v]) => v === null || ["string", "number", "boolean"].includes(typeof v));
-  slot.replaceChildren(h("div", { class: "table-wrap" }, h("table", null,
-    h("caption", null, "Live detector (J3) results"),
-    h("tbody", null, scalars.map(([k, v]) => h("tr", null, h("th", { scope: "row" }, k.replace(/_/g, " ")), h("td", null, v === null ? "—" : String(v))))))));
-}
-
-function renderEvidence(summary, curves, j3) {
-  const out = document.getElementById("evidence-out");
+function orderingSection(summary, curves, headline) {
   let split = "test_sample";
   const tableSlot = h("div");
   const countLine = h("p", { class: "hint" });
-
   const redraw = () => {
-    tableSlot.replaceChildren(summary ? summaryTable(summary, split) : stateBox("error", "Summary table unavailable", "summary.json did not load."));
+    tableSlot.replaceChildren(summary ? orderingTable(summary, split) : stateBox("error", "Summary table unavailable", "summary.json did not load."));
     countLine.textContent = summary ? splitCounts(summary, split) : "";
     if (!curves) return;
-    const grid = Array.isArray(curves.grid) ? curves.grid.map((x) => Math.round(x * 100)) : [];
-    const options = baseChartOptions("Stale claims caught (%)", "Claims searched, riskiest first (%)");
-    options.scales.y.min = 0;
-    options.scales.y.max = 100;
-    options.scales.x.ticks.maxTicksLimit = 11;
-    options.interaction = { mode: "index", intersect: false };
-    options.plugins.tooltip = { callbacks: { title: (items) => `search top ${items[0].label}%`, label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(0)}% caught` } };
-    drawChart("curve-chart", { type: "line", data: { labels: grid, datasets: curveDatasets(curves, split) }, options });
+    const grid = (curves.grid || []).map((x) => Math.round(x * 100));
+    drawChart("curve-chart", {
+      type: "line",
+      data: { labels: grid, datasets: curveDatasets(curves[split] || {}, ["model_p", "halflife", "model_ts", "class_only", "age_only", "random"]) },
+      options: curveChartOptions("Claims verified, riskiest first (%)"),
+    });
   };
-
   const radio = (value, label) => h("label", null,
     h("input", { type: "radio", name: "split", value, checked: value === split }), h("span", null, label));
-  const picker = h("fieldset", { class: "segmented", style: { padding: "0" } },
-    h("legend", { class: "kicker", style: { position: "absolute", left: "-999px" } }, "Dataset"),
+  const picker = h("fieldset", { class: "segmented" },
+    h("legend", { class: "visually-hidden" }, "Dataset"),
     radio("test_sample", "Model sample (n=300)"), radio("test_full", "Full test set"));
   picker.addEventListener("change", (e) => { split = e.target.value; redraw(); });
 
-  const j3Slot = h("div");
-  out.replaceChildren(...[
-    h("h2", null, "Does the ranking find stale claims early?"),
-    h("p", { class: "section-note" }, "Risk-coverage: search claims from riskiest down; the curve shows what share of the truly stale ones you have caught after searching x% of all claims. Higher and further left is better."),
+  const section = h("section", { "aria-labelledby": "ord-h" },
+    h("h2", { id: "ord-h" }, "Ordering test (time-travel dataset)"),
+    h("p", { class: "section-note" }, "Claims dated before a cutoff, outcomes after it. Verify claims from riskiest down; the curve shows what share of the truly stale ones are caught after verifying x% of all claims."),
     picker, countLine,
-    curves ? chartSlot("curve-chart", "Line chart of stale claims caught against claims searched, one line per ranking method") : stateBox("error", "Curves unavailable", "curves.json did not load."),
+    curves ? chartSlot("curve-chart", "Line chart of stale claims caught against claims verified, one line per ranking method") : stateBox("error", "Curves unavailable", "curves.json did not load."),
     h("div", { class: "caption-box" },
-      h("p", null, h("strong", null, "Plain reading: "), "the model's own probability that a claim is outdated ranks better than the half-life model (AUC 0.826 vs 0.782 on the 300-claim sample). Half-life ordering still beats random, age-only and class-only ranking, and it drives cache TTLs where no model call is made."),
-      h("p", null, "The dataset covers four classes only: office holder, software version, policy rate, and timeless controls. It has no prices and no laws.")),
-    h("h3", { style: { marginTop: "22px" } }, "Summary"),
+      h("p", null, "Ordering dataset covers four classes (office holder, software version, policy rate, timeless); prices and laws are not in it.")),
+    headline ? headlineTable(headline) : null,
+    h("h3", { style: { marginTop: "18px" } }, "All rankings"),
     tableSlot,
-    summary && summary.cutoff ? h("p", { class: "hint" }, `Half-lives fitted on outcomes before ${summary.cutoff}; every test outcome is a change after that date.`) : null,
-    h("h2", null, "Live detector results"),
-    j3Slot].filter(Boolean));
-  renderJ3(j3Slot, j3);
-  redraw();
+    summary && summary.cutoff ? h("p", { class: "hint" }, `Half-lives fitted on outcomes before ${summary.cutoff}; every test outcome is a change after that date.`) : null);
+  return { section, redraw };
 }
 
 async function loadEvidence() {
   loaded.evidence = true;
   const out = document.getElementById("evidence-out");
-  out.replaceChildren(stateBox("", "Loading measured results…"));
-  const [summary, curves, j3] = await Promise.allSettled([getJSON(RESULTS.summary), getJSON(RESULTS.curves), getJSON(RESULTS.j3)]);
-  if (summary.status === "rejected" && curves.status === "rejected") {
+  out.replaceChildren(stateBox("loading", "Loading measured results…"));
+  const keys = Object.keys(RESULTS);
+  const settled = await Promise.allSettled(keys.map((k) => getJSON(RESULTS[k])));
+  const data = Object.fromEntries(keys.map((k, i) => [k, settled[i].status === "fulfilled" ? settled[i].value : null]));
+  if (keys.every((k) => !data[k])) {
     loaded.evidence = false;
-    out.replaceChildren(stateBox("error", "No measured results found", summary.reason.message, curves.reason.message));
+    out.replaceChildren(stateBox("error", "No measured results found", settled[0].reason.message));
     return;
   }
-  let j3Result;
-  if (j3.status === "fulfilled") j3Result = { status: "ok", data: j3.value };
-  else if (j3.reason.missing) j3Result = { status: "missing" };
-  else j3Result = { status: "error", message: j3.reason.message };
-  renderEvidence(summary.status === "fulfilled" ? summary.value : null, curves.status === "fulfilled" ? curves.value : null, j3Result);
+  const ordering = orderingSection(data.orderingSummary, data.orderingCurves, data.orderingHeadline);
+  out.replaceChildren(detectorSection(data.detectorSummary, data.detectorCurves), ordering.section);
+  drawDetectorChart(data.detectorCurves);
+  ordering.redraw();
 }
 
 // ---------- boot ----------
 
 document.getElementById("source-flag").textContent = DATA_SOURCE === "fixture" ? "data: sample fixtures" : "data: live API";
+loadHealth();
 initCheck();
 initTabs();

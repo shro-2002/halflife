@@ -41,7 +41,7 @@ git clone <this repo> halflife && cd halflife
 cp .env.example .env    # fill ANTHROPIC_API_KEY, TAVILY_API_KEY, BIFROST_ADMIN_PASSWORD, BIFROST_SETUP_TOKEN
 uv sync
 make bifrost            # stock Bifrost v2.5.1 via npx on :8088 (BIFROST_PORT), admin auth from .env
-make setup              # Anthropic provider, Tavily relay, virtual key "halflife-dev" with a $10 budget
+make setup              # Anthropic provider, Tavily relay, virtual key "halflife-dev" ($10 budget), fitted half-lives
 make api                # Half-Life API + UI on http://localhost:8091
 ```
 
@@ -142,7 +142,8 @@ $0.0011 and 2.8 Tavily credits per check, median latency 5.9 s (max 9.3 s), `rea
   England page still showed the old rate days after a change).
 - **Judge errors:** the judge can over-read evidence (an announced resignation treated as done); every verdict ships
   its verbatim quote and URL so it can be audited. See [errors.md](results/2026-11-12-detector/errors.md).
-- **Rate limiter is per process** (in-memory). Behind several replicas, use a shared store.
+- **Rate limiter is per process** (in-memory). Behind several replicas, use a shared store. Setting `HALFLIFE_API_KEY`
+  protects programmatic callers, but the bundled UI does not send a key; a public UI relies on the rate limit.
 - Demo audit numbers describe seeded demo traffic, not production.
 
 **Future work:** per-entity half-lives (a package or office, not a whole class). The model wins today because it

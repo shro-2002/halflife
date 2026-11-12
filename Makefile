@@ -15,6 +15,7 @@ bifrost-cache:
 
 setup:
 	uv run python -m halflife.clients.setup_gateway
+	uv run python -m halflife.ledger import-fit results/2026-11-12-ordering/summary.json
 
 api:
 	uv run uvicorn halflife.api:app --port $(PORT_API) --reload

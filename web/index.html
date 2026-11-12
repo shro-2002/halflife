@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Half-Life</title>
-  <meta name="description" content="Checks which claims in LLM answers are stale, verifies the riskiest under a budget, and audits gateway traffic.">
-  <link rel="stylesheet" href="style.css">
+  <meta name="description" content="Audits gateway traffic for stale claims, checks single answers against the web under a budget, and shows the measured evidence.">
+  <link rel="stylesheet" href="/web/style.css">
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" integrity="sha384-bs/nf9FbdNouRbMiFcrcZfLXYPKiPaGVGplVbv7dLGECccEXDW+S3zjqSKR5ZEaD" crossorigin="anonymous"></script>
-  <script defer src="app.js"></script>
+  <script defer src="/web/app.js"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -15,7 +15,7 @@
     <div class="masthead-text">
       <p class="eyebrow">Lab notebook &middot; freshness of LLM answers</p>
       <h1>Half-Life</h1>
-      <p class="lede">Which claims in an answer have gone stale since the model learned them, which ones we checked against the web, and how long a cached answer stays safe.</p>
+      <p class="lede">How much of your gateway's traffic is already out of date, which claims in an answer have gone stale, and what we checked against the web to know.</p>
     </div>
     <svg class="decay-motif" viewBox="0 0 220 90" aria-hidden="true" focusable="false">
       <line x1="10" y1="80" x2="214" y2="80" class="axis"/>
@@ -30,30 +30,40 @@
 
   <nav class="tabs" aria-label="Views">
     <div role="tablist" aria-label="Half-Life views">
-      <button role="tab" id="tab-check" aria-controls="panel-check" aria-selected="true">Check an answer</button>
-      <button role="tab" id="tab-gateway" aria-controls="panel-gateway" aria-selected="false" tabindex="-1">Gateway audit</button>
+      <button role="tab" id="tab-gateway" aria-controls="panel-gateway" aria-selected="true">Gateway audit</button>
+      <button role="tab" id="tab-check" aria-controls="panel-check" aria-selected="false" tabindex="-1">Check an answer</button>
       <button role="tab" id="tab-evidence" aria-controls="panel-evidence" aria-selected="false" tabindex="-1">Evidence</button>
     </div>
-    <p class="source-flag" id="source-flag"></p>
+    <div class="status-row">
+      <span class="pill" id="health-pill" role="status">Bifrost: checking…</span>
+      <span class="source-flag" id="source-flag"></span>
+    </div>
   </nav>
 
   <main id="main">
-    <section role="tabpanel" id="panel-check" aria-labelledby="tab-check" tabindex="0">
+    <section role="tabpanel" id="panel-gateway" aria-labelledby="tab-gateway" tabindex="0">
+      <div id="gateway-out" aria-live="polite"></div>
+    </section>
+
+    <section role="tabpanel" id="panel-check" aria-labelledby="tab-check" tabindex="0" hidden>
       <form id="check-form" class="check-form">
+        <div class="examples" role="group" aria-labelledby="examples-label">
+          <span class="kicker" id="examples-label">Try an example</span>
+          <button type="button" class="chip" data-example="stale">Stale facts</button>
+          <button type="button" class="chip" data-example="timeless">Timeless facts</button>
+          <button type="button" class="chip" data-example="mixed">Mixed</button>
+        </div>
         <label for="answer-input" class="field-label">Answer to check</label>
-        <textarea id="answer-input" rows="5" placeholder="Paste an LLM answer here."></textarea>
+        <textarea id="answer-input" rows="5" maxlength="20000" placeholder="Paste an LLM answer here."></textarea>
         <div class="form-row">
           <label>As of <input type="date" id="asof-input"></label>
-          <label>Search budget <input type="number" id="budget-input" min="0" max="50" step="1" inputmode="numeric" placeholder="all"></label>
+          <label>Search budget <input type="number" id="budget-input" min="0" max="20" step="1" inputmode="numeric" placeholder="all"></label>
+          <label class="check-opt"><input type="checkbox" id="failover-input"> <span>Simulate primary model outage (Bifrost fails over to claude-haiku-4-5)</span></label>
           <button type="submit" class="primary" id="check-btn">Check</button>
         </div>
         <p class="hint" id="check-hint"></p>
       </form>
       <div id="check-out" aria-live="polite"></div>
-    </section>
-
-    <section role="tabpanel" id="panel-gateway" aria-labelledby="tab-gateway" tabindex="0" hidden>
-      <div id="gateway-out" aria-live="polite"></div>
     </section>
 
     <section role="tabpanel" id="panel-evidence" aria-labelledby="tab-evidence" tabindex="0" hidden>
