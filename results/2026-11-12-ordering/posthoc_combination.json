@@ -1,0 +1,25 @@
+{
+ "note": "POST-HOC exploratory, not pre-registered",
+ "auc": {
+  "halflife": 0.7821,
+  "class_only": 0.6965,
+  "age_only": 0.6058,
+  "random": 0.5011,
+  "model_ts": 0.7606,
+  "model_p": 0.8262,
+  "rankavg_hl_modelp": 0.8102,
+  "max_hl_modelp": 0.8107
+ },
+ "ci95_rankavg_minus": {
+  "model_p": [
+   -0.0279,
+   -0.0157,
+   -0.0039
+  ],
+  "halflife": [
+   0.018,
+   0.0279,
+   0.0389
+  ]
+ }
+}

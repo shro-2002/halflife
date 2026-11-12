@@ -112,6 +112,16 @@ class BifrostClient:
         data = resp.json()
         return data.get("log", data)
 
+    async def vk_spend_usd(self, vk_name: str = "halflife-dev") -> float:
+        """Authoritative spend: the VK budget's current_usage. Chat responses carry no cost field
+        (only the log row does), so runs measure spend as the delta of this value."""
+        resp = await self.admin("GET", "/api/governance/virtual-keys")
+        resp.raise_for_status()
+        for vk in resp.json().get("virtual_keys") or []:
+            if vk.get("name") == vk_name:
+                return float(sum(b.get("current_usage") or 0.0 for b in vk.get("budgets") or []))
+        return 0.0
+
     async def admin(self, method: str, path: str, **kwargs: Any) -> httpx.Response:
         return await self._http.request(method, path, auth=self._admin, **kwargs)
 

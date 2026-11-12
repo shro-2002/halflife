@@ -1,0 +1,1202 @@
+{
+ "head_of_government:Q423#1": {
+  "time_sensitivity": 6.0,
+  "p_outdated": 0.35
+ },
+ "ceo:Q825159#1": {
+  "time_sensitivity": 6.0,
+  "p_outdated": 0.08
+ },
+ "head_of_government:Q230#1": {
+  "time_sensitivity": 7.0,
+  "p_outdated": 0.15
+ },
+ "ceo:Q8766#1": {
+  "time_sensitivity": 7.0,
+  "p_outdated": 0.2
+ },
+ "ceo:Q726572#2": {
+  "time_sensitivity": 7.0,
+  "p_outdated": 0.2
+ },
+ "head_of_state:Q252#2": {
+  "time_sensitivity": 7.0,
+  "p_outdated": 0.03
+ },
+ "head_of_government:Q43#2": {
+  "time_sensitivity": 7.0,
+  "p_outdated": 0.08
+ },
+ "ceo:Q1305281#2": {
+  "time_sensitivity": 6.0,
+  "p_outdated": 0.03
+ },
+ "head_of_government:Q697#0": {
+  "time_sensitivity": 7.0,
+  "p_outdated": 0.2
+ },
+ "head_of_state:Q917#1": {
+  "time_sensitivity": 3.0,
+  "p_outdated": 0.03
+ },
+ "ceo:Q668737#1": {
+  "time_sensitivity": 7.0,
+  "p_outdated": 0.35
+ },
+ "head_of_state:Q800#2": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.12
+ },
+ "ceo:Q1852556#1": {
+  "time_sensitivity": 6.0,
+  "p_outdated": 0.08
+ },
+ "ceo:Q689791#2": {
+  "time_sensitivity": 7.0,
+  "p_outdated": 0.2
+ },
+ "head_of_government:Q242#0": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.2
+ },
+ "head_of_government:Q822#2": {
+  "time_sensitivity": 7.0,
+  "p_outdated": 0.25
+ },
+ "ceo:Q642189#2": {
+  "time_sensitivity": 6.0,
+  "p_outdated": 0.08
+ },
+ "head_of_government:Q232#1": {
+  "time_sensitivity": 7.0,
+  "p_outdated": 0.2
+ },
+ "head_of_state:Q756617#0": {
+  "time_sensitivity": 2.0,
+  "p_outdated": 0.02
+ },
+ "head_of_government:Q754#1": {
+  "time_sensitivity": 7.0,
+  "p_outdated": 0.04
+ },
+ "ceo:Q1852556#2": {
+  "time_sensitivity": 6.0,
+  "p_outdated": 0.1
+ },
+ "ceo:Q1475312#1": {
+  "time_sensitivity": 4.0,
+  "p_outdated": 0.03
+ },
+ "ceo:Q157617#0": {
+  "time_sensitivity": 6.0,
+  "p_outdated": 0.08
+ },
+ "head_of_government:Q1013#2": {
+  "time_sensitivity": 7.0,
+  "p_outdated": 0.3
+ },
+ "head_of_government:Q678#1": {
+  "time_sensitivity": 7.0,
+  "p_outdated": 0.12
+ },
+ "head_of_state:Q783#0": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.1
+ },
+ "ceo:Q27074#1": {
+  "time_sensitivity": 6.0,
+  "p_outdated": 0.04
+ },
+ "ceo:Q20718#1": {
+  "time_sensitivity": 6.0,
+  "p_outdated": 0.03
+ },
+ "head_of_government:Q221#1": {
+  "time_sensitivity": 6.0,
+  "p_outdated": 0.04
+ },
+ "head_of_government:Q800#2": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.9
+ },
+ "head_of_state:Q1030#2": {
+  "time_sensitivity": 7.0,
+  "p_outdated": 0.08
+ },
+ "ceo:Q23317#2": {
+  "time_sensitivity": 6.0,
+  "p_outdated": 0.2
+ },
+ "head_of_state:Q709#0": {
+  "time_sensitivity": 7.0,
+  "p_outdated": 0.35
+ },
+ "head_of_state:Q733#0": {
+  "time_sensitivity": 7.0,
+  "p_outdated": 0.03
+ },
+ "head_of_state:Q189#1": {
+  "time_sensitivity": 6.0,
+  "p_outdated": 0.12
+ },
+ "head_of_state:Q889#0": {
+  "time_sensitivity": 7.0,
+  "p_outdated": 0.03
+ },
+ "ceo:Q944760#2": {
+  "time_sensitivity": 6.0,
+  "p_outdated": 0.12
+ },
+ "head_of_government:Q235#1": {
+  "time_sensitivity": 6.0,
+  "p_outdated": 0.1
+ },
+ "ceo:Q14662364#0": {
+  "time_sensitivity": 6.0,
+  "p_outdated": 0.08
+ },
+ "head_of_government:Q983#0": {
+  "time_sensitivity": 6.0,
+  "p_outdated": 0.05
+ },
+ "head_of_state:Q419#1": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.35
+ },
+ "head_of_government:Q754#2": {
+  "time_sensitivity": 7.0,
+  "p_outdated": 0.08
+ },
+ "ceo:Q1885456#2": {
+  "time_sensitivity": 6.0,
+  "p_outdated": 0.05
+ },
+ "head_of_government:Q16#1": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.08
+ },
+ "head_of_government:Q1025#1": {
+  "time_sensitivity": 7.0,
+  "p_outdated": 0.12
+ },
+ "head_of_state:Q1032#0": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.12
+ },
+ "head_of_state:Q1005#1": {
+  "time_sensitivity": 7.0,
+  "p_outdated": 0.05
+ },
+ "head_of_state:Q734#0": {
+  "time_sensitivity": 6.0,
+  "p_outdated": 0.12
+ },
+ "head_of_government:Q29999#1": {
+  "time_sensitivity": 7.0,
+  "p_outdated": 0.15
+ },
+ "head_of_state:Q43#1": {
+  "time_sensitivity": 6.0,
+  "p_outdated": 0.12
+ },
+ "ceo:Q931207#0": {
+  "time_sensitivity": 7.0,
+  "p_outdated": 0.15
+ },
+ "ceo:Q791285#1": {
+  "time_sensitivity": 7.0,
+  "p_outdated": 0.3
+ },
+ "ceo:Q20858163#2": {
+  "time_sensitivity": 6.0,
+  "p_outdated": 0.12
+ },
+ "ceo:Q2103926#1": {
+  "time_sensitivity": 7.0,
+  "p_outdated": 0.08
+ },
+ "ceo:Q901262#1": {
+  "time_sensitivity": 6.0,
+  "p_outdated": 0.12
+ },
+ "ceo:Q9325#0": {
+  "time_sensitivity": 6.0,
+  "p_outdated": 0.25
+ },
+ "head_of_government:Q36#0": {
+  "time_sensitivity": 7.0,
+  "p_outdated": 0.12
+ },
+ "head_of_government:Q228#1": {
+  "time_sensitivity": 6.0,
+  "p_outdated": 0.12
+ },
+ "ceo:Q297879#1": {
+  "time_sensitivity": 6.0,
+  "p_outdated": 0.08
+ },
+ "ceo:Q20165#1": {
+  "time_sensitivity": 7.0,
+  "p_outdated": 0.35
+ },
+ "ceo:Q170416#1": {
+  "time_sensitivity": 6.0,
+  "p_outdated": 0.12
+ },
+ "ceo:Q898208#2": {
+  "time_sensitivity": 6.0,
+  "p_outdated": 0.12
+ },
+ "head_of_state:Q760#2": {
+  "time_sensitivity": 4.0,
+  "p_outdated": 0.04
+ },
+ "head_of_government:Q29999#0": {
+  "time_sensitivity": 7.0,
+  "p_outdated": 0.35
+ },
+ "head_of_government:Q974#1": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "ceo:Q669141#0": {
+  "time_sensitivity": 6.0,
+  "p_outdated": 0.35
+ },
+ "ceo:Q467752#1": {
+  "time_sensitivity": 6.0,
+  "p_outdated": 0.12
+ },
+ "head_of_government:Q215#1": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.35
+ },
+ "head_of_government:Q214#1": {
+  "time_sensitivity": 7.0,
+  "p_outdated": 0.12
+ },
+ "head_of_government:Q145#0": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.35
+ },
+ "head_of_government:Q229#0": {
+  "time_sensitivity": 6.0,
+  "p_outdated": 0.03
+ },
+ "head_of_government:Q1050#1": {
+  "time_sensitivity": 6.0,
+  "p_outdated": 0.15
+ },
+ "head_of_government:Q184#0": {
+  "time_sensitivity": 6.0,
+  "p_outdated": 0.15
+ },
+ "head_of_government:Q230#0": {
+  "time_sensitivity": 6.0,
+  "p_outdated": 0.12
+ },
+ "head_of_state:Q237#1": {
+  "time_sensitivity": 7.0,
+  "p_outdated": 0.03
+ },
+ "rate:CH#3": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.25
+ },
+ "rate:GB#1": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.45
+ },
+ "rate:SA#2": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "rate:PL#0": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "rate:IL#2": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.5
+ },
+ "rate:MY#1": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.55
+ },
+ "rate:BR#1": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "rate:CA#2": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "rate:CN#1": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "rate:CZ#1": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "rate:KR#3": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.35
+ },
+ "rate:SA#1": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "rate:CZ#2": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.45
+ },
+ "rate:GB#3": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "rate:BR#2": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.8
+ },
+ "rate:US#1": {
+  "time_sensitivity": 9.0,
+  "p_outdated": 0.6
+ },
+ "rate:BR#3": {
+  "time_sensitivity": 9.0,
+  "p_outdated": 0.6
+ },
+ "rate:ID#0": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.45
+ },
+ "rate:TR#2": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.9
+ },
+ "rate:CH#0": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "rate:ID#3": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.8
+ },
+ "rate:CL#1": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.45
+ },
+ "rate:MX#0": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.9
+ },
+ "rate:HK#2": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.5
+ },
+ "rate:PL#1": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.35
+ },
+ "rate:AU#3": {
+  "time_sensitivity": 9.0,
+  "p_outdated": 0.85
+ },
+ "rate:KR#2": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "rate:CH#2": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.35
+ },
+ "rate:HK#0": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.9
+ },
+ "rate:GB#2": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "rate:CL#3": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.9
+ },
+ "rate:MY#2": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.25
+ },
+ "rate:NZ#1": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.9
+ },
+ "rate:CZ#3": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.45
+ },
+ "rate:US#3": {
+  "time_sensitivity": 9.0,
+  "p_outdated": 0.85
+ },
+ "rate:HK#3": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "rate:CN#0": {
+  "time_sensitivity": 7.0,
+  "p_outdated": 0.6
+ },
+ "rate:SA#3": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.85
+ },
+ "rate:NZ#3": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.8
+ },
+ "rate:CH#1": {
+  "time_sensitivity": 7.0,
+  "p_outdated": 0.35
+ },
+ "rate:NZ#0": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.85
+ },
+ "rate:CN#2": {
+  "time_sensitivity": 7.0,
+  "p_outdated": 0.35
+ },
+ "rate:IL#1": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.45
+ },
+ "rate:AU#0": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.35
+ },
+ "rate:ID#1": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.5
+ },
+ "rate:TR#0": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.45
+ },
+ "rate:CL#0": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "rate:US#2": {
+  "time_sensitivity": 9.0,
+  "p_outdated": 0.45
+ },
+ "rate:CN#3": {
+  "time_sensitivity": 7.0,
+  "p_outdated": 0.3
+ },
+ "rate:NZ#2": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.55
+ },
+ "rate:MY#3": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "rate:TR#3": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "rate:BR#0": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "rate:GB#0": {
+  "time_sensitivity": 9.0,
+  "p_outdated": 0.6
+ },
+ "rate:CL#2": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.55
+ },
+ "rate:PL#3": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.35
+ },
+ "rate:MX#1": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "rate:MX#3": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "rate:AU#2": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.35
+ },
+ "rate:AU#1": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.9
+ },
+ "rate:TR#1": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "rate:CZ#0": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.35
+ },
+ "rate:PL#2": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.9
+ },
+ "rate:KR#1": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.85
+ },
+ "rate:MX#2": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.9
+ },
+ "rate:CA#1": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.8
+ },
+ "rate:KR#0": {
+  "time_sensitivity": 7.0,
+  "p_outdated": 0.35
+ },
+ "rate:MY#0": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "rate:IL#3": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.35
+ },
+ "rate:HK#1": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.35
+ },
+ "rate:IL#0": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "rate:SA#0": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.45
+ },
+ "rate:ID#2": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "rate:CA#0": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "rate:CA#3": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.45
+ },
+ "npm:vue#0": {
+  "time_sensitivity": 9.0,
+  "p_outdated": 0.97
+ },
+ "npm:d3#0": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.8
+ },
+ "pypi:matplotlib#3": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.8
+ },
+ "pypi:torch#2": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.8
+ },
+ "npm:prisma#2": {
+  "time_sensitivity": 9.0,
+  "p_outdated": 0.97
+ },
+ "pypi:matplotlib#2": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "npm:react#0": {
+  "time_sensitivity": 9.0,
+  "p_outdated": 0.9
+ },
+ "npm:next#3": {
+  "time_sensitivity": 9.0,
+  "p_outdated": 0.9
+ },
+ "pypi:jinja2#0": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.7
+ },
+ "npm:vue#3": {
+  "time_sensitivity": 9.0,
+  "p_outdated": 0.85
+ },
+ "npm:svelte#1": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.9
+ },
+ "pypi:cryptography#1": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.9
+ },
+ "pypi:setuptools#1": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "pypi:click#3": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "npm:chalk#0": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.35
+ },
+ "pypi:openai#1": {
+  "time_sensitivity": 9.0,
+  "p_outdated": 0.8
+ },
+ "pypi:matplotlib#0": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.75
+ },
+ "npm:esbuild#1": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.85
+ },
+ "pypi:poetry#0": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.85
+ },
+ "npm:node-fetch#3": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.85
+ },
+ "npm:esbuild#0": {
+  "time_sensitivity": 9.0,
+  "p_outdated": 0.8
+ },
+ "pypi:poetry#1": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.75
+ },
+ "npm:commander#3": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "pypi:torch#3": {
+  "time_sensitivity": 9.0,
+  "p_outdated": 0.97
+ },
+ "pypi:jinja2#2": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.7
+ },
+ "npm:commander#1": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.8
+ },
+ "npm:react#3": {
+  "time_sensitivity": 9.0,
+  "p_outdated": 0.97
+ },
+ "npm:esbuild#3": {
+  "time_sensitivity": 9.0,
+  "p_outdated": 0.97
+ },
+ "pypi:pandas#1": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.35
+ },
+ "pypi:fastapi#3": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.9
+ },
+ "pypi:requests#2": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.95
+ },
+ "pypi:uvicorn#0": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.7
+ },
+ "pypi:pydantic#0": {
+  "time_sensitivity": 9.0,
+  "p_outdated": 0.6
+ },
+ "npm:@angular/core#1": {
+  "time_sensitivity": 9.0,
+  "p_outdated": 0.97
+ },
+ "npm:prisma#0": {
+  "time_sensitivity": 9.0,
+  "p_outdated": 0.9
+ },
+ "npm:commander#0": {
+  "time_sensitivity": 9.0,
+  "p_outdated": 0.9
+ },
+ "pypi:pydantic#2": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.9
+ },
+ "pypi:urllib3#3": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "pypi:uvicorn#2": {
+  "time_sensitivity": 9.0,
+  "p_outdated": 0.97
+ },
+ "npm:@angular/core#0": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "npm:webpack#0": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.85
+ },
+ "npm:prisma#1": {
+  "time_sensitivity": 9.0,
+  "p_outdated": 0.9
+ },
+ "pypi:pandas#0": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.8
+ },
+ "npm:rollup#3": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "npm:webpack#2": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "npm:svelte#2": {
+  "time_sensitivity": 9.0,
+  "p_outdated": 0.97
+ },
+ "pypi:pandas#3": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.85
+ },
+ "npm:next#2": {
+  "time_sensitivity": 9.0,
+  "p_outdated": 0.6
+ },
+ "npm:lodash#3": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.85
+ },
+ "npm:mongoose#0": {
+  "time_sensitivity": 9.0,
+  "p_outdated": 0.9
+ },
+ "pypi:setuptools#2": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.9
+ },
+ "pypi:cryptography#0": {
+  "time_sensitivity": 9.0,
+  "p_outdated": 0.8
+ },
+ "npm:electron#0": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.9
+ },
+ "pypi:click#1": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "npm:electron#1": {
+  "time_sensitivity": 9.0,
+  "p_outdated": 0.9
+ },
+ "npm:next#1": {
+  "time_sensitivity": 9.0,
+  "p_outdated": 0.85
+ },
+ "npm:d3#2": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.8
+ },
+ "npm:commander#2": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "npm:webpack#1": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.85
+ },
+ "npm:node-fetch#2": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "npm:chalk#1": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "pypi:sqlalchemy#2": {
+  "time_sensitivity": 9.0,
+  "p_outdated": 0.97
+ },
+ "npm:vue#2": {
+  "time_sensitivity": 9.0,
+  "p_outdated": 0.97
+ },
+ "npm:node-fetch#0": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "npm:socket.io#2": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "pypi:sqlalchemy#0": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "pypi:click#0": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.35
+ },
+ "pypi:cryptography#2": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "pypi:matplotlib#1": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.97
+ },
+ "npm:prisma#3": {
+  "time_sensitivity": 9.0,
+  "p_outdated": 0.85
+ },
+ "pypi:click#2": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "pypi:jinja2#1": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "pypi:sqlalchemy#1": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.8
+ },
+ "npm:d3#3": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.6
+ },
+ "pypi:pyarrow#0": {
+  "time_sensitivity": 8.0,
+  "p_outdated": 0.5
+ },
+ "element:Q1853#0": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q1888#1": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.0
+ },
+ "element:Q713#1": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q895#1": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q708#0": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.0
+ },
+ "element:Q1843#0": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q1123#1": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q888#0": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.0
+ },
+ "element:Q1098#0": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q677#1": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q869681#1": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q1121#0": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q1089#1": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.0
+ },
+ "element:Q3029913#0": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q682#1": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q3551931#0": {
+  "time_sensitivity": 1.0,
+  "p_outdated": 0.03
+ },
+ "element:Q1089#0": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q1306#0": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q91655999#0": {
+  "time_sensitivity": 1.0,
+  "p_outdated": 0.02
+ },
+ "element:Q1278#1": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q19599218#0": {
+  "time_sensitivity": 1.0,
+  "p_outdated": 0.02
+ },
+ "element:Q999#1": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q30929350#1": {
+  "time_sensitivity": 1.0,
+  "p_outdated": 0.02
+ },
+ "element:Q22314315#1": {
+  "time_sensitivity": 1.0,
+  "p_outdated": 0.02
+ },
+ "element:Q1857#0": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q3551935#0": {
+  "time_sensitivity": 1.0,
+  "p_outdated": 0.02
+ },
+ "element:Q713#0": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q1123#0": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q1106#0": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q1849#0": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q1876#0": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.0
+ },
+ "element:Q3552038#1": {
+  "time_sensitivity": 1.0,
+  "p_outdated": 0.02
+ },
+ "element:Q1252#1": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q428692#1": {
+  "time_sensitivity": 1.0,
+  "p_outdated": 0.02
+ },
+ "element:Q428648#0": {
+  "time_sensitivity": 1.0,
+  "p_outdated": 0.02
+ },
+ "element:Q722#0": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q1809#1": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q1109#1": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q660#1": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q1086#0": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q895#0": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q1853#1": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q650#0": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.0
+ },
+ "element:Q1843#1": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q2399140#0": {
+  "time_sensitivity": 1.0,
+  "p_outdated": 0.02
+ },
+ "element:Q1846#0": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q1119#1": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q868375#0": {
+  "time_sensitivity": 1.0,
+  "p_outdated": 0.02
+ },
+ "element:Q1838#1": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q1898#1": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q1133#0": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q22314315#0": {
+  "time_sensitivity": 1.0,
+  "p_outdated": 0.03
+ },
+ "element:Q706#1": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q1838#0": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q428648#1": {
+  "time_sensitivity": 1.0,
+  "p_outdated": 0.02
+ },
+ "element:Q1857#1": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q671#1": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.0
+ },
+ "element:Q1901#1": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q3551924#0": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q1099#1": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q1099#0": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q428685#1": {
+  "time_sensitivity": 1.0,
+  "p_outdated": 0.01
+ },
+ "element:Q1266#1": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q716#1": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q113084037#0": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q16307178#0": {
+  "time_sensitivity": 1.0,
+  "p_outdated": 0.02
+ },
+ "element:Q1272#1": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q1301#1": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q1086#1": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q1094#0": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.0
+ },
+ "element:Q3551921#0": {
+  "time_sensitivity": 1.0,
+  "p_outdated": 0.02
+ },
+ "element:Q1094#1": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q1102#0": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ },
+ "element:Q3551924#1": {
+  "time_sensitivity": 1.0,
+  "p_outdated": 0.01
+ },
+ "element:Q11289368#0": {
+  "time_sensitivity": 0.0,
+  "p_outdated": 0.01
+ }
+}
