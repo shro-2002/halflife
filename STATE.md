@@ -43,6 +43,8 @@
 - Item 4: measure cost/latency per check on 10 answers before J3, record here.
 - Item 7: #9748 thread read 2026-11-12 21:03 IST: no maintainer reply, only a CodeRabbit bot comment (links merged relay PR #9170). Its asks: plugin location, `plugin_metadata` on stream chunks, shared plugin cache. UPSTREAM.md must not repeat those; re-read before writing.
 - M1 notes from W3: verbatim-but-weak quote can still count as strong support (UN photo caption on un.org) -> judge prompt must require the quote to state the fact; carry VerifyOutcome.strong_support into the 95/80 score; when both searches fail, searched=True with verdict None -> score as unverified. current_value prompt changed to value-only (untested live).
+- M1 security fixes (review on 56f7694): validate `authoritative_domain` (hostname chars, >=1 dot, not a bare/public suffix) before using include_domains or the authoritative flag; count source independence by registrable domain, not host.
+- W6 done: UI renders from fixtures; switch `DATA_SOURCE` to "api" in web/app.js at J4; J3 results path assumed `results/j3-live/summary.json`.
 - M1 notes from W1: treat `is_past_event` claims as non-decaying in the half-life fallback; year-only dates stored as YYYY-01-01 (no precision field).
 
 ## Spend

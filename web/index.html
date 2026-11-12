@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Half-Life</title>
+  <meta name="description" content="Checks which claims in LLM answers are stale, verifies the riskiest under a budget, and audits gateway traffic.">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" integrity="sha384-bs/nf9FbdNouRbMiFcrcZfLXYPKiPaGVGplVbv7dLGECccEXDW+S3zjqSKR5ZEaD" crossorigin="anonymous"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="masthead">
+    <div class="masthead-text">
+      <p class="eyebrow">Lab notebook &middot; freshness of LLM answers</p>
+      <h1>Half-Life</h1>
+      <p class="lede">Which claims in an answer have gone stale since the model learned them, which ones we checked against the web, and how long a cached answer stays safe.</p>
+    </div>
+    <svg class="decay-motif" viewBox="0 0 220 90" aria-hidden="true" focusable="false">
+      <line x1="10" y1="80" x2="214" y2="80" class="axis"/>
+      <line x1="10" y1="8" x2="10" y2="80" class="axis"/>
+      <line x1="61" y1="80" x2="61" y2="44" class="tick"/>
+      <line x1="112" y1="80" x2="112" y2="62" class="tick"/>
+      <path class="curve" d="M10 8 C 40 30, 70 50, 112 62 S 180 76, 214 78"/>
+      <text x="56" y="40" class="lbl">h</text>
+      <text x="104" y="58" class="lbl">2h</text>
+    </svg>
+  </header>
+
+  <nav class="tabs" aria-label="Views">
+    <div role="tablist" aria-label="Half-Life views">
+      <button role="tab" id="tab-check" aria-controls="panel-check" aria-selected="true">Check an answer</button>
+      <button role="tab" id="tab-gateway" aria-controls="panel-gateway" aria-selected="false" tabindex="-1">Gateway audit</button>
+      <button role="tab" id="tab-evidence" aria-controls="panel-evidence" aria-selected="false" tabindex="-1">Evidence</button>
+    </div>
+    <p class="source-flag" id="source-flag"></p>
+  </nav>
+
+  <main id="main">
+    <section role="tabpanel" id="panel-check" aria-labelledby="tab-check" tabindex="0">
+      <form id="check-form" class="check-form">
+        <label for="answer-input" class="field-label">Answer to check</label>
+        <textarea id="answer-input" rows="5" placeholder="Paste an LLM answer here."></textarea>
+        <div class="form-row">
+          <label>As of <input type="date" id="asof-input"></label>
+          <label>Search budget <input type="number" id="budget-input" min="0" max="50" step="1" inputmode="numeric" placeholder="all"></label>
+          <button type="submit" class="primary" id="check-btn">Check</button>
+        </div>
+        <p class="hint" id="check-hint"></p>
+      </form>
+      <div id="check-out" aria-live="polite"></div>
+    </section>
+
+    <section role="tabpanel" id="panel-gateway" aria-labelledby="tab-gateway" tabindex="0" hidden>
+      <div id="gateway-out" aria-live="polite"></div>
+    </section>
+
+    <section role="tabpanel" id="panel-evidence" aria-labelledby="tab-evidence" tabindex="0" hidden>
+      <div id="evidence-out" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer class="colophon">
+    <p>Half-Life &middot; Bifrost gateway + Tavily search. Freshness scores rest only on quoted search evidence; model reasoning is shown apart from it.</p>
+  </footer>
+</body>
+</html>

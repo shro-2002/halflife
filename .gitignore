@@ -16,3 +16,4 @@ node_modules/
 *.db-wal
 docs/_ref/
 data/histories/raw/
+.hypothesis/
