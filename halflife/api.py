@@ -3,19 +3,26 @@
     uv run uvicorn halflife.api:app --port 8091
 
 POST /v1/check            AnswerReport for one answer (check mode: every time-sensitive claim verified
-                          unless a budget is given). Recorded in the fact ledger.
+                          unless a budget is given). Requires `x-halflife-key` when HALFLIFE_API_KEY is
+                          set; rate-limited per client IP. NOT recorded in the fact ledger: half-lives
+                          are refitted only from the gateway audit, which reads Bifrost's own logs, so
+                          ad-hoc callers cannot poison the fit.
 GET  /v1/gateway/summary  latest gateway audit summary (written by `python -m halflife.gateway.audit`)
 GET  /health              liveness, plus whether Bifrost answers
 GET  /                    the web UI; /results/* and /fixtures/* are served read-only for it
 """
 
+import hmac
 import json
 import logging
+import os
+import time
+from collections import defaultdict, deque
 from contextlib import asynccontextmanager
 from datetime import UTC, date, datetime
 from typing import Literal
 
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, Header, HTTPException, Request
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
@@ -31,6 +38,23 @@ log = logging.getLogger("halflife.api")
 SUMMARY_PATH = ROOT / "data" / "gateway_summary.json"
 MAX_ANSWER_CHARS = 20_000
 MAX_BUDGET = 20
+RATE_LIMIT_PER_MIN = int(os.environ.get("HALFLIFE_RATE_LIMIT_PER_MIN", "10"))
+_hits: dict[str, deque[float]] = defaultdict(deque)
+
+
+def require_access(request: Request, x_halflife_key: str | None = Header(default=None)) -> None:
+    # ponytail: in-process sliding window, per replica; move to Redis/Bifrost rate limits if scaled out
+    ip = request.client.host if request.client else "unknown"
+    now, window = time.monotonic(), _hits[ip]
+    while window and now - window[0] > 60:
+        window.popleft()
+    if len(window) >= RATE_LIMIT_PER_MIN:
+        raise HTTPException(status_code=429, detail={"code": "RATE_LIMITED", "message": "try again in a minute"},
+                            headers={"Retry-After": "60"})
+    window.append(now)  # counted before auth, so failed keys are rate-limited too
+    expected = os.environ.get("HALFLIFE_API_KEY", "")
+    if expected and not hmac.compare_digest((x_halflife_key or "").encode(), expected.encode()):
+        raise HTTPException(status_code=401, detail={"code": "UNAUTHORIZED", "message": "missing or bad x-halflife-key"})
 
 
 class CheckRequest(BaseModel):
@@ -60,7 +84,7 @@ def _half_lives(settings) -> dict:
         return ledger.half_lives()
 
 
-@app.post("/v1/check", response_model=AnswerReport)
+@app.post("/v1/check", response_model=AnswerReport, dependencies=[Depends(require_access)])
 async def check(req: CheckRequest) -> AnswerReport:
     s = app.state.settings
     today = datetime.now(UTC).date()
@@ -72,12 +96,6 @@ async def check(req: CheckRequest) -> AnswerReport:
     except Exception as err:  # fail open at the edge: never a stack trace to the client
         log.exception("check failed")
         raise HTTPException(status_code=502, detail={"code": "CHECK_FAILED", "message": type(err).__name__}) from err
-    try:
-        with Ledger(s.db_path) as ledger:
-            ledger.record(report, model=req.answer_model, virtual_key=None)
-    except Exception:  # the ledger is best-effort; the user still gets the report
-        log.exception("ledger write failed")
-        report.errors.append("ledger: write failed")
     return report
 
 

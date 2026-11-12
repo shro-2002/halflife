@@ -127,3 +127,22 @@ async def test_live_check_through_bifrost_and_tavily():
                                 opts=CheckOptions(as_of=s.model_cutoff, today=TODAY))
     await bf.aclose()
     assert report.claims and report.claims[0].searched
+
+
+def test_api_requires_key_when_configured_and_rate_limits(monkeypatch):
+    from fastapi.testclient import TestClient
+
+    import halflife.api as api
+    monkeypatch.setenv("HALFLIFE_API_KEY", "k-test")
+    monkeypatch.setattr(api, "RATE_LIMIT_PER_MIN", 2)
+    api._hits.clear()
+
+    async def fake_check(answer, **_):
+        from halflife.schemas import AnswerReport
+        return AnswerReport.model_validate_json(open("tests/fixtures/report.json").read())
+    monkeypatch.setattr(api, "check_answer", fake_check)
+    with TestClient(api.app) as client:
+        assert client.post("/v1/check", json={"answer": "x"}).status_code == 401
+        ok = {"x-halflife-key": "k-test"}
+        assert client.post("/v1/check", json={"answer": "x"}, headers=ok).status_code == 200
+        assert client.post("/v1/check", json={"answer": "x"}, headers=ok).status_code == 429  # 401 counted too
