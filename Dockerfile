@@ -23,6 +23,6 @@ RUN uv sync --frozen --no-dev \
     && useradd --create-home app && chown -R app /app
 USER app
 
-ENV BIFROST_PORT=8088 HALFLIFE_RATE_LIMIT_PER_MIN=5
+ENV BIFROST_PORT=8088 HALFLIFE_RATE_LIMIT_PER_MIN=5 HALFLIFE_REPLAY=1 HALFLIFE_LIVE_CHECKS_PER_DAY=20
 EXPOSE 8091
 ENTRYPOINT ["scripts/docker-entrypoint.sh"]

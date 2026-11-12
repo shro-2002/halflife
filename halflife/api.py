@@ -31,6 +31,7 @@ from pydantic import BaseModel, Field
 from halflife.clients.bifrost import BifrostClient
 from halflife.clients.tavily import DiskCache, TavilyViaRelay
 from halflife.config import ROOT, load_settings
+from halflife import replay
 from halflife.ledger import Ledger
 from halflife.pipeline import CheckOptions, check_answer
 from halflife.schemas import AgeBasis, AnswerReport, GatewaySummary
@@ -92,6 +93,8 @@ async def lifespan(app: FastAPI):
     app.state.bifrost = BifrostClient(settings)
     app.state.searcher = TavilyViaRelay(app.state.bifrost, settings.relay_name, DiskCache(settings.cache_dir))
     settings.db_path.parent.mkdir(parents=True, exist_ok=True)
+    app.state.recorded = replay.Recorded()
+    app.state.daily = replay.DailyCap()
     yield
     await app.state.bifrost.aclose()
 
@@ -107,6 +110,14 @@ def _half_lives(settings) -> dict:
 @app.post("/v1/check", response_model=AnswerReport, dependencies=[Depends(require_access)])
 async def check(req: CheckRequest) -> AnswerReport:
     s = app.state.settings
+    if replay.enabled():
+        recorded = app.state.recorded.lookup(req.answer)
+        if recorded is not None:
+            return recorded
+        if not app.state.daily.try_take(replay.daily_cap()):
+            raise HTTPException(status_code=429, detail={
+                "code": "DAILY_LIVE_CAP", "message": f"Today's {replay.daily_cap()} live checks are used up. "
+                "Try one of the example answers (recorded) or come back tomorrow (UTC)."}, headers={"Retry-After": "3600"})
     today = datetime.now(UTC).date()
     opts = CheckOptions(as_of=req.as_of or s.model_cutoff, today=today, age_basis=AgeBasis(req.age_basis),
                         budget=req.budget, mode="check", answer_model=req.answer_model)
@@ -130,10 +141,20 @@ async def check(req: CheckRequest) -> AnswerReport:
 
 @app.get("/v1/gateway/summary", response_model=GatewaySummary)
 async def gateway_summary() -> GatewaySummary:
+    if replay.enabled() and (saved := replay.saved_audit()) is not None:
+        return saved
     if not SUMMARY_PATH.exists():
         raise HTTPException(status_code=404, detail={"code": "NO_AUDIT_YET",
                                                      "message": "Run: uv run python -m halflife.gateway.audit"})
     return GatewaySummary.model_validate_json(SUMMARY_PATH.read_text())
+
+
+@app.get("/v1/mode")
+async def mode() -> JSONResponse:
+    on = replay.enabled()
+    return JSONResponse({"replay": on, "live_checks_per_day": replay.daily_cap() if on else None,
+                         "live_checks_remaining_today": app.state.daily.remaining(replay.daily_cap()) if on else None,
+                         "demo_mode": os.environ.get("HALFLIFE_DEMO_MODE") == "1"})
 
 
 @app.get("/health")

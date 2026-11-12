@@ -151,6 +151,7 @@ class AnswerReport(BaseModel):
     usage: Usage = Field(default_factory=Usage)
     errors: list[str] = Field(default_factory=list)
     bifrost_request_id: str | None = None
+    recorded: bool = Field(default=False, description="Replay mode: a saved report, not a live check")
 
 
 class StaleRateRow(BaseModel):
@@ -177,5 +178,6 @@ class GatewaySummary(BaseModel):
     rows: list[StaleRateRow]
     half_lives: dict[str, float] = Field(description="Class -> half-life days in use")
     half_life_source: dict[str, Literal["prior_guess", "fitted"]]
+    recorded: bool = Field(default=False, description="Replay mode: the saved audit, not a live one")
     usage: Usage = Field(default_factory=Usage)
     errors: list[str] = Field(default_factory=list)

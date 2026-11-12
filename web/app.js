@@ -421,6 +421,10 @@ function renderReport(report, typedAnswer) {
     return;
   }
   const notes = [];
+  if (report.recorded) {
+    notes.push(h("div", { class: "demo-banner", role: "note" }, h("span", { class: "badge" }, "RECORDED"),
+      ` Replay mode: this is a saved report recorded on ${fmt.when(report.checked_at)}, not a live check. Type your own answer for a live check (daily cap applies).`));
+  }
   if (DATA_SOURCE === "fixture" && typedAnswer && typedAnswer.trim() !== String(report.answer || "").trim()) {
     notes.push(stateBox("", "Fixture mode", "Showing the sample report, not a check of the text you typed. Remove ?fixtures=1 from the URL to check live."));
   }
@@ -442,7 +446,7 @@ function renderReport(report, typedAnswer) {
 
 function checkErrorBox(err) {
   if (err.status === 401) return stateBox("error", "Not authorised (401)", err.message, "This server requires an x-halflife-key; the UI does not send one.");
-  if (err.status === 429) return stateBox("error", "Rate limited (429)", err.message);
+  if (err.status === 429) return stateBox("error", "Limit reached (429)", err.message);
   if (err.status === 502) return stateBox("error", "Check failed upstream (502)", `The pipeline raised ${err.message}. Bifrost or a model call may be down; try again.`);
   if (err.network) return stateBox("error", "Server unreachable", err.message, "Is the API running on this host?");
   return stateBox("error", `Check failed${err.status ? ` (${err.status})` : ""}`, err.message);
@@ -633,6 +637,8 @@ function renderGateway(summary) {
   out.replaceChildren(...[
     h("h2", null, "Stale rate among verified claims, by model and virtual key"),
     h("p", { class: "section-note" }, "Half-Life samples answers from Bifrost's own logs, extracts the time-sensitive claims, and verifies them with Tavily. Stale rate among verified claims = claims whose current value changed ÷ claims verified (verdict current or changed; unverifiable excluded). Only the riskiest claims, up to the verification budget, are verified, so this is not a stale rate over all traffic; the verified share is shown beside it."),
+    summary.recorded ? h("div", { class: "demo-banner", role: "note" }, h("span", { class: "badge" }, "RECORDED"),
+      ` Replay mode: the saved audit from ${fmt.when(summary.generated_at)}, not a live audit.`) : null,
     allDemo ? h("div", { class: "demo-banner", role: "note" }, demoBadge(),
       " Every row below comes from seeded demo virtual keys (demo-*), not real user traffic.") : null,
     h("div", { class: "meta-row" },
@@ -862,3 +868,19 @@ document.getElementById("source-flag").textContent = DATA_SOURCE === "fixture" ?
 loadHealth();
 initCheck();
 initTabs();
+
+
+// Replay mode: show how many live checks remain today (public hosting).
+(async () => {
+  if (DATA_SOURCE !== "api") return;
+  try {
+    const r = await fetch("/v1/mode");
+    if (!r.ok) return;
+    const m = await r.json();
+    if (!m.replay) return;
+    const form = document.querySelector("#panel-check form") || document.getElementById("panel-check");
+    if (!form) return;
+    form.prepend(h("p", { class: "demo-banner", role: "note" }, h("span", { class: "badge" }, "REPLAY MODE"),
+      ` Example answers return recorded reports. Live checks left today: ${m.live_checks_remaining_today} of ${m.live_checks_per_day}.`));
+  } catch (_) { /* mode banner is optional */ }
+})();
