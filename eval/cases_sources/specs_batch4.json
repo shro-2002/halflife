@@ -1,0 +1,11 @@
+[
+ {"query": "hydrogen atomic number 1 element", "include_domains": ["rsc.org"]},
+ {"query": "Treaty of Versailles signed 28 June 1919"},
+ {"query": "Wolfgang Amadeus Mozart born 27 January 1756 Salzburg"},
+ {"query": "Eiffel Tower completed 1889 height"},
+ {"query": "Watson and Crick DNA double helix structure 1953", "include_domains": ["nature.com"]},
+ {"query": "IAU Pluto dwarf planet 2006 resolution"},
+ {"query": "GDPR administrative fines up to 20 million euros or 4% of worldwide annual turnover"},
+ {"query": "estate tax basic exclusion amount 2026 $15 million", "include_domains": ["irs.gov"]},
+ {"query": "ISA allowance £20,000 2026 to 2027", "include_domains": ["gov.uk"]}
+]
