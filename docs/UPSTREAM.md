@@ -17,8 +17,8 @@ chunks, a shared plugin cache).
 samples recent answers, ranks claims by risk, verifies only the riskiest under a budget, and aggregates stale rate by
 `(model, virtual_key)`. The approaches are complementary: an inline checker could use the same risk ranking to decide
 which answers to check. Measured on 108 labelled cases, ranking by the extractor model's outdated-probability caught
-0.842 of stale claims when verifying half the answers (random: 0.460); full verification: precision 0.854, recall
-0.921 (repo `results/2026-11-12-detector`).
+0.788 of stale claims when verifying half the answers (mean of five runs; random: 0.441); full verification: precision
+0.863, recall 0.884, means of five runs (repo `results/2026-11-12-detector/variance.json`).
 
 ## What already works on stock Bifrost v2.5.1 (no changes needed)
 

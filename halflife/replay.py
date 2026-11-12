@@ -35,6 +35,10 @@ def daily_cap() -> int:
     return int(os.environ.get("HALFLIFE_LIVE_CHECKS_PER_DAY", "20"))
 
 
+def per_ip_cap() -> int:
+    return int(os.environ.get("HALFLIFE_LIVE_CHECKS_PER_IP_PER_DAY", "5"))
+
+
 def _norm(text: str) -> str:
     return " ".join(text.split()).lower()
 
@@ -63,18 +67,27 @@ class DailyCap:
     def __init__(self) -> None:
         self.day: date | None = None
         self.used = 0
+        self.by_ip: dict[str, int] = {}
 
     def _roll(self) -> None:
         today = datetime.now(UTC).date()
         if self.day != today:
-            self.day, self.used = today, 0
+            self.day, self.used, self.by_ip = today, 0, {}
 
-    def try_take(self, cap: int) -> bool:
+    def try_take(self, cap: int, ip: str = "", ip_cap: int | None = None) -> bool:
+        """Global daily cap plus a per-client quota so one client cannot use everyone's allowance."""
         self._roll()
-        if self.used >= cap:
+        if self.used >= cap or (ip_cap is not None and self.by_ip.get(ip, 0) >= ip_cap):
             return False
         self.used += 1  # taken before the check runs, so concurrent requests cannot overshoot
+        self.by_ip[ip] = self.by_ip.get(ip, 0) + 1
         return True
+
+    def give_back(self, ip: str = "") -> None:
+        """Refund a slot when the live check failed."""
+        self.used = max(self.used - 1, 0)
+        if self.by_ip.get(ip):
+            self.by_ip[ip] -= 1
 
     def remaining(self, cap: int) -> int:
         self._roll()

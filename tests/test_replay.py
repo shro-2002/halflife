@@ -64,3 +64,20 @@ def test_cap_resets_on_a_new_utc_day():
 def test_replay_off_means_no_cap_and_live_summary(monkeypatch):
     monkeypatch.delenv("HALFLIFE_REPLAY", raising=False)
     assert replay.enabled() is False
+
+
+def test_demo_mode_rejection_and_failed_checks_do_not_use_slots(client, monkeypatch):
+    assert client.post("/v1/check", json={"answer": "x claim", "simulate_primary_down": True}).status_code == 403
+    assert client.get("/v1/mode").json()["live_checks_remaining_today"] == 2
+
+    async def boom(answer, **_):
+        raise RuntimeError("upstream down")
+    monkeypatch.setattr(api, "check_answer", boom)
+    assert client.post("/v1/check", json={"answer": "y claim"}).status_code == 502
+    assert client.get("/v1/mode").json()["live_checks_remaining_today"] == 2
+
+
+def test_per_client_daily_quota():
+    cap = replay.DailyCap()
+    assert cap.try_take(10, "1.1.1.1", 1) and not cap.try_take(10, "1.1.1.1", 1)
+    assert cap.try_take(10, "2.2.2.2", 1)

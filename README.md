@@ -30,7 +30,7 @@ whether the question was the capital of France or the latest Python release.
    reported beside it.
 2. **Budgeted verification with a measured curve.** Claims are ranked by the extractor model's own probability that
    the claim is outdated, so a budget is spent where staleness is likely. On 108 labelled cases, verifying the top
-   50% of answers caught **0.842** of stale claims (random order: 0.460)
+   50% of answers caught **0.788** of stale claims on average over five runs (range 0.724–0.842; random order 0.441)
    ([results](results/2026-11-12-detector/README.md)).
 3. **Decay-based cache TTL (experimental).** Each volatility class has a fitted half-life; the recommended TTL is the
    time until P(stale) reaches 5%. A proxy puts that TTL on each request with Bifrost's own `x-bf-cache-ttl`
@@ -88,7 +88,7 @@ Optional pieces:
 | **B1** Real operator problem | stale rate per model and virtual key: `halflife/gateway/audit.py`; TTL proxy: `halflife/gateway/proxy.py` |
 | **B2** Public extension points | logging API (`GET /api/logs`, `/api/logs/{id}`), governance (virtual keys, budgets, relay and MCP grants), Relays, cache headers, MCP gateway — no Go plugin, no fork |
 | **B3** Reproducible on standard Bifrost | `scripts/bifrost.sh` (stock `npx @maximhq/bifrost`), `make setup`, `scripts/spike.sh`, `Dockerfile` |
-| **B4** Contribution quality | 141 offline tests + live tests (`make test`), CI (`.github/workflows/ci.yml`), `docs/UPSTREAM.md`, `CONTRIBUTING.md`, Apache-2.0 |
+| **B4** Contribution quality | 146 offline tests + live tests (`make test`), CI (`.github/workflows/ci.yml`), `docs/UPSTREAM.md`, `CONTRIBUTING.md`, Apache-2.0 |
 
 ## 5. What Bifrost contributes, what Tavily contributes
 
@@ -104,20 +104,22 @@ filter and a domain-restricted search on the official site when one is known. 1 
 
 All numbers come from files under `results/`; each folder has a README with the protocol and a reproduce command.
 
-**Live detector, 108 labelled cases** (eval date 2026-11-12; CIs by bootstrap over source URLs) —
-[results/2026-11-12-detector](results/2026-11-12-detector/README.md)
+**Live detector, 108 labelled cases** (eval date 2026-11-12), mean over five runs with the range beside it —
+[variance.json](results/2026-11-12-detector/variance.json), [results README](results/2026-11-12-detector/README.md)
 
-| Metric | Value | 95% CI |
-|---|---|---|
-| Precision | 0.854 | [0.742, 0.950] |
-| Recall | 0.921 | [0.828, 1.000] |
-| Timeless cases flagged | 0 of 25 | |
+| Metric | Mean of 5 runs | Range | One run's 95% CI (run 2, by source URL) |
+|---|---|---|---|
+| Precision | **0.863** | 0.841–0.889 | [0.742, 0.950] |
+| Recall | **0.884** | 0.816–0.974 | [0.828, 1.000] |
+| Timeless cases flagged | 0 of 25 in every run | | |
 
-| Budget ordering | stale caught @25% | @50% |
+Recall varies because the extractor phrases each claim slightly differently on every run, so the search query and the retrieved evidence change; in the three cached-evidence runs, queries never seen before could not be searched and count as unverifiable, so their recall is a lower bound.
+
+| Budget ordering | stale caught @25% (mean, range) | @50% (mean, range) |
 |---|---|---|
-| Haiku outdated-probability (default) | 0.462 [0.366, 0.574] | 0.842 [0.703, 0.938] |
-| Half-life | 0.387 [0.276, 0.500] | 0.708 [0.586, 0.853] |
-| Random | 0.233 | 0.460 |
+| Haiku outdated-probability (default) | 0.438 (0.406–0.477) | 0.788 (0.724–0.842) |
+| Half-life | 0.365 (0.338–0.387) | 0.681 (0.646–0.715) |
+| Random | 0.224 (0.207–0.246) | 0.441 (0.406–0.487) |
 
 **The model's own estimate ranks better than the half-life model.** On the time-travel ordering dataset
 ([results/2026-11-12-ordering](results/2026-11-12-ordering/README.md)), 300-claim sample:

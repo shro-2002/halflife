@@ -1,0 +1,151 @@
+{
+  "note": "Detector run-to-run variance. Runs 1-2 searched live; runs 3-5 used cached evidence only (no Tavily calls): a query not seen before could not be searched and counts as unverifiable, so their recall is a lower bound. Run 1 predates the numeric-equality bug fix.",
+  "runs": {
+    "run1": {
+      "mode": "live search (cold cache)",
+      "precision": 0.841,
+      "recall": 0.974,
+      "tp": 37,
+      "fp": 7,
+      "fn": 1,
+      "unverifiable_rate": 0.036,
+      "uncached_queries": 0,
+      "caught_at_25": {
+        "model_p": 0.477,
+        "half_life": 0.379,
+        "random": 0.246
+      },
+      "caught_at_50": {
+        "model_p": 0.821,
+        "half_life": 0.715,
+        "random": 0.487
+      }
+    },
+    "run2": {
+      "mode": "live search (warm cache), after bug fix",
+      "precision": 0.854,
+      "recall": 0.921,
+      "tp": 35,
+      "fp": 6,
+      "fn": 3,
+      "unverifiable_rate": 0.084,
+      "uncached_queries": 0,
+      "caught_at_25": {
+        "model_p": 0.462,
+        "half_life": 0.387,
+        "random": 0.233
+      },
+      "caught_at_50": {
+        "model_p": 0.842,
+        "half_life": 0.708,
+        "random": 0.46
+      }
+    },
+    "run3": {
+      "mode": "cached evidence only, after bug fix",
+      "precision": 0.861,
+      "recall": 0.816,
+      "tp": 31,
+      "fp": 5,
+      "fn": 7,
+      "unverifiable_rate": 0.181,
+      "uncached_queries": 17,
+      "caught_at_25": {
+        "model_p": 0.424,
+        "half_life": 0.338,
+        "random": 0.207
+      },
+      "caught_at_50": {
+        "model_p": 0.737,
+        "half_life": 0.646,
+        "random": 0.406
+      }
+    },
+    "run4": {
+      "mode": "cached evidence only, after bug fix",
+      "precision": 0.868,
+      "recall": 0.868,
+      "tp": 33,
+      "fp": 5,
+      "fn": 5,
+      "unverifiable_rate": 0.108,
+      "uncached_queries": 11,
+      "caught_at_25": {
+        "model_p": 0.423,
+        "half_life": 0.362,
+        "random": 0.22
+      },
+      "caught_at_50": {
+        "model_p": 0.816,
+        "half_life": 0.681,
+        "random": 0.435
+      }
+    },
+    "run5": {
+      "mode": "cached evidence only, after bug fix",
+      "precision": 0.889,
+      "recall": 0.842,
+      "tp": 32,
+      "fp": 4,
+      "fn": 6,
+      "unverifiable_rate": 0.157,
+      "uncached_queries": 16,
+      "caught_at_25": {
+        "model_p": 0.406,
+        "half_life": 0.361,
+        "random": 0.212
+      },
+      "caught_at_50": {
+        "model_p": 0.724,
+        "half_life": 0.657,
+        "random": 0.419
+      }
+    }
+  },
+  "across_5_runs": {
+    "precision": {
+      "mean": 0.863,
+      "min": 0.841,
+      "max": 0.889
+    },
+    "recall": {
+      "mean": 0.884,
+      "min": 0.816,
+      "max": 0.974
+    },
+    "caught_at_25": {
+      "model_p": {
+        "mean": 0.438,
+        "min": 0.406,
+        "max": 0.477
+      },
+      "half_life": {
+        "mean": 0.365,
+        "min": 0.338,
+        "max": 0.387
+      },
+      "random": {
+        "mean": 0.224,
+        "min": 0.207,
+        "max": 0.246
+      }
+    },
+    "caught_at_50": {
+      "model_p": {
+        "mean": 0.788,
+        "min": 0.724,
+        "max": 0.842
+      },
+      "half_life": {
+        "mean": 0.681,
+        "min": 0.646,
+        "max": 0.715
+      },
+      "random": {
+        "mean": 0.441,
+        "min": 0.406,
+        "max": 0.487
+      }
+    }
+  }
+}

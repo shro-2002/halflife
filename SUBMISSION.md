@@ -21,7 +21,7 @@ knowledge cutoff and state outdated prices, versions and office holders confiden
 extra model calls, searches and seconds, so nobody does it on production traffic; and gateway caches use one TTL for
 every answer regardless of how fast the facts in it decay. Half-Life gives operators a stale-rate metric per model and
 key from logged traffic, spends a verification budget where staleness is likely (measured: verifying half the answers
-caught 0.842 of stale claims, versus 0.460 for random order, on 108 labelled cases), and grounds every verdict in a
+caught 0.788 of stale claims on average over five runs, versus 0.441 for random order, on 108 labelled cases), and grounds every verdict in a
 verbatim quote from a retrieved source.
 
 ## Technologies used
@@ -58,8 +58,8 @@ verbatim quote from a retrieved source.
 
 | What | Number | File |
 |---|---|---|
-| Detector precision / recall (108 cases) | 0.854 [0.742, 0.950] / 0.921 [0.828, 1.000] | results/2026-11-12-detector |
-| Stale caught at 50% verified: model ordering / half-life / random | 0.842 / 0.708 / 0.460 | results/2026-11-12-detector |
+| Detector precision / recall (108 cases, mean of 5 runs) | 0.863 (0.841–0.889) / 0.884 (0.816–0.974) | results/2026-11-12-detector/variance.json |
+| Stale caught at 50% verified, mean of 5 runs: model / half-life / random | 0.788 / 0.681 / 0.441 | results/2026-11-12-detector/variance.json |
 | Ordering AUC (300 claims): model / half-life / random | 0.826 / 0.782 / 0.499 | results/2026-11-12-ordering |
 | Cost per check (10 answers) | $0.0011, 2.8 Tavily credits, median 5.9 s | results/2026-11-12-checks10 |
 | Demo audit, seeded demo traffic (50 answers, 2 keys × 2 models) | stale rate among verified claims 0.27–0.78 per slice; 29.7% of found claims verified | results/2026-11-12-gateway-audit |

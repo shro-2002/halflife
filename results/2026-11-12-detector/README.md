@@ -16,6 +16,21 @@ resamples of **source URLs** (82 URLs; stale/current pairs share URLs), not case
 - **Run 2** (this folder, headline): full rerun once after the fix. Model outputs are not deterministic;
   run 1 → run 2 differences on other cases are run-to-run variation.
 
+## Variance across five runs (`variance.json`)
+
+| Run | search | precision | recall | uncached queries |
+|---|---|---|---|---|
+| 1 | live, cold cache (before bug fix) | 0.841 | 0.974 | 0 |
+| 2 | live, warm cache | 0.854 | 0.921 | 0 |
+| 3 | cached evidence only | 0.861 | 0.816 | 17 |
+| 4 | cached evidence only | 0.868 | 0.868 | 11 |
+| 5 | cached evidence only | 0.889 | 0.842 | 16 |
+| **mean (range)** | | **0.863** (0.841–0.889) | **0.884** (0.816–0.974) | |
+
+Recall varies because the extractor phrases each claim slightly differently on every run, so the search query and the retrieved evidence change; in the three cached-evidence runs, queries never seen before could not be searched and count as unverifiable, so their recall is a lower bound. Runs 3–5 used `--cached-evidence-only` (0 Tavily credits). Budget curve means: caught@25% model 0.438,
+half-life 0.365, random 0.224; caught@50% model 0.788, half-life 0.681, random 0.441 (ranges in `variance.json`).
+The README headline uses these means; the tables below are run 2 in detail.
+
 ## Headline (run 2)
 
 | Metric | Value | 95% CI (by source URL) |

@@ -15,7 +15,7 @@ cached (the recorded run is then fast and costs 0 credits). Keep a terminal with
 | 0:48–1:05 | Show the two claim cards: **changed**, score 5, corrected value (Bank Rate → 4.0%, Node 20 → Node.js 26), the green evidence quote and source links; point at the separate "model reasoning" box. | "Each verdict rests on a verbatim quote that Tavily returned, checked in code, with the current value and sources." |
 | 1:05–1:15 | Click the **Timeless facts** chip, then **Check**. Point at "Skipped — not time-sensitive. 0 searches, 0 Tavily credits". | "Timeless facts are skipped, so they cost nothing." |
 | 1:15–1:27 | Tick **Simulate primary model outage**, click **Check** again; point at the **FAILOVER: served by claude-haiku-4-5** badge. | "If the primary model fails, Bifrost's fallback serves the check and the report says so." |
-| 1:27–1:45 | Click the **Evidence** tab; point at the budget-curve chart and the caught@25/50% table. | "On 108 labelled cases, verifying half the answers caught 84% of stale claims, versus 46% in random order." |
+| 1:27–1:45 | Click the **Evidence** tab; point at the budget-curve chart and the caught@25/50% table. | "On 108 labelled cases, verifying half the answers caught 79% of stale claims on average, versus 44% in random order." |
 | 1:45–1:55 | Point at the caption "Haiku's own outdated-probability ranks better than the half-life model". | "We measured our own idea honestly: the model's estimate ranks better than the half-life model, so it's the default." |
 | 1:55–2:00 | Switch to the Bifrost dashboard tab (Logs / Relay Logs) showing the Tavily relay calls under the virtual key. | "Stock Bifrost, public APIs only — every model call and every search is governed and logged by the gateway." |
 

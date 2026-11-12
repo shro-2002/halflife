@@ -108,23 +108,35 @@ def _half_lives(settings) -> dict:
 
 
 @app.post("/v1/check", response_model=AnswerReport, dependencies=[Depends(require_access)])
-async def check(req: CheckRequest) -> AnswerReport:
+async def check(req: CheckRequest, request: Request) -> AnswerReport:
     s = app.state.settings
+    if req.simulate_primary_down and os.environ.get("HALFLIFE_DEMO_MODE") != "1":  # validate before taking a slot
+        raise HTTPException(status_code=403, detail={"code": "DEMO_MODE_OFF",
+                                                     "message": "simulate_primary_down needs HALFLIFE_DEMO_MODE=1"})
+    ip = request.client.host if request.client else "unknown"
+    took_slot = False
     if replay.enabled():
         recorded = app.state.recorded.lookup(req.answer)
         if recorded is not None:
             return recorded
-        if not app.state.daily.try_take(replay.daily_cap()):
+        took_slot = app.state.daily.try_take(replay.daily_cap(), ip, replay.per_ip_cap())
+        if not took_slot:
             raise HTTPException(status_code=429, detail={
-                "code": "DAILY_LIVE_CAP", "message": f"Today's {replay.daily_cap()} live checks are used up. "
+                "code": "DAILY_LIVE_CAP", "message": f"Today's live-check allowance is used up ({replay.daily_cap()} per day, {replay.per_ip_cap()} per client). "
                 "Try one of the example answers (recorded) or come back tomorrow (UTC)."}, headers={"Retry-After": "3600"})
+    try:
+        return await _live_check(req, s)
+    except Exception:
+        if took_slot:
+            app.state.daily.give_back(ip)
+        raise
+
+
+async def _live_check(req: CheckRequest, s) -> AnswerReport:
     today = datetime.now(UTC).date()
     opts = CheckOptions(as_of=req.as_of or s.model_cutoff, today=today, age_basis=AgeBasis(req.age_basis),
                         budget=req.budget, mode="check", answer_model=req.answer_model)
     model = app.state.bifrost
-    if req.simulate_primary_down and os.environ.get("HALFLIFE_DEMO_MODE") != "1":
-        raise HTTPException(status_code=403, detail={"code": "DEMO_MODE_OFF",
-                                                     "message": "simulate_primary_down needs HALFLIFE_DEMO_MODE=1"})
     if req.simulate_primary_down:
         model = BifrostClient(replace(s, model=s.model + "-unavailable"))
     try:

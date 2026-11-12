@@ -51,7 +51,8 @@
 | Lead | everything else (schemas, clients, risk.py, fit.py, results/, STATE.md) |
 
 ## Remains
-- GATE 3: awaiting user go for push/deploy/upstream issue. Done: A case fixes, J3, J2 (a-d), J4, J5, V4 (2 rounds: quickstart 133 s, all numbers traceable after fixes). No cuts applied. Earlier: fan-out W1–W6, V1–V3, GATE 2, M1, J2, J3, J4, J5, V4, GATE 3, J6.
+- Post-Gate-3 (user: push only; deploy + upstream on hold): secrets scan clean (gitleaks v8.24.3 over 22 commits: no leaks; exact-value search of all history: 0 hits); detector variance 5 runs -> precision 0.863 (0.841–0.889), recall 0.884 (0.816–0.974), variance.json; stale rate defined as stale among verified + verified share (29.7%) in README/UI/results; replay mode (HALFLIFE_REPLAY, daily cap 20 + 5 per client, refund on failure) with tests; 148 offline tests.
+- GATE 3: go received for push only. Done: A case fixes, J3, J2 (a-d), J4, J5, V4 (2 rounds: quickstart 133 s, all numbers traceable after fixes). No cuts applied. Earlier: fan-out W1–W6, V1–V3, GATE 2, M1, J2, J3, J4, J5, V4, GATE 3, J6.
 - Item 4: measure cost/latency per check on 10 answers before J3, record here.
 - Item 7: #9748 thread read 2026-11-12 21:03 IST: no maintainer reply, only a CodeRabbit bot comment (links merged relay PR #9170). Its asks: plugin location, `plugin_metadata` on stream chunks, shared plugin cache. UPSTREAM.md must not repeat those; re-read before writing.
 - M1 notes from W3: verbatim-but-weak quote can still count as strong support (UN photo caption on un.org) -> judge prompt must require the quote to state the fact; carry VerifyOutcome.strong_support into the 95/80 score; when both searches fail, searched=True with verdict None -> score as unverified. current_value prompt changed to value-only (untested live).

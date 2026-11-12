@@ -884,3 +884,24 @@ initTabs();
       ` Example answers return recorded reports. Live checks left today: ${m.live_checks_remaining_today} of ${m.live_checks_per_day}.`));
   } catch (_) { /* mode banner is optional */ }
 })();
+
+// Detector variance (five runs) next to the run-2 detail in the Evidence view.
+(async () => {
+  try {
+    const r = await fetch("/results/2026-11-12-detector/variance.json");
+    if (!r.ok) return;
+    const v = (await r.json()).across_5_runs;
+    const place = () => {
+      const head = document.getElementById("det-h");
+      if (!head || document.getElementById("det-variance")) return Boolean(head);
+      const p = h("p", { class: "section-note", id: "det-variance" },
+        `Mean of 5 runs: precision ${v.precision.mean.toFixed(3)} (range ${v.precision.min.toFixed(3)}–${v.precision.max.toFixed(3)}), ` +
+        `recall ${v.recall.mean.toFixed(3)} (range ${v.recall.min.toFixed(3)}–${v.recall.max.toFixed(3)}); ` +
+        `stale caught @50% verified: model ${v.caught_at_50.model_p.mean.toFixed(3)}, half-life ${v.caught_at_50.half_life.mean.toFixed(3)}, random ${v.caught_at_50.random.mean.toFixed(3)}. ` +
+        "Recall varies because claim phrasing (and so the search query) changes between runs. Tables below: run 2.");
+      head.after(p);
+      return true;
+    };
+    if (!place()) new MutationObserver((_, obs) => { if (place()) obs.disconnect(); }).observe(document.body, { childList: true, subtree: true });
+  } catch (_) { /* optional */ }
+})();
