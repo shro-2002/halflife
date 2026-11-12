@@ -14,7 +14,8 @@
         "explicit_date": null,
         "is_past_event": false,
         "subject": "Python",
-        "authoritative_domain": "python.org"
+        "authoritative_domain": "python.org",
+        "p_outdated_model": 0.81
       },
       "risk": {
         "claim_id": "c1",
@@ -23,7 +24,9 @@
         "half_life_days": 120.0,
         "half_life_source": "prior_guess",
         "p_stale": 0.541,
-        "recommended_ttl_days": 8.9
+        "recommended_ttl_days": 8.9,
+        "rank_score": 0.81,
+        "rank_basis": "model_p"
       },
       "searched": true,
       "evidence": [
@@ -62,7 +65,8 @@
         "explicit_date": null,
         "is_past_event": false,
         "subject": "ECB deposit facility rate",
-        "authoritative_domain": "ecb.europa.eu"
+        "authoritative_domain": "ecb.europa.eu",
+        "p_outdated_model": 0.55
       },
       "risk": {
         "claim_id": "c2",
@@ -71,7 +75,9 @@
         "half_life_days": 150.0,
         "half_life_source": "prior_guess",
         "p_stale": 0.462,
-        "recommended_ttl_days": 11.1
+        "recommended_ttl_days": 11.1,
+        "rank_score": 0.55,
+        "rank_basis": "model_p"
       },
       "searched": true,
       "evidence": [
@@ -108,7 +114,8 @@
         "explicit_date": null,
         "is_past_event": false,
         "subject": "Microsoft CEO",
-        "authoritative_domain": "microsoft.com"
+        "authoritative_domain": "microsoft.com",
+        "p_outdated_model": 0.12
       },
       "risk": {
         "claim_id": "c3",
@@ -117,7 +124,9 @@
         "half_life_days": 900.0,
         "half_life_source": "prior_guess",
         "p_stale": 0.098,
-        "recommended_ttl_days": 66.6
+        "recommended_ttl_days": 66.6,
+        "rank_score": 0.12,
+        "rank_basis": "model_p"
       },
       "searched": true,
       "evidence": [
@@ -156,7 +165,8 @@
         "explicit_date": "2024-08-01",
         "is_past_event": true,
         "subject": "EU AI Act",
-        "authoritative_domain": null
+        "authoritative_domain": null,
+        "p_outdated_model": 0.04
       },
       "risk": {
         "claim_id": "c4",
@@ -165,7 +175,9 @@
         "half_life_days": 700.0,
         "half_life_source": "prior_guess",
         "p_stale": 0.562,
-        "recommended_ttl_days": 51.8
+        "recommended_ttl_days": 51.8,
+        "rank_score": 0.04,
+        "rank_basis": "model_p"
       },
       "searched": true,
       "evidence": [
@@ -204,7 +216,8 @@
         "explicit_date": null,
         "is_past_event": false,
         "subject": "Netflix Standard plan price",
-        "authoritative_domain": "netflix.com"
+        "authoritative_domain": "netflix.com",
+        "p_outdated_model": 0.38
       },
       "risk": {
         "claim_id": "c5",
@@ -213,7 +226,9 @@
         "half_life_days": 240.0,
         "half_life_source": "prior_guess",
         "p_stale": 0.323,
-        "recommended_ttl_days": 17.8
+        "recommended_ttl_days": 17.8,
+        "rank_score": 0.38,
+        "rank_basis": "model_p"
       },
       "searched": false,
       "evidence": [],
@@ -231,7 +246,8 @@
         "explicit_date": null,
         "is_past_event": false,
         "subject": null,
-        "authoritative_domain": null
+        "authoritative_domain": null,
+        "p_outdated_model": 0.0
       },
       "risk": {
         "claim_id": "c6",
@@ -240,7 +256,9 @@
         "half_life_days": null,
         "half_life_source": "prior_guess",
         "p_stale": 0.0,
-        "recommended_ttl_days": null
+        "recommended_ttl_days": null,
+        "rank_score": 0.0,
+        "rank_basis": "model_p"
       },
       "searched": false,
       "evidence": [],

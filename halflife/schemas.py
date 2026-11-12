@@ -49,6 +49,11 @@ class Claim(BaseModel):
     is_past_event: bool = Field(default=False, description="Dated past event ('became CEO in 2021'): not a current claim")
     subject: str | None = Field(default=None, description="Entity the claim is about, for search")
     authoritative_domain: str | None = Field(default=None, description="Official site, e.g. python.org")
+    p_outdated_model: float | None = Field(
+        default=None, ge=0, le=1,
+        description="Extractor model's probability the claim is no longer accurate today, given the answer's "
+        "as-of date (same call as extraction). Default ranking signal for the verification budget.",
+    )
 
 
 class RiskScore(BaseModel):
@@ -57,8 +62,12 @@ class RiskScore(BaseModel):
     age_basis: AgeBasis
     half_life_days: float | None = Field(description="None for timeless claims")
     half_life_source: Literal["prior_guess", "fitted"]
-    p_stale: float = Field(ge=0, le=1)
+    p_stale: float = Field(ge=0, le=1, description="Half-life model: 1 - 2^(-age/h)")
     recommended_ttl_days: float | None = Field(default=None, description="Days until p_stale reaches epsilon")
+    rank_score: float = Field(ge=0, le=1, description="Score used to order verification")
+    rank_basis: Literal["model_p", "half_life"] = Field(
+        description="model_p when the extractor returned p_outdated_model; half_life as fallback (J0.5 result)"
+    )
 
 
 class Evidence(BaseModel):
@@ -140,3 +149,31 @@ class AnswerReport(BaseModel):
     usage: Usage = Field(default_factory=Usage)
     errors: list[str] = Field(default_factory=list)
     bifrost_request_id: str | None = None
+
+
+class StaleRateRow(BaseModel):
+    """Gateway audit aggregate for one (model, virtual key) slice."""
+
+    model: str
+    virtual_key: str | None
+    answers_seen: int
+    answers_checked: int
+    claims_found: int
+    claims_verified: int
+    claims_changed: int
+    stale_rate: float | None = Field(description="claims_changed / claims_verified; None if nothing verified")
+    mean_answer_score: float | None = None
+
+
+class GatewaySummary(BaseModel):
+    generated_at: datetime
+    window_start: datetime
+    window_end: datetime
+    logs_scanned: int
+    sample_cap: int
+    verification_budget: int
+    rows: list[StaleRateRow]
+    half_lives: dict[str, float] = Field(description="Class -> half-life days in use")
+    half_life_source: dict[str, Literal["prior_guess", "fitted"]]
+    usage: Usage = Field(default_factory=Usage)
+    errors: list[str] = Field(default_factory=list)

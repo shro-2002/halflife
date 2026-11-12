@@ -1,0 +1,68 @@
+{
+  "generated_at": "2026-11-12T15:00:00Z",
+  "window_start": "2026-11-11T15:00:00Z",
+  "window_end": "2026-11-12T15:00:00Z",
+  "logs_scanned": 412,
+  "sample_cap": 50,
+  "verification_budget": 60,
+  "rows": [
+    {
+      "model": "anthropic/claude-haiku-5-5",
+      "virtual_key": "support-bot",
+      "answers_seen": 250,
+      "answers_checked": 30,
+      "claims_found": 71,
+      "claims_verified": 36,
+      "claims_changed": 9,
+      "stale_rate": 0.25,
+      "mean_answer_score": 63.2
+    },
+    {
+      "model": "anthropic/claude-haiku-4-5",
+      "virtual_key": "docs-assistant",
+      "answers_seen": 120,
+      "answers_checked": 15,
+      "claims_found": 40,
+      "claims_verified": 18,
+      "claims_changed": 7,
+      "stale_rate": 0.389,
+      "mean_answer_score": 55.0
+    },
+    {
+      "model": "anthropic/claude-haiku-5-5",
+      "virtual_key": null,
+      "answers_seen": 42,
+      "answers_checked": 5,
+      "claims_found": 3,
+      "claims_verified": 0,
+      "claims_changed": 0,
+      "stale_rate": null,
+      "mean_answer_score": null
+    }
+  ],
+  "half_lives": {
+    "software_version": 83.2,
+    "price": 240.0,
+    "rate_or_statistic": 55.2,
+    "office_holder": 1626.9,
+    "law_or_regulation": 700.0,
+    "product_spec": 300.0
+  },
+  "half_life_source": {
+    "software_version": "fitted",
+    "price": "prior_guess",
+    "rate_or_statistic": "fitted",
+    "office_holder": "fitted",
+    "law_or_regulation": "prior_guess",
+    "product_spec": "prior_guess"
+  },
+  "usage": {
+    "model_calls": 50,
+    "model_cost_usd": 0.004,
+    "tavily_calls": 54,
+    "tavily_credits": 54,
+    "tavily_cache_hits": 6,
+    "latency_ms": 0.0
+  },
+  "errors": []
+}

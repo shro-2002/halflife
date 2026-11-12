@@ -20,10 +20,25 @@
 - W5 shrinks to ~100 live cases and may reuse J0.5 data.
 - Audit: cap sample per run, semaphore on log-detail calls (BifrostClient log_concurrency=4).
 
+- J0.5 gate decision (user): extractor returns `p_outdated_model` in the same call; that is the default verification ordering (`RiskScore.rank_basis = model_p`). Half-life kept for cache TTL, re-scoring aged cached answers without a model call, and fallback when the model call fails. No more ranking experiments (no stacking, no per-entity fits; per-entity = README future work).
+- Positioning (README/UPSTREAM/SUBMISSION): lead with (a) traffic audit stale rate per model and VK, (b) budgeted verification with the measured curve, (c) decay-based cache TTL. State plainly the model's rating ranks better; ordering data covers 4 classes only (no prices, laws).
+- Calibration rule: refit on last 24 months before cutoff; keep the better-calibrated fit; if neither within ~0.10 per class, TTL ships "experimental" with the reason in README.
+
+## Fan-out ownership (one writer per file; workers never commit, lead merges)
+| Node | Files it may write |
+|---|---|
+| W1 extract | halflife/extract.py, tests/test_extract.py |
+| W2 risk tests | tests/test_risk.py (risk.py is lead-owned, read-only) |
+| W3 verify | halflife/verify.py, tests/test_verify.py |
+| W4 ledger + fit tests | halflife/ledger.py, tests/test_fit.py, tests/test_ledger.py (fit.py lead-owned, read-only) |
+| W5 cases | eval/cases.jsonl, eval/README.md, eval/build_cases.py |
+| W6 UI shell | web/index.html, web/app.js, web/style.css |
+| Lead | everything else (schemas, clients, risk.py, fit.py, results/, STATE.md) |
+
 ## Remains
 - J0.5 gate: awaiting user decision on the model_p result. Then fan-out W1–W6, V1–V3, GATE 2, M1, J2, J3, J4, J5, V4, GATE 3, J6.
 - Item 4: measure cost/latency per check on 10 answers before J3, record here.
 - Item 7: read #9748 thread before UPSTREAM.md.
 
 ## Spend
-- Model: $0.0092 (current VK) + $0.00007 (pre-reset VK) ≈ $0.0093 / $10. Tavily: 6 / 1000 credits.
+- Model: $0.0092 (current VK) + $0.00007 (pre-reset VK) ≈ $0.0093 / $10. Tavily: 5 / 1000 credits by own count (4 spike searches + 1 relay test); Tavily /usage endpoint reported 0 at 20:57 IST.
