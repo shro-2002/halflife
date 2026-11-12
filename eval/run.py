@@ -75,13 +75,16 @@ async def run_case(case: dict, bf, searcher, cutoff: date) -> dict:
     return {"id": case["id"], "extract": extract, "claims": claims}
 
 
+CACHED_ONLY = False  # --cached-evidence-only: never call Tavily; a cache miss -> search error -> unverifiable
+
+
 async def live() -> None:
     from halflife.clients.bifrost import BifrostClient
     from halflife.clients.tavily import DiskCache, TavilyViaRelay
 
     s = load_settings()
     bf = BifrostClient(s)
-    searcher = TavilyViaRelay(bf, s.relay_name, DiskCache(s.cache_dir))
+    searcher = TavilyViaRelay(bf, s.relay_name, DiskCache(s.cache_dir), offline=CACHED_ONLY)
     cases = [json.loads(l) for l in CASES.read_text().splitlines()]
     OUT.mkdir(parents=True, exist_ok=True)
     raw_path = OUT / "raw.jsonl"
@@ -298,7 +301,13 @@ def plot(curves: dict, path: Path) -> None:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--offline", action="store_true", help="recompute from raw.jsonl; no spend")
+    ap.add_argument("--out", type=Path, default=None, help="results folder (default results/<eval date>-detector)")
+    ap.add_argument("--cached-evidence-only", action="store_true", help="live model calls, no Tavily calls")
     args = ap.parse_args()
+    global OUT, CACHED_ONLY
+    if args.out:
+        OUT = args.out
+    CACHED_ONLY = args.cached_evidence_only
     if not args.offline:
         asyncio.run(live())
     s = offline()

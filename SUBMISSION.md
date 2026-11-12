@@ -62,4 +62,4 @@ verbatim quote from a retrieved source.
 | Stale caught at 50% verified: model ordering / half-life / random | 0.842 / 0.708 / 0.460 | results/2026-11-12-detector |
 | Ordering AUC (300 claims): model / half-life / random | 0.826 / 0.782 / 0.499 | results/2026-11-12-ordering |
 | Cost per check (10 answers) | $0.0011, 2.8 Tavily credits, median 5.9 s | results/2026-11-12-checks10 |
-| Demo audit (50 answers, 2 keys × 2 models) | stale rate 0.27–0.78 per slice | results/2026-11-12-gateway-audit |
+| Demo audit, seeded demo traffic (50 answers, 2 keys × 2 models) | stale rate among verified claims 0.27–0.78 per slice; 29.7% of found claims verified | results/2026-11-12-gateway-audit |

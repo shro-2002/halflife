@@ -19,8 +19,15 @@ whether the question was the capital of France or the latest Python release.
 
 1. **Traffic audit (lead feature).** Reads recent requests from Bifrost's logging API, verifies the riskiest claims
    under a budget, and stores **stale rate by model and virtual key** in a fact ledger
-   (`halflife/gateway/audit.py`). On 50 demo answers through stock Bifrost it found stale rates from 0.27 to 0.78
-   per (model, key) slice ([results](results/2026-11-12-gateway-audit/README.md); demo traffic, not production).
+   (`halflife/gateway/audit.py`). On 50 answers of **seeded demo traffic** through stock Bifrost, the stale rate
+   among verified claims ranged from 0.27 to 0.78 per (model, key) slice, with 29.7% of found claims verified
+   ([results](results/2026-11-12-gateway-audit/README.md)).
+
+   **How stale rate is computed.** For each (model, virtual key): *stale rate among verified claims* = claims with a
+   `changed` verdict ÷ claims verified, where "verified" means the verdict was `current` or `changed` (unverifiable
+   claims are excluded). The audit verifies only the riskiest claims, ranked across the whole run, up to a verification
+   budget — so this is **not** a stale rate over all traffic. The *verified share* (claims verified ÷ claims found) is
+   reported beside it.
 2. **Budgeted verification with a measured curve.** Claims are ranked by the extractor model's own probability that
    the claim is outdated, so a budget is spent where staleness is likely. On 108 labelled cases, verifying the top
    50% of answers caught **0.842** of stale claims (random order: 0.460)

@@ -581,6 +581,7 @@ function staleRateRow(r) {
     h("td", { class: "num" }, fmt.num(r.answers_seen)), h("td", { class: "num" }, fmt.num(r.answers_checked)),
     h("td", { class: "num" }, fmt.num(r.claims_found)), h("td", { class: "num" }, fmt.num(r.claims_verified)),
     h("td", { class: "num" }, fmt.num(r.claims_changed)),
+    h("td", { class: "num" }, r.claims_found ? fmt.pct(r.claims_verified / r.claims_found, 1) : "—"),
     h("td", { class: "num" }, isNil(r.stale_rate) ? h("span", { class: "muted" }, "— nothing verified") : fmt.pct(r.stale_rate, 1)),
     h("td", { class: "num" }, fmt.num(r.mean_answer_score, 1)));
 }
@@ -603,7 +604,7 @@ function halfLifeTable(summary) {
 
 function drawGatewayChart(charted) {
   if (!charted.length) return;
-  const options = baseChartOptions(null, "Stale rate (%)");
+  const options = baseChartOptions(null, "Stale among verified (%)");
   options.indexAxis = "y";
   options.plugins.legend.display = false;
   options.scales.x.min = 0;
@@ -613,7 +614,7 @@ function drawGatewayChart(charted) {
     type: "bar",
     data: {
       labels: charted.map((r) => [r.model.replace(/^anthropic\//, ""), `${r.virtual_key || "no key"}${isDemoKey(r.virtual_key) ? " (DEMO)" : ""}`]),
-      datasets: [{ label: "Stale rate", data: charted.map((r) => r.stale_rate * 100), backgroundColor: cssVar("--accent"), borderRadius: 2, maxBarThickness: 40 }],
+      datasets: [{ label: "Stale rate among verified claims", data: charted.map((r) => r.stale_rate * 100), backgroundColor: cssVar("--accent"), borderRadius: 2, maxBarThickness: 40 }],
     },
     options,
   });
@@ -630,15 +631,16 @@ function renderGateway(summary) {
   const charted = rows.filter((r) => !isNil(r.stale_rate));
 
   out.replaceChildren(...[
-    h("h2", null, "Stale rate across gateway traffic"),
-    h("p", { class: "section-note" }, "Half-Life samples answers from Bifrost's own logs, extracts the time-sensitive claims, and verifies them with Tavily. Stale rate = claims whose current value changed / claims verified."),
+    h("h2", null, "Stale rate among verified claims, by model and virtual key"),
+    h("p", { class: "section-note" }, "Half-Life samples answers from Bifrost's own logs, extracts the time-sensitive claims, and verifies them with Tavily. Stale rate among verified claims = claims whose current value changed ÷ claims verified (verdict current or changed; unverifiable excluded). Only the riskiest claims, up to the verification budget, are verified, so this is not a stale rate over all traffic; the verified share is shown beside it."),
     allDemo ? h("div", { class: "demo-banner", role: "note" }, demoBadge(),
       " Every row below comes from seeded demo virtual keys (demo-*), not real user traffic.") : null,
     h("div", { class: "meta-row" },
       h("span", null, `window ${fmt.when(summary.window_start)} → ${fmt.when(summary.window_end)}`),
       h("span", null, `generated ${fmt.when(summary.generated_at)}`)),
     h("dl", { class: "stats", style: { marginTop: "14px" } },
-      stat("Overall stale rate", verified ? fmt.pct(changed / verified, 1) : "—"),
+      stat("Stale rate among verified claims", verified ? fmt.pct(changed / verified, 1) : "—"),
+      stat("Share of claims verified", sum("claims_found") ? fmt.pct(verified / sum("claims_found"), 1) : "—"),
       stat("Logs scanned", fmt.num(summary.logs_scanned)),
       stat("Answers seen", fmt.num(sum("answers_seen"))),
       stat("Answers checked", fmt.num(sum("answers_checked"))),
@@ -650,7 +652,7 @@ function renderGateway(summary) {
     rows.length ? chartSlot("gateway-chart", "Bar chart of stale rate by model and virtual key") : stateBox("", "No traffic in this window", "The audit found no gateway logs to sample."),
     charted.length < rows.length ? h("p", { class: "hint" }, `${rows.length - charted.length} slice(s) not charted: nothing verified there.`) : null,
     rows.length ? table("Stale rate per model and virtual key",
-      ["Model", "Virtual key", "Answers seen", "Checked", "Claims", "Verified", "Changed", "Stale rate", "Mean score"]
+      ["Model", "Virtual key", "Answers seen", "Checked", "Claims found", "Verified", "Changed", "Verified share", "Stale among verified", "Mean score"]
         .map((label, i) => ({ label, num: i >= 2 })),
       rows.map(staleRateRow)) : null,
     h("h3", { style: { marginTop: "18px" } }, "Cost of this audit"),
