@@ -57,11 +57,16 @@ class MeteredModel:
         self._inner = inner
         self.calls = 0
         self.cost_usd = 0.0
+        self.models: list[str] = []
+        self.fallback = False
 
     async def chat(self, messages: list[dict[str, str]], **kwargs):  # noqa: ANN201 - mirrors ChatModel
         self.calls += 1
         result = await self._inner.chat(messages, **kwargs)
         self.cost_usd += result.cost_usd
+        if result.model and result.model not in self.models:
+            self.models.append(result.model)
+        self.fallback = self.fallback or result.is_fallback
         return result
 
 
@@ -132,6 +137,7 @@ async def check_answer(answer: str, *, model: ChatModel, searcher: Searcher, opt
         usage.tavily_credits += o.credits
         usage.tavily_cache_hits += o.cache_hits
     usage.model_calls = model.calls  # counts attempts, including failed ones
+    usage.models_used, usage.fallback_used = list(model.models), model.fallback
 
     reports = [build_claim_report(c, r, outcomes.get(i)) for i, (c, r) in enumerate(zip(claims, risks))]
     usage.latency_ms = round((time.perf_counter() - started) * 1000, 1)

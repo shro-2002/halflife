@@ -21,6 +21,7 @@ from halflife.config import load_settings
 from halflife.pipeline import CheckOptions, check_answer
 
 PORT = 8092
+GRANT_TO = ("demo-support-bot", "demo-docs-assistant")
 MAX_ANSWER_CHARS = 20_000
 server = MCPServer(name="halflife", instructions="Check whether the factual claims in an answer are still current.")
 
@@ -65,13 +66,18 @@ async def register(url: str) -> dict:
             body = {"name": "halflife", "connection_type": "http", "connection_string": url, "tools_to_execute": ["*"]}
             resp = await bf.admin("POST", "/api/mcp/client", json=body)
             status = f"registered ({resp.status_code})"
-        # Virtual keys need an explicit MCP grant (otherwise 403 mcp_tool_blocked).
+        # Grant the tool to CALLER keys (the demo apps), never to Half-Life's own key: Bifrost injects
+        # granted tools into that key's chat calls, and the extractor/judge would start calling the tool.
         keys = (await bf.admin("GET", "/api/governance/virtual-keys")).json().get("virtual_keys") or []
-        vk = next((k for k in keys if k["name"] == "halflife-dev"), None)
-        if vk:
-            await bf.admin("PUT", f"/api/governance/virtual-keys/{vk['id']}",
-                           json={"mcp_configs": [{"mcp_client_name": "halflife", "tools_to_execute": ["*"]}]})
-        return {"status": status, "granted_to": "halflife-dev" if vk else None}
+        granted = []
+        for k in keys:
+            if k["name"] in GRANT_TO:
+                await bf.admin("PUT", f"/api/governance/virtual-keys/{k['id']}",
+                               json={"mcp_configs": [{"mcp_client_name": "halflife", "tools_to_execute": ["*"]}]})
+                granted.append(k["name"])
+            elif k["name"] == "halflife-dev" and k.get("mcp_configs"):
+                await bf.admin("PUT", f"/api/governance/virtual-keys/{k['id']}", json={"mcp_configs": []})
+        return {"status": status, "granted_to": granted}
     finally:
         await bf.aclose()
 

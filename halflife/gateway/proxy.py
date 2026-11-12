@@ -16,9 +16,11 @@ Experimental because the half-lives are not calibrated (results/2026-11-12-order
 
 import asyncio
 import hashlib
+import hmac
 import json
 import logging
 import re
+from dataclasses import replace
 from datetime import UTC, datetime
 
 import httpx
@@ -46,8 +48,14 @@ app = FastAPI(title="Half-Life cache-TTL proxy (experimental)")
 _reports: dict[str, dict] = {}  # ponytail: in-memory, bounded; persist if the proxy leaves experimental
 
 
-def cache_key(body: dict) -> str:
-    blob = json.dumps({"model": body.get("model"), "messages": body.get("messages")}, sort_keys=True)
+def _vk_hash(vk: str) -> str:
+    return hashlib.sha256(vk.encode()).hexdigest()[:16]
+
+
+def cache_key(body: dict, vk: str) -> str:
+    """Scoped to the caller's key and every generation parameter (Bifrost also scopes by VK)."""
+    params = {k: v for k, v in body.items() if k not in ("stream",)}
+    blob = json.dumps({"vk": _vk_hash(vk), "params": params}, sort_keys=True, default=str)
     return "halflife:" + hashlib.sha256(blob.encode()).hexdigest()[:32]
 
 
@@ -84,13 +92,17 @@ async def chat(request: Request) -> JSONResponse:
     vk = request.headers.get("x-bf-vk") or request.headers.get("authorization", "")
     if not vk:
         raise HTTPException(401, {"code": "UNAUTHORIZED", "message": "send your Bifrost virtual key in x-bf-vk"})
-    s, bf = app.state.settings, app.state.bf
+    s = app.state.settings
+    # Classification and the background report run on the CALLER's virtual key: Bifrost authenticates
+    # it and bills that key; Half-Life's own key is never spent on unauthenticated callers.
+    caller_vk = vk.split(" ", 1)[1] if vk.lower().startswith("bearer ") else vk
+    bf = BifrostClient(replace(s, virtual_key=caller_vk))
     question = next((m.get("content", "") for m in reversed(body.get("messages") or []) if m.get("role") == "user"), "")
     cls = await predict_class(bf, str(question))
     with Ledger(s.db_path) as ledger:
         half_lives = ledger.half_lives()
     ttl = ttl_seconds(cls, half_lives)
-    headers = {"x-bf-cache-key": cache_key(body), "x-bf-cache-ttl": str(ttl), "Content-Type": "application/json"}
+    headers = {"x-bf-cache-key": cache_key(body, caller_vk), "x-bf-cache-ttl": str(ttl), "Content-Type": "application/json"}
     headers["x-bf-vk" if not vk.lower().startswith("bearer") else "Authorization"] = vk
     resp = await app.state.http.post("/v1/chat/completions", content=json.dumps(body), headers=headers)
     rid = resp.headers.get("x-bifrost-request-id", "")
@@ -100,27 +112,34 @@ async def chat(request: Request) -> JSONResponse:
     if resp.status_code == 200 and rid and not hit:
         answer = ((resp.json().get("choices") or [{}])[0].get("message") or {}).get("content") or ""
         out_headers["x-halflife-report"] = f"/v1/reports/{rid}"
-        asyncio.create_task(_report(rid, answer, body.get("model")))
+        asyncio.create_task(_report(rid, answer, body.get("model"), bf, _vk_hash(caller_vk)))
+    else:
+        await bf.aclose()
     return JSONResponse(resp.json(), status_code=resp.status_code, headers=out_headers)
 
 
-async def _report(rid: str, answer: str, model: str | None) -> None:
+async def _report(rid: str, answer: str, model: str | None, bf: BifrostClient, owner: str) -> None:
     s = app.state.settings
-    _reports[rid] = {"status": "pending"}
+    _reports[rid] = {"status": "pending", "owner": owner}
     try:
-        rep = await check_answer(answer, model=app.state.bf, searcher=app.state.searcher,
+        rep = await check_answer(answer, model=bf, searcher=TavilyViaRelay(bf, s.relay_name, DiskCache(s.cache_dir)),
                                  opts=CheckOptions(as_of=s.model_cutoff, today=datetime.now(UTC).date(),
                                                    mode="gateway", answer_model=model, request_id=rid, budget=3))
-        _reports[rid] = {"status": "done", "report": json.loads(rep.model_dump_json())}
+        _reports[rid] = {"status": "done", "owner": owner, "report": json.loads(rep.model_dump_json())}
     except Exception as err:  # fail open; the answer was already returned
         log.exception("report failed")
-        _reports[rid] = {"status": "failed", "error": type(err).__name__}
+        _reports[rid] = {"status": "failed", "owner": owner, "error": type(err).__name__}
+    finally:
+        await bf.aclose()
     while len(_reports) > MAX_REPORTS:
         _reports.pop(next(iter(_reports)))
 
 
 @app.get("/v1/reports/{request_id}")
-async def report(request_id: str) -> JSONResponse:
-    if request_id not in _reports:
+async def report(request_id: str, request: Request) -> JSONResponse:
+    vk = request.headers.get("x-bf-vk", "")
+    entry = _reports.get(request_id)
+    # Same 404 for unknown ids and other callers' reports: ids are not an oracle.
+    if not vk or entry is None or not hmac.compare_digest(entry["owner"], _vk_hash(vk)):
         raise HTTPException(404, {"code": "UNKNOWN_REQUEST", "message": "no report for that x-bifrost-request-id"})
-    return JSONResponse(_reports[request_id])
+    return JSONResponse({k: v for k, v in entry.items() if k != "owner"})

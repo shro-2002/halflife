@@ -86,5 +86,8 @@ def test_proxy_ttl_follows_half_life_and_bounds():
     assert ttl_seconds(V.SOFTWARE_VERSION, hl) < ttl_seconds(V.OFFICE_HOLDER, hl)
     assert ttl_seconds(V.SOFTWARE_VERSION, hl) == int(-120 * __import__("math").log2(0.95) * 86400)
     assert ttl_seconds(V.PRICE, hl) == MIN_TTL_S
-    a = cache_key({"model": "m", "messages": [{"role": "user", "content": "q"}], "temperature": 0.2})
-    assert a == cache_key({"model": "m", "messages": [{"role": "user", "content": "q"}]}) and a.startswith("halflife:")
+    body = {"model": "m", "messages": [{"role": "user", "content": "q"}]}
+    a = cache_key(body, "sk-bf-a")
+    assert a == cache_key(dict(body), "sk-bf-a") and a.startswith("halflife:")
+    assert a != cache_key(body, "sk-bf-b")  # no cross-tenant sharing
+    assert a != cache_key({**body, "temperature": 0.9}, "sk-bf-a")  # generation params are part of the key

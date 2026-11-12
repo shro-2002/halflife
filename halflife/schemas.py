@@ -136,6 +136,8 @@ class Usage(BaseModel):
     tavily_credits: int = 0
     tavily_cache_hits: int = 0
     latency_ms: float = 0.0
+    models_used: list[str] = Field(default_factory=list, description="Models that actually served Half-Life's calls")
+    fallback_used: bool = Field(default=False, description="Bifrost failed over to a fallback model for some call")
 
 
 class AnswerReport(BaseModel):

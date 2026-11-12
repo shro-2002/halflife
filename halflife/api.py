@@ -13,6 +13,7 @@ GET  /                    the web UI; /results/* and /fixtures/* are served read
 """
 
 import hmac
+from dataclasses import replace
 import json
 import logging
 import os
@@ -80,6 +81,8 @@ class CheckRequest(BaseModel):
     age_basis: Literal["model_cutoff", "cache_write", "explicit_date"] = "model_cutoff"
     budget: int | None = Field(default=None, ge=0, le=MAX_BUDGET)
     answer_model: str | None = Field(default=None, max_length=200)
+    simulate_primary_down: bool = Field(default=False, description="Demo: point the primary model at an unavailable "
+                                        "ID so Bifrost's fallback (claude-haiku-4-5) serves the check")
 
 
 @asynccontextmanager
@@ -107,12 +110,18 @@ async def check(req: CheckRequest) -> AnswerReport:
     today = datetime.now(UTC).date()
     opts = CheckOptions(as_of=req.as_of or s.model_cutoff, today=today, age_basis=AgeBasis(req.age_basis),
                         budget=req.budget, mode="check", answer_model=req.answer_model)
+    model = app.state.bifrost
+    if req.simulate_primary_down:
+        model = BifrostClient(replace(s, model=s.model + "-unavailable"))
     try:
-        report = await check_answer(req.answer, model=app.state.bifrost, searcher=app.state.searcher,
+        report = await check_answer(req.answer, model=model, searcher=app.state.searcher,
                                     opts=opts, half_lives=_half_lives(s))
     except Exception as err:  # fail open at the edge: never a stack trace to the client
         log.exception("check failed")
         raise HTTPException(status_code=502, detail={"code": "CHECK_FAILED", "message": type(err).__name__}) from err
+    finally:
+        if model is not app.state.bifrost:
+            await model.aclose()
     return report
 
 

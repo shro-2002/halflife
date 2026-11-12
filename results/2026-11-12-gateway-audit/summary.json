@@ -1,0 +1,81 @@
+{
+  "generated_at": "2026-11-12T16:35:37.328543Z",
+  "window_start": "2026-11-12T13:34:01.700576Z",
+  "window_end": "2026-11-12T16:34:01.700576Z",
+  "logs_scanned": 500,
+  "sample_cap": 50,
+  "verification_budget": 60,
+  "rows": [
+    {
+      "model": "anthropic/claude-haiku-4-5",
+      "virtual_key": "demo-docs-assistant",
+      "answers_seen": 12,
+      "answers_checked": 7,
+      "claims_found": 36,
+      "claims_verified": 12,
+      "claims_changed": 7,
+      "stale_rate": 0.5833,
+      "mean_answer_score": 41.7
+    },
+    {
+      "model": "anthropic/claude-haiku-4-5",
+      "virtual_key": "demo-support-bot",
+      "answers_seen": 12,
+      "answers_checked": 7,
+      "claims_found": 43,
+      "claims_verified": 15,
+      "claims_changed": 11,
+      "stale_rate": 0.7333,
+      "mean_answer_score": 19.9
+    },
+    {
+      "model": "anthropic/claude-haiku-5-5",
+      "virtual_key": "demo-docs-assistant",
+      "answers_seen": 13,
+      "answers_checked": 6,
+      "claims_found": 47,
+      "claims_verified": 15,
+      "claims_changed": 4,
+      "stale_rate": 0.2667,
+      "mean_answer_score": 63.6
+    },
+    {
+      "model": "anthropic/claude-haiku-5-5",
+      "virtual_key": "demo-support-bot",
+      "answers_seen": 13,
+      "answers_checked": 7,
+      "claims_found": 46,
+      "claims_verified": 9,
+      "claims_changed": 7,
+      "stale_rate": 0.7778,
+      "mean_answer_score": 43.4
+    }
+  ],
+  "half_lives": {
+    "software_version": 120.0,
+    "price": 240.0,
+    "rate_or_statistic": 150.0,
+    "office_holder": 900.0,
+    "law_or_regulation": 700.0,
+    "product_spec": 300.0
+  },
+  "half_life_source": {
+    "software_version": "prior_guess",
+    "price": "prior_guess",
+    "rate_or_statistic": "prior_guess",
+    "office_holder": "prior_guess",
+    "law_or_regulation": "prior_guess",
+    "product_spec": "prior_guess"
+  },
+  "usage": {
+    "model_calls": 110,
+    "model_cost_usd": 0.054564,
+    "tavily_calls": 114,
+    "tavily_credits": 88,
+    "tavily_cache_hits": 26,
+    "latency_ms": 95563.5
+  },
+  "errors": [
+    "extract: item 1: span not in answer: 'Some models combine Europe and Asia into Eurasia, which would make six.'"
+  ]
+}

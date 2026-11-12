@@ -84,7 +84,10 @@ class BifrostClient:
         }
         if self._s.fallback_models:
             body["fallbacks"] = list(self._s.fallback_models)
-        headers = {"x-bf-vk": self._s.virtual_key, **(extra_headers or {})}
+        # Half-Life's own calls must never receive MCP tools (Bifrost injects tools granted to the key);
+        # an include-filter naming no client yields none.
+        headers = {"x-bf-vk": self._s.virtual_key, "x-bf-mcp-include-clients": "halflife-internal-none",
+                   **(extra_headers or {})}
         started = time.perf_counter()
         try:
             resp = await self._http.post("/v1/chat/completions", json=body, headers=headers)
