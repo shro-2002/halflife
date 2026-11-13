@@ -654,9 +654,11 @@ function renderGateway(summary) {
       stat("Claims changed", fmt.num(changed)),
       stat("Sample cap", fmt.num(summary.sample_cap), "answers per audit run"),
       stat("Verification budget", fmt.num(summary.verification_budget), "claims searched per run")),
-    errorList("Audit errors:", summary.errors),
     rows.length ? chartSlot("gateway-chart", "Bar chart of stale rate by model and virtual key") : stateBox("", "No traffic in this window", "The audit found no gateway logs to sample."),
     charted.length < rows.length ? h("p", { class: "hint" }, `${rows.length - charted.length} slice(s) not charted: nothing verified there.`) : null,
+    (summary.errors || []).length ? h("details", { class: "audit-errors" },
+      h("summary", null, `Audit errors (${summary.errors.length}) — failures recorded, not hidden`),
+      errorList("", summary.errors)) : null,
     rows.length ? table("Stale rate per model and virtual key",
       ["Model", "Virtual key", "Answers seen", "Checked", "Claims found", "Verified", "Changed", "Verified share", "Stale among verified", "Mean score"]
         .map((label, i) => ({ label, num: i >= 2 })),

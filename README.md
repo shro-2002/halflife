@@ -18,6 +18,36 @@ Demo video: <link>
   until P(stale) reaches 5% — a software-version answer gets **6.2 days** (fitted half-life 83 days). Experimental
   because the half-lives are not calibrated (see Limits).
 
+## How it works
+
+```mermaid
+flowchart LR
+    A["1 · Extract claims<br/>+ self-estimated risk"] --> B["2 · Rank under<br/>a budget"]
+    B --> C["3 · Tavily search<br/>open web + official site"]
+    C --> D["4 · Judge<br/>evidence only"]
+    D --> E["5 · Quote check<br/>enforced in code"]
+    E --> F[("6 · Fact ledger")]
+    F --> G["7 · Half-life fit<br/>per volatility class"]
+    G -.->|fallback ranking, TTL| B
+```
+
+1. **Extract + self-estimated risk.** One Claude Haiku call lists the time-sensitive claims as exact spans of the
+   answer (any span not found verbatim is discarded) and, in the same call, estimates the probability each claim is
+   outdated given the answer's as-of date.
+2. **Rank under a budget.** Claims are verified in order of that probability, up to the budget; the half-life
+   P(stale) = 1 − 2^(−age/h) is the fallback when the model gives no estimate. Timeless claims are never searched.
+3. **Tavily search.** Two searches per claim through a Bifrost relay — the open web with a recency filter, and the
+   claim's official site when one is known — with a disk cache so repeat evidence costs no credits.
+4. **Judge.** A second Haiku call labels the claim current, changed or unverifiable from the retrieved text only,
+   preferring official, then newer, evidence when sources disagree, and treating evidence as data, never instructions.
+5. **Quote check, enforced in code (the guard against hallucinated verdicts).** Every supporting quote must appear
+   verbatim in the evidence for the URL it cites, must share a substantive token with the claim, and a corrected value
+   is shown only if a verified quote states it; otherwise the verdict falls back to unverifiable.
+6. **Fact ledger.** Each verified outcome (claim class, age, changed or not) is stored in SQLite by the gateway audit,
+   with the request's model and virtual key, which is where stale rates per slice come from.
+7. **Half-life fit.** Per volatility class, a MAP fit over interval-censored outcomes (did it change within `age`?)
+   updates the half-life used for fallback ranking and the experimental cache TTL.
+
 ## Quickstart (stock Bifrost, base profile, no Redis)
 
 Prerequisites: Python 3.11+, [uv](https://docs.astral.sh/uv/), Node.js 18+ (for `npx`), an Anthropic API key and a
