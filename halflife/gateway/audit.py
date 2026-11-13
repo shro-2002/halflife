@@ -73,13 +73,15 @@ async def _detail_when_written(bf: BifrostClient, log_id: str, tries: int = 10) 
     return None
 
 
-async def sample_logs(bf: BifrostClient, *, hours: float, cap: int, request_ids: set[str] | None = None) -> tuple[list[dict], int]:
+async def sample_logs(bf: BifrostClient, *, hours: float, cap: int, request_ids: set[str] | None = None,
+                      vk_ids: list[str] | None = None) -> tuple[list[dict], int]:
     if request_ids is not None:  # explicit ids (tests, proxy joins): read each by id
         details = await asyncio.gather(*(_detail_when_written(bf, i) for i in list(request_ids)[:cap]))
         return [p for d in details if d and (p := parse_log(d))], len(request_ids)
     since = datetime.now(UTC) - timedelta(hours=hours)
     # Scan deeper than the cap: Half-Life's own extract/judge calls share the log and are skipped.
-    rows = await bf.list_logs(max_rows=min(max(cap * 10, 100), 1000), status="success")
+    filters = {"status": "success", **({"virtual_key_ids": ",".join(vk_ids)} if vk_ids else {})}
+    rows = await bf.list_logs(max_rows=min(max(cap * 10, 100), 1000), **filters)
     scanned = len(rows)
     picked = []
     for r in rows:
@@ -101,10 +103,10 @@ async def sample_logs(bf: BifrostClient, *, hours: float, cap: int, request_ids:
 async def audit(bf: BifrostClient, model: ChatModel, searcher: Searcher, *, hours: float = 24, cap: int = 50,
                 budget: int = 60, today: date | None = None, half_lives: dict | None = None,
                 request_ids: set[str] | None = None, ledger: Ledger | None = None,
-                random_share: float = 0.3, seed: int = 0) -> tuple[GatewaySummary, list[AnswerReport]]:
+                random_share: float = 0.3, seed: int = 0, vk_ids: list[str] | None = None) -> tuple[GatewaySummary, list[AnswerReport]]:
     today = today or datetime.now(UTC).date()
     started = datetime.now(UTC)
-    logs, scanned = await sample_logs(bf, hours=hours, cap=cap, request_ids=request_ids)
+    logs, scanned = await sample_logs(bf, hours=hours, cap=cap, request_ids=request_ids, vk_ids=vk_ids)
     metered = MeteredModel(model)
     sem = asyncio.Semaphore(CONCURRENCY)
 
@@ -218,8 +220,14 @@ async def main_async(args) -> None:
     bf = BifrostClient(s)
     searcher = TavilyViaRelay(bf, s.relay_name, DiskCache(s.cache_dir))
     with Ledger(s.db_path) as ledger:
+        names = [n for n in args.virtual_keys.split(",") if n]
+        vks = (await bf.admin("GET", "/api/governance/virtual-keys")).json().get("virtual_keys") or [] if names else []
+        vk_ids = [k["id"] for k in vks if k["name"] in names] or None
+        if args.budget * args.random_share < 60:
+            print(f"note: {round(args.budget * args.random_share)} random samples; intervals undercover below ~60")
         summary, reports = await audit(bf, bf, searcher, hours=args.hours, cap=args.sample_cap, budget=args.budget,
-                                       half_lives=ledger.half_lives(), ledger=ledger, random_share=args.random_share)
+                                       half_lives=ledger.half_lives(), ledger=ledger, random_share=args.random_share,
+                                       vk_ids=vk_ids)
         if args.refit:
             for row in ledger.refit():
                 print("refit", row)
@@ -234,7 +242,11 @@ def main() -> None:
     ap.add_argument("--hours", type=float, default=24)
     ap.add_argument("--sample-cap", type=int, default=50)
     ap.add_argument("--budget", type=int, default=60, help="claims verified per run, riskiest first")
-    ap.add_argument("--random-share", type=float, default=0.3, help="share of the budget for the random sample")
+    ap.add_argument("--random-share", type=float, default=0.3,
+                    help="share of the budget for the stratified random sample behind the traffic-wide estimate; "
+                         "aim for at least ~60 random samples (budget x share): below that the 95%% interval undercovers "
+                         "(validation: 0.74 coverage at 18, 0.945 at 60; results/2026-11-13-estimator-validation)")
+    ap.add_argument("--virtual-keys", default="", help="comma-separated virtual key names to audit (server-side log filter)")
     ap.add_argument("--refit", action="store_true")
     asyncio.run(main_async(ap.parse_args()))
 

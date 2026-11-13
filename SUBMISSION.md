@@ -12,7 +12,8 @@ Half-Life tells an AI gateway which answers to re-check, and when. It runs besid
 traffic Bifrost already logs, finds time-sensitive claims in the answers (prices, software versions, office holders,
 rates, laws), verifies the riskiest ones against live web sources with Tavily, and reports a freshness score per claim
 and a stale rate per model and virtual key. It also checks any answer on demand (API, UI and an MCP tool inside
-Bifrost's MCP gateway), and experimentally sets a cache TTL per request from fitted fact half-lives.
+Bifrost's MCP gateway), estimates the stale rate across all logged traffic from a stratified random sample
+(validated as unbiased on 1,763 labelled claims), and experimentally sets a cache TTL per request from fitted fact half-lives.
 
 ## The problem being solved
 
@@ -58,6 +59,8 @@ verbatim quote from a retrieved source.
 
 | What | Number | File |
 |---|---|---|
+| Traffic-wide estimator validation (1,763 labelled claims) | unbiased (abs bias ≤ 0.004); 95% CI coverage 0.74 at 18, 0.89 at 30, 0.945 at 60 samples | results/2026-11-13-estimator-validation |
+| Traffic-wide estimate, seeded demo traffic (50 answers, 60 random samples) | 0.477, 95% CI [0.369, 0.590]; sampling error only, labels from the detector | results/2026-11-13-gateway-audit |
 | Detector precision / recall (108 cases, live runs 1–2) | 0.847 (0.841–0.854) / 0.948 (0.921–0.974); cached-only stability runs: precision 0.873, recall ≥ 0.816 (lower bound) | results/2026-11-12-detector/variance.json |
 | Stale caught at 50% of claims verified, live runs: model / half-life / random | 0.831 / 0.712 / 0.474 | results/2026-11-12-detector/variance.json |
 | Ordering AUC (300 claims): model / half-life / random | 0.826 / 0.782 / 0.499 | results/2026-11-12-ordering |

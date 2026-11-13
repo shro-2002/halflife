@@ -1,0 +1,140 @@
+{
+  "generated_at": "2026-11-13T09:37:27.441052Z",
+  "window_start": "2026-11-12T03:35:41.123703Z",
+  "window_end": "2026-11-13T09:35:41.123703Z",
+  "logs_scanned": 60,
+  "sample_cap": 50,
+  "verification_budget": 120,
+  "rows": [
+    {
+      "model": "anthropic/claude-haiku-4-5",
+      "virtual_key": "demo-docs-assistant",
+      "answers_seen": 12,
+      "answers_checked": 8,
+      "claims_found": 38,
+      "claims_verified": 14,
+      "claims_changed": 6,
+      "stale_rate": 0.4286,
+      "mean_answer_score": 40.2,
+      "est_stale_rate": 0.3922,
+      "est_ci95": [
+        0.1373,
+        0.7255
+      ],
+      "est_bounds_unverifiable": [
+        0.3373,
+        0.502
+      ],
+      "est_n_sampled": 14,
+      "time_sensitive_claims": 17
+    },
+    {
+      "model": "anthropic/claude-haiku-4-5",
+      "virtual_key": "demo-support-bot",
+      "answers_seen": 12,
+      "answers_checked": 7,
+      "claims_found": 43,
+      "claims_verified": 18,
+      "claims_changed": 12,
+      "stale_rate": 0.6667,
+      "mean_answer_score": 29.6,
+      "est_stale_rate": 0.66,
+      "est_ci95": [
+        0.4875,
+        0.83
+      ],
+      "est_bounds_unverifiable": [
+        0.625,
+        0.6833
+      ],
+      "est_n_sampled": 18,
+      "time_sensitive_claims": 20
+    },
+    {
+      "model": "anthropic/claude-haiku-5-5",
+      "virtual_key": "demo-docs-assistant",
+      "answers_seen": 13,
+      "answers_checked": 7,
+      "claims_found": 48,
+      "claims_verified": 20,
+      "claims_changed": 6,
+      "stale_rate": 0.3,
+      "mean_answer_score": 50.5,
+      "est_stale_rate": 0.3068,
+      "est_ci95": [
+        0.1053,
+        0.4659
+      ],
+      "est_bounds_unverifiable": [
+        0.2386,
+        0.3068
+      ],
+      "est_n_sampled": 17,
+      "time_sensitive_claims": 22
+    },
+    {
+      "model": "anthropic/claude-haiku-5-5",
+      "virtual_key": "demo-support-bot",
+      "answers_seen": 13,
+      "answers_checked": 10,
+      "claims_found": 48,
+      "claims_verified": 11,
+      "claims_changed": 8,
+      "stale_rate": 0.7273,
+      "mean_answer_score": 38.1,
+      "est_stale_rate": 0.5938,
+      "est_ci95": [
+        0.4062,
+        0.8636
+      ],
+      "est_bounds_unverifiable": [
+        0.5938,
+        0.75
+      ],
+      "est_n_sampled": 11,
+      "time_sensitive_claims": 16
+    }
+  ],
+  "half_lives": {
+    "software_version": 83.2,
+    "price": 240.0,
+    "rate_or_statistic": 55.2,
+    "office_holder": 1626.9,
+    "law_or_regulation": 700.0,
+    "product_spec": 300.0
+  },
+  "half_life_source": {
+    "software_version": "fitted",
+    "price": "prior_guess",
+    "rate_or_statistic": "fitted",
+    "office_holder": "fitted",
+    "law_or_regulation": "prior_guess",
+    "product_spec": "prior_guess"
+  },
+  "recorded": false,
+  "random_share": 0.5,
+  "estimate_overall": {
+    "est_stale_rate": 0.4772,
+    "est_ci95": [
+      0.3692,
+      0.5898
+    ],
+    "est_bounds_unverifiable": [
+      0.4276,
+      0.528
+    ],
+    "est_n_sampled": 60,
+    "time_sensitive_claims": 75
+  },
+  "usage": {
+    "model_calls": 121,
+    "model_cost_usd": 0.063348,
+    "tavily_calls": 136,
+    "tavily_credits": 125,
+    "tavily_cache_hits": 11,
+    "latency_ms": 106267.6,
+    "models_used": [],
+    "fallback_used": false
+  },
+  "errors": []
+}

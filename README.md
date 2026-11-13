@@ -9,11 +9,13 @@ Demo video: <link>
 
 ![Gateway view: stale rate among verified claims by model and virtual key, on seeded demo traffic](docs/img/gateway.png)
 
+- **Traffic-wide stale-rate estimate:** the audit spends part of its verification budget on a stratified random
+  sample of all time-sensitive claims in Bifrost's logged traffic and estimates the stale rate over all of them —
+  validated on 1,763 claims with known labels: unbiased at every sample size (|bias| ≤ 0.004) and 95% interval coverage 0.74 at 18 samples, 0.89 at 30, 0.945 at 60 — so aim for about 60 random samples ([validation](results/2026-11-13-estimator-validation/README.md)). On seeded **demo traffic**: **0.477**,
+  95% CI [0.369, 0.590]. The interval covers sampling error only: labels come from the detector (live-run precision 0.847, recall 0.948), and the population is the time-sensitive claims the extractor found in the sampled answers.
 - **Budgeted verification:** claims are ranked by the extractor model's own probability that they are outdated, then
   checked against live Tavily search. Verifying half the claims caught **83%** of the stale ones, against 47% in
   random order (108 labelled cases; mean of the two live runs).
-- **Traffic audit:** reads Bifrost's request logs and reports a stale rate per model and virtual key. On seeded
-  **demo traffic** the stale rate among verified claims ranged from **27% to 78%** across model × key slices.
 - **Decay-based cache TTL (experimental):** each kind of fact gets a fitted half-life, and the cache TTL is the time
   until P(stale) reaches 5% — a software-version answer gets **6.2 days** (fitted half-life 83 days). Experimental
   because the half-lives are not calibrated (see Limits).
@@ -22,8 +24,11 @@ Demo video: <link>
 
 ```mermaid
 flowchart LR
-    A["1 · Extract claims<br/>+ self-estimated risk"] --> B["2 · Rank under<br/>a budget"]
-    B --> C["3 · Tavily search<br/>open web + official site"]
+    A["1 · Extract claims<br/>+ self-estimated risk"] --> B["2 · Split the budget"]
+    B -->|"top-risk share"| B1["riskiest claims"]
+    B -->|"random share"| B2["stratified random sample<br/>→ traffic-wide estimate"]
+    B1 --> C["3 · Tavily search<br/>open web + official site"]
+    B2 --> C
     C --> D["4 · Judge<br/>evidence only"]
     D --> E["5 · Quote check<br/>enforced in code"]
     E --> F[("6 · Fact ledger")]
@@ -34,7 +39,9 @@ flowchart LR
 1. **Extract + self-estimated risk.** One Claude Haiku call lists the time-sensitive claims as exact spans of the
    answer (any span not found verbatim is discarded) and, in the same call, estimates the probability each claim is
    outdated given the answer's as-of date.
-2. **Rank under a budget.** Claims are verified in order of that probability, up to the budget; the half-life
+2. **Split the budget.** In the audit, one share of the budget goes to the riskiest claims and the rest to a random
+   sample stratified by rank score (4 quantile strata), which gives an unbiased traffic-wide estimate (default 30%;
+   aim for ≥ ~60 random samples). Within the top-risk share, claims are verified in order of that probability; the half-life
    P(stale) = 1 − 2^(−age/h) is the fallback when the model gives no estimate. Timeless claims are never searched.
 3. **Tavily search.** Two searches per claim through a Bifrost relay — the open web with a recency filter, and the
    claim's official site when one is known — with a disk cache so repeat evidence costs no credits.
@@ -179,7 +186,15 @@ The gap holds on claims dated after the model's knowledge cutoff (0.827 vs 0.773
 random, age-only and class-only (all 95% CIs exclude zero), which is why it stays as the fallback and as the basis
 for TTL — but the product ranks by the model.
 
-**Gateway audit on seeded demo traffic** ([results/2026-11-12-gateway-audit](results/2026-11-12-gateway-audit/README.md)).
+**Traffic-wide estimate.** Validation ([results/2026-11-13-estimator-validation](results/2026-11-13-estimator-validation/README.md)):
+on 1,763 time-sensitive claims with known labels (true stale rate 0.206), the stratified estimator is unbiased at every
+sample size (|bias| ≤ 0.004); 95% interval coverage is 0.47 / 0.74 / 0.89 / 0.945 / 0.945 / 0.97 at 8 / 18 / 30 / 60 /
+120 / 240 samples. On seeded **demo traffic** (50 answers, budget 120 split 50/50, 60 of 75 time-sensitive claims
+sampled; [results/2026-11-13-gateway-audit](results/2026-11-13-gateway-audit/README.md)): **0.477**, 95% CI [0.369,
+0.590]; 0.428–0.528 with unverifiable claims counted all current / all stale. The interval covers sampling error only: labels come from the detector (live-run precision 0.847, recall 0.948), and the population is the time-sensitive claims the extractor found in the sampled answers. Per-slice estimates have 11–18
+samples each and are shown greyed, not reported as findings.
+
+**Gateway audit, top-risk slice, on seeded demo traffic** ([results/2026-11-12-gateway-audit](results/2026-11-12-gateway-audit/README.md)).
 *Stale rate among verified claims* = claims with a `changed` verdict ÷ claims verified, where "verified" means the
 verdict was `current` or `changed` (unverifiable claims are excluded). The audit verifies only the riskiest claims,
 ranked across the run, up to a verification budget, so this is **not** a stale rate over all traffic; the *verified

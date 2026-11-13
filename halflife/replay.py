@@ -18,7 +18,7 @@ from halflife.schemas import AnswerReport, GatewaySummary
 
 RECORDED_DIR = ROOT / "results" / "2026-11-12-recorded"
 EXAMPLES_PATH = RECORDED_DIR / "examples.json"
-SAVED_AUDIT = ROOT / "results" / "2026-11-12-gateway-audit" / "summary.json"
+SAVED_AUDIT = ROOT / "results" / "2026-11-13-gateway-audit" / "summary.json"
 # Must match the example answers in web/app.js (EXAMPLES).
 EXAMPLE_ANSWERS = {
     "stale": "The Bank of Canada policy interest rate is 2.25%. Justin Trudeau is the Prime Minister of Canada.",

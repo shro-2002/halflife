@@ -62,3 +62,10 @@
 
 ## Spend
 - Model: $0.245 / $10 measured 22:20 IST (halflife-dev $0.233, demo keys $0.011, cache-profile gateway $0.001). Tavily: ~430 / 1000 by own count (Tavily /usage reports 152 at 22:20 IST; its counter lags) (154 to Gate 2 + ~5 recheck + 141 J3 run1 + 33 J3 run2 + 88 audit + ~10 e2e/proxy/MCP); Tavily /usage endpoint reported 0 at 20:57 IST.
+
+## 2026-11-13 update (post-push polish, item 3 done)
+- Evidence order fix: displayed quote states the corrected value; judge prefers official then newest evidence (cached rerun run6: precision 0.865, no drop). Stale-facts replay example switched to Bank of Canada + Canadian PM (Node/BoE are index-lag examples in Limits).
+- Traffic-wide estimator (halflife/gateway/estimate.py): stratified random sample (4 rank-score strata), bootstrap CI, unverifiable bounds. Validation (results/2026-11-13-estimator-validation): 1,763 labelled claims, |bias| <= 0.004, coverage 0.74@18, 0.945@60 -> guidance >= ~60 random samples.
+- Demo audit rerun (results/2026-11-13-gateway-audit, --budget 120 --random-share 0.5, demo keys): estimate 0.477 [0.369, 0.590], bounds 0.428-0.528, 60 of 75 claims sampled; 125 Tavily credits, $0.063 model. Audit gained --virtual-keys (server-side log filter) after a run with 0 answers (internal logs filled the scan window).
+- Spend now: Tavily ~600 / 1000 by own count; model ~$0.33 / $10.
+- No further features (user, 2026-11-13).

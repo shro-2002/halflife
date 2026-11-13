@@ -1,7 +1,7 @@
 # Two-minute demo script
 
 **Before recording** (once, off camera): `make demo` (starts stock Bifrost, sets up the relay and virtual key, seeds
-~40 demo requests, runs the audit, starts the UI) with `HALFLIFE_DEMO_MODE=1` in `.env`. Open
+~40 demo requests, runs the audit (use `--budget 120 --random-share 0.5 --virtual-keys demo-support-bot,demo-docs-assistant` for the estimate on screen), starts the UI) with `HALFLIFE_DEMO_MODE=1` in `.env`. Open
 http://localhost:8091 in a browser at 1440 px wide. Run the "Stale facts" example once off camera so its evidence is
 cached (the recorded run is then fast and costs 0 credits). Keep a terminal with the Bifrost dashboard
 (http://localhost:8088) in a second tab.
@@ -9,7 +9,7 @@ cached (the recorded run is then fast and costs 0 credits). Keep a terminal with
 | Time | Click / show | Say (one sentence) |
 |---|---|---|
 | 0:00–0:12 | Title card, then the **Gateway audit** tab (opens by default). | "Bifrost tells you what every key cost; Half-Life tells you how much of what it served is no longer true." |
-| 0:12–0:30 | Point at the stale-rate bar chart and table; hover the **DEMO TRAFFIC** badge. | "It reads Bifrost's own request logs, checks the riskiest claims under a budget, and reports stale rate per model and virtual key — on this demo traffic, the stale rate among verified claims runs from 27% to 78% depending on model and key, with about 30% of claims verified under the budget." |
+| 0:12–0:30 | Point at **Estimated stale rate, all time-sensitive claims** (47.7%, CI 37–59%), then the bar chart; hover the **DEMO TRAFFIC** badge. | "It reads Bifrost's own request logs and, from a random sample of claims, estimates that about 48% of time-sensitive claims in this seeded demo traffic are stale — an estimator we validated as unbiased on 1,763 labelled claims." |
 | 0:30–0:40 | Scroll to the half-life table; point at the **experimental** TTL label. | "Each kind of fact has a half-life, which also gives a cache TTL — we label that experimental because it isn't calibrated yet." |
 | 0:40–0:48 | Click the **Check an answer** tab, then the **Stale facts** chip, then **Check**. | "Now one answer: a policy rate and an office holder that were true at the model's cutoff." |
 | 0:48–1:05 | Show the two claim cards: **changed**, score 5, corrected value (Bank of Canada 2.25% → 2.5%, Justin Trudeau → Mark Carney), the green evidence quote and source links; point at the separate "model reasoning" box. | "Each verdict rests on a verbatim quote that Tavily returned, checked in code, with the current value and sources." |

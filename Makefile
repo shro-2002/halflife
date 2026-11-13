@@ -36,7 +36,7 @@ seed:
 	uv run python -m halflife.gateway.seed
 
 audit:
-	uv run python -m halflife.gateway.audit --hours 6 --sample-cap 50 --budget 60
+	uv run python -m halflife.gateway.audit --hours 6 --sample-cap 50 --budget 120 --random-share 0.5
 
 # One command: stock Bifrost (no Redis) + setup + demo traffic + audit + API/UI in the background.
 demo: bifrost setup seed audit api-bg
