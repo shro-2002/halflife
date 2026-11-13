@@ -1,25 +1,25 @@
 {
  "stale": {
-  "answer": "The Bank of England base rate is 5.25%. The latest LTS release of Node.js is Node 20.",
-  "recorded_at": "2026-11-13T09:20:26.523843+00:00",
+  "answer": "The Bank of Canada policy interest rate is 2.25%. Justin Trudeau is the Prime Minister of Canada.",
+  "recorded_at": "2026-11-13T09:26:27.244209+00:00",
   "report": {
-   "answer": "The Bank of England base rate is 5.25%. The latest LTS release of Node.js is Node 20.",
+   "answer": "The Bank of Canada policy interest rate is 2.25%. Justin Trudeau is the Prime Minister of Canada.",
    "model": "anthropic/claude-haiku-5-5",
    "mode": "check",
-   "checked_at": "2026-11-13T09:20:26.523821Z",
+   "checked_at": "2026-11-13T09:26:27.244183Z",
    "verification_budget": null,
    "claims": [
     {
      "claim": {
       "id": "c1",
-      "text": "The Bank of England base rate is 5.25%.",
-      "span": "The Bank of England base rate is 5.25%.",
+      "text": "The Bank of Canada policy interest rate is 2.25%.",
+      "span": "The Bank of Canada policy interest rate is 2.25%.",
       "volatility_class": "rate_or_statistic",
       "explicit_date": null,
       "is_past_event": false,
-      "subject": "Bank of England base rate",
-      "authoritative_domain": "bankofengland.co.uk",
-      "p_outdated_model": 0.6
+      "subject": "Bank of Canada policy interest rate",
+      "authoritative_domain": "bankofcanada.ca",
+      "p_outdated_model": 0.5
      },
      "risk": {
       "claim_id": "c1",
@@ -29,104 +29,112 @@
       "half_life_source": "prior_guess",
       "p_stale": 0.4666,
       "recommended_ttl_days": 11.1,
-      "rank_score": 0.6,
+      "rank_score": 0.5,
       "rank_basis": "model_p"
      },
      "searched": true,
      "evidence": [
       {
-       "url": "https://finance.yahoo.com/economy/policy/articles/uk-interest-rates-fall-2026-160348987.html",
-       "title": "Will UK interest rates fall in 2026?",
-       "content": "Between August 2024 and December 2025, the Bank of England cut interest rates six times \u2013 roughly once a quarter, and each time by 0.25 percentage points.\n\nThat cutting trend brought the base rate down from a recent high of 5.25% to 3.75% in December 2025.\n\nAt the start of 2026, most economists believed the MPC would continue cutting rates at this roughly quarterly cadence before reaching a neutral monetary policy footing, potentially at around 3.25%. [...] The Bank of England's ratesetting committee held interest rates for the sixth consecutive time at their most recent meeting on 17 September.\n\nThe bank's Monetary Policy Committee (MPC) voted to keep the base rate at 3.75%, with the motion passing by six votes to three as ratesetters remained in \"wait-and-see\" mode. [...] \"The decision, however, signalled a change in direction by the MPC. A more resilient economy combined with material upside risks building around the inflation outlook saw the MPC deliver a more hawkish tone on the policy outlook.\n\n\"The stage is set for rate hikes in the coming months \u2013 but a change in Bank Rate isn't a done deal. Much depends on the path of energy prices from here and how second-round effects track in the coming months,\" he added.",
-       "published_date": "Mon, 21 Sep 2026 00:00:00 GMT",
-       "query": "Bank of England base rate: The Bank of England base rate is 5.25%. (as of 2026)",
+       "url": "https://wowa.ca/bank-of-canada-interest-rate",
+       "title": "Bank of Canada Interest Rate: Current Rate 2.25% (October 2026) | Historical Chart 1935-2026 | WOWA.ca",
+       "content": "As inflation moved closer to the Bank\u2019s target range by 2024, policymakers initiated a cautious easing phase. Rate cuts were small and widely spaced, reflecting the Bank's concern that inflation pressures\u2014although declining\u2014were not yet fully extinguished. At the same time, keeping the policy rate unchanged for too long risked tightening financial conditions further in real terms, given falling inflation. [...] Through its policy tools, the Bank of Canada aims to keep inflation, measured by changes in the CPI, within an optimal range. Established in 1991, the inflation-control target is set at 1% to 3%, with a midpoint target of 2% as the preferred rate for annual inflation. This target range is reviewed periodically (typically every 5 years), with the latest review conducted in 2021 and the next review coming up in 2026. [...] After reaching its peak, the Bank kept the policy rate unchanged for an extended period. Maintaining the rate at this restrictive level allowed the full impact of earlier tightening to work through the economy. Inflation decelerated steadily as supply chains normalized, energy prices cooled, and domestic demand softened.",
+       "published_date": "Fri, 28 Nov 2025 00:00:00 GMT",
+       "query": "Bank of Canada policy interest rate: The Bank of Canada policy interest rate is 2.25%. (as of 2026)",
        "is_authoritative": false,
-       "retrieved_at": "2026-11-13T09:20:24.886039Z"
+       "retrieved_at": "2026-11-13T09:26:25.643577Z"
       },
       {
-       "url": "https://www.mortgageonefinance.co.uk/bank-of-england-base-rate-history",
-       "title": "Bank of England Base Rate History | 50 Years \u2014 Mortgage One",
-       "content": "What followed was fast rather than extreme. Fourteen consecutive increases between December 2021 and August 2023 took the rate from 0.10% to 5.25%, where it stayed for a full year before the first cut in August 2024. Borrowers experienced that as a shock because they measured it against the preceding decade. Measured against the chart's full range, 5.25% was unremarkable, and it sat below the 51-year average throughout. The shock was the speed, not the destination. Anyone who came off a cheap [...] Set the chart to 20Y to see it. The window opens shortly before the 2008 financial crisis, covers the fall to 0.50% in March 2009 and the long stretch below 0.75%, then the fourteen consecutive rises to 5.25% between December 2021 and August 2023, and the cuts that followed from August 2024.\n\n7. Will mortgage rates ever go to 3% again? [...] ## What is the average Bank of England base rate since 1975?\n\nThe time-weighted average Bank Rate between January 1975 and July 2026 is 6.11%. By decade the averages run 10.77% for 1975 to 1979, 11.70% across the 1980s, 7.85% in the 1990s, 4.33% in the 2000s, 0.50% through the 2010s and 2.74% in the 2020s so far.",
-       "published_date": "Thu, 30 Jul 2026 00:00:00 GMT",
-       "query": "Bank of England base rate: The Bank of England base rate is 5.25%. (as of 2026)",
+       "url": "https://stories.td.com/ca/en/article/bank-of-canada-interest-rate-march-2026",
+       "title": "The Bank of Canada holds its interest rate | TD Stories",
+       "content": "The Bank of Canada (BoC) announced it is holding its interest rate steady at 2.25%.\n\nThe March 18 decision is the second rate hold of 2026 as the BoC also held its rate in January.\n\nTD Economist Maria Solovieva said that inflation is currently within the BoC\u2019s target of 1-3%, and while GDP growth is muted, it\u2019s still within a reasonable range. Even with tariffs, the economy is still chugging along for now.",
+       "published_date": "Wed, 18 Mar 2026 00:00:00 GMT",
+       "query": "Bank of Canada policy interest rate: The Bank of Canada policy interest rate is 2.25%. (as of 2026)",
        "is_authoritative": false,
-       "retrieved_at": "2026-11-13T09:20:24.886039Z"
+       "retrieved_at": "2026-11-13T09:26:25.643577Z"
       },
       {
-       "url": "https://commonslibrary.parliament.uk/research-briefings/sn02802",
-       "title": "Interest rates and monetary policy: Economic indicators",
-       "content": "Image 1: UK interest rates were increased from 0.1% in December 2021 to 5.25% in August 2023. They were then cut gradually from August 2024 to December 2025 to 3.75%. In November 2026 they were raised to 4.0%.\n\nSource:Bank of England,Interest rates and Bank Rate [accessed 5 Nov 2026]",
-       "published_date": "Fri, 11 Sep 2026 22:30:44 GMT",
-       "query": "Bank of England base rate: The Bank of England base rate is 5.25%. (as of 2026)",
+       "url": "https://ca.finance.yahoo.com/news/bank-of-canada-maintains-key-interest-rate-at-225-as-cusma-negotiations-loom-120033036.html",
+       "title": "Bank of Canada maintains key interest rate at 2.25%, says 'timing or direction' of next rate change uncertain",
+       "content": "\"When combined with the Bank\u2019s explicit concern around upcoming USMCA negotiations and potential spillovers to trade and growth, the message is that the BoC is increasingly sensitive to downside risks,\" he added.\n\n  \"This reinforces our expectation that the Bank will begin easing policy in the first half of 2026.\"\n Jeff Lagerquist\n\n  Jeff Lagerquist\n\n  ## BoC to hike rates by mid-2027: Oxford Economics\n\n  Oxford Economics predicts the next move from the BoC will be a rate hike in 2027. [...] Today's rate hold was broadly predicted by economists and investors. ATB Financial Economist Mark Parsons expects the BoC will stay on hold through 2026.\n\n  \"The key takeaway is that the big cuts are behind us, and our current view is that we're at the bottom of the rate cutting cycle,\" he stated in a research note on Wednesday. [...] \"The statement leaned solidly to the dovish side with the Bank noting geopolitical uncertainty, a softer labour market and moderate growth expectations for 2026,\" chief investment strategist Philip Petursson stated on Wednesday.\n\n  \"In our view the Bank has let it be known that they are prepared to respond to any changes in the economy as necessary. To us that means that we may not have hit the end of cuts for this cycle. In short, this is not a hawkish pause,\" he added.",
+       "published_date": "Wed, 28 Jan 2026 00:00:00 GMT",
+       "query": "Bank of Canada policy interest rate: The Bank of Canada policy interest rate is 2.25%. (as of 2026)",
        "is_authoritative": false,
-       "retrieved_at": "2026-11-13T09:20:24.886039Z"
+       "retrieved_at": "2026-11-13T09:26:25.643577Z"
       },
       {
-       "url": "https://www.raisin.com/en-gb/banking/will-interest-rates-rise",
-       "title": "When will interest rates rise for savers? | Raisin UK",
-       "content": "In February 2022, the BoE announced the base rate would increase to 0.5% as spiralling energy costs pushed inflation to a 30-year high. Interest rates rose again in April 2022, and by a further 0.25% in May 2022 to reach 1.00%, which was the highest level in 13 years at the time. However, with inflation still climbing, the BoE continued to increase the base rate \u2013 and by August 2023, the rate was set at 5.25%, marking the 14th consecutive rise by the Bank. The BoE then held the rate at 5.25% [...] Raisin\n\nLog inRegister\n\nLog inRegister\n\nHomeBankingWill interest rates rise?\n\nLast updated:21 October 2026\n\n# When will interest rates rise for savers?\n\nUK savings rates and expectations for 2026 and beyond\n\nWith the Bank of England (BoE) holding the base rate at 3.75% in September 2026, many savers will be wondering: what\u2019s next for interest rates? We look at the latest forecasts and what they could mean for your savings accounts.\n\n#### Key takeaways [...] The Governor of the Bank of England has hinted that the base rate will continue to go down, with forecasts at the start of 2026 suggesting that it'll reach 3.5% by the end of the year.However, the 2026 conflict in the Middle East and subsequent impact on inflation and prices may change this approach.",
-       "published_date": "Wed, 21 Oct 2026 00:00:00 GMT",
-       "query": "Bank of England base rate: The Bank of England base rate is 5.25%. (as of 2026)",
-       "is_authoritative": false,
-       "retrieved_at": "2026-11-13T09:20:24.886039Z"
-      },
-      {
-       "url": "https://www.bankofengland.co.uk/explainers/current-interest-rate",
-       "title": "What is happening with interest rates in the UK? | Bank of England \u2013 the UK's central bank",
-       "content": "War in the Middle East has affected energy prices and pushed up inflation \u2013 we will do what is necessary to get it back on target\n\nThis page was last updated on 17 September 2026\n\nWe started raising interest rates at the end of 2021 to help control inflation. Since then, it has fallen a lot and the pressures that caused price rises had eased. As a result, we were able to start reducing interest rates in August 2024 from 5.25% down to 3.75% in December 2025.",
-       "published_date": "Thu, 17 Sep 2026 00:00:00 GMT",
-       "query": "Bank of England base rate: The Bank of England base rate is 5.25%. (as of 2026)",
-       "is_authoritative": true,
-       "retrieved_at": "2026-11-13T09:20:24.886039Z"
-      },
-      {
-       "url": "https://www.bankofengland.co.uk/-/media/boe/files/monetary-policy-report/2026/april/monetary-policy-report-april-2026.pdf",
-       "title": "Monetary Policy Report April 2026",
-       "content": "Bank of England Page 81 In Scenario C, the path for Bank Rate is materially higher than the market-implied path in most illustrative policy rules produced by Bank staff, given the outlook embodies persistent and material second-round effects which policy needs to act to offset. In staff\u2019s illustrative model-based projections for Scenario C, for example, Bank Rate rises to around 5.25% by 2027 Q1 (Chart 3.6, left panel), which reduces the projected inflation peak in this scenario and [...] respond to an energy price shock? 84 Annex 1: Model-based policy simulations 91 Annex 2: Monetary policy since the February 2026 Report 103 Glossary and other information 104 Bank of England Page 3 Monetary Policy Summary At its meeting ending on 29 April 2026, the Monetary Policy Committee (MPC) voted by a majority of 8\u20131 to maintain Bank Rate at 3.75%. One member voted to increase Bank Rate by 0.25 percentage points, to 4%. [...] Bank of England Page 27 Financial conditions Based on the 15-day average of forward interest rates to 22 April, the market-implied path for Bank Rate rises to 4.2% in early 2027 before gradually falling to 4% by early 2028 (Chart 1.15). The median respondent to the April 2026 Market Participants Survey (MaPS) expected Bank Rate to remain unchanged through the rest of this year, and to be 3.5% one year ahead and 3.25% two and three years ahead. The market-implied path for Bank Rate will capture",
+       "url": "https://www.cbc.ca/news/business/bank-of-canada-interest-rate-april-2026-9.7181093",
+       "title": "Bank of Canada holds key interest rate at 2.25%, warning future decisions are clouded by uncertainty | CBC News",
+       "content": "Duration \n\n4:15\n\nThe Bank of Canada is keeping its key lending rate at 2.25 per cent, saying future changes could be small if its economic projections hold true. However, Governor Tiff Macklem also warned that this is a time of uncertainty and that there could be future consecutive rate hikes if oil prices stay high and increase inflation. UPDATE (April 29, 2026): This video previously had a technical error at 4:14. It has been replaced. [...] Inflation in April is expected to \u2060shoot up to about three per cent, \u2060from 2.4 per cent in March, while averaging around 2.3 per cent for this \u200cyear, but is expected to come back down to the bank's two per cent target by early next year. The bank lifted its 2026 growth forecast to 1.2 per cent, from the 1.1 per cent it had predicted in January.\n\nBut at this point, inflation was mostly contained to energy prices, and long-term inflation expectations remained anchored, Macklem said. [...] Governor Tiff Macklem said the key rate is probably at about the right level if the economy follows the central bank's projections, though he didn't rule out future adjustments depending on how the risks play out.\n\n\"If the economy evolves broadly in line with the base case, changes in the policy rate can be expected to be small,\" he said.\n\n\"However, uncertainty is unusually elevated and there are many possible outcomes. Monetary policy may need to be nimble.\"",
        "published_date": "Wed, 29 Apr 2026 00:00:00 GMT",
-       "query": "Bank of England base rate: The Bank of England base rate is 5.25%. (as of 2026)",
-       "is_authoritative": true,
-       "retrieved_at": "2026-11-13T09:20:24.886121Z"
+       "query": "Bank of Canada policy interest rate: The Bank of Canada policy interest rate is 2.25%. (as of 2026)",
+       "is_authoritative": false,
+       "retrieved_at": "2026-11-13T09:26:25.643577Z"
       },
       {
-       "url": "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2024/august-2024",
-       "title": "Bank Rate reduced to 5% - August 2024 | Bank of England \u2013 the UK's central bank",
-       "content": "26: Five members (Andrew Bailey, Sarah Breeden, Swati Dhingra, Clare Lombardelli and Dave Ramsden) voted in favour of the proposition. Four members (Megan Greene, Jonathan Haskel, Catherine L Mann and Huw Pill) voted against the proposition, preferring to maintain Bank Rate at 5.25%.\n\nOperational considerations\n\n27: On 31 July, the stock of UK government bonds held for monetary policy purposes was \u00a3690 billion. [...] 23: Four members preferred to maintain Bank Rate at 5.25% at this meeting. The upside news to services inflation and GDP outturns relative to the May Report, along with continued elevated wage growth, suggested that second-round effects were having a greater impact on wage and price-setting behaviour in the economy beyond what was embodied in the modal forecast. External factors, such as international food and energy prices, had played the major role in reducing headline inflation to date. By [...] At its meeting ending on 31 July 2024, the MPC voted by a majority of 5\u20134 to reduce Bank Rate by 0.25 percentage points, to 5%. Four members preferred to maintain Bank Rate at 5.25%.\n\nThe Committee has published an updated set of projections for activity and inflation in the accompanying August Monetary Policy Report.",
-       "published_date": "Thu, 30 Jul 2026 00:00:00 GMT",
-       "query": "Bank of England base rate: The Bank of England base rate is 5.25%. (as of 2026)",
-       "is_authoritative": true,
-       "retrieved_at": "2026-11-13T09:20:24.886121Z"
+       "url": "https://www.youtube.com/watch?v=tuMvbu0kv40",
+       "title": "Bank of Canada holds key interest rate at 2.25%",
+       "content": "### Transcript\n[0:00] We have some breaking economic news. The Bank of Canada is holding its key interest rate at 2.25% in its first announcement of 2026.\n[0:08] Here's how the Bank of Canada Governor weighed the decision.\n[0:12] Our forecast for economic growth and inflation in Canada has not changed significantly since our October projection. As the Canadian economy [...] ### Description\n8,734 views\nPosted: 2026-01-28\nThe Bank of Canada announced Wednesday it is maintaining its key interest rate at 2.25 per cent for a second consecutive meeting. Governor Tiff Macklem said the central bank's economic outlook has not evolved 'significantly' since its projection in October, though its trajectory could change as the country stares down a risky free trade negotiation with the U.S. and Mexico.\n\n\u00bb\u00bb\u00bb Subscribe to CBC News to watch more videos: [...] [2:07] What it can do is make borrowing money cheaper, which can help Canadian businesses and Canadian consumers spend money, and that can theoretically\n[2:15] stimulate the economy. It also can cause inflation, which is why when inflation is under control, as Tiff M has implied, he feels it is right now, at least\n[2:23] moderately so. They don't want to increase interest rates yet. They want to wait until the economy might be in need of a boost to increase interest",
+       "published_date": "Wed, 28 Jan 2026 00:00:00 GMT",
+       "query": "Bank of Canada policy interest rate: The Bank of Canada policy interest rate is 2.25%. (as of 2026)",
+       "is_authoritative": false,
+       "retrieved_at": "2026-11-13T09:26:25.643577Z"
       },
       {
-       "url": "https://www.bankofengland.co.uk/markets/market-intelligence/survey-results/2025/market-participants-survey-results-september-2025",
-       "title": "Market Participants Survey results \u2013 September 2025 | Bank of England \u2013 the UK's central bank",
-       "content": "#### Footnotes\n\n (a) In the question provided to respondents, the different Bank Rate outcomes spanned <2.75% and >5.25% at the extremes, and all 25 basis point increments in between. Results have been truncated where the mean probabilities above or below a certain outcome were close to or at zero. Mean probabilities are rounded to one decimal place. 86 respondents answered this question. [...] #### Footnotes\n\n (a) In the question provided to respondents, the different Bank Rate outcomes spanned <2.75% and >5.25% at the extremes, and all 25 basis point increments in between. Results have been truncated where the mean probabilities above or below a certain outcome were close to or at zero. Mean probabilities are rounded to one decimal place. 86 respondents answered this question.",
-       "published_date": "Fri, 19 Sep 2025 00:00:00 GMT",
-       "query": "Bank of England base rate: The Bank of England base rate is 5.25%. (as of 2026)",
+       "url": "https://www.bankofcanada.ca/2026/07/fad-press-release-2026-07-15",
+       "title": "Bank of Canada maintains the policy rate at 2\u00bc% - Bank of Canada",
+       "content": "Skip to content\n\nFR\n\n# Bank of Canada maintains the policy rate at 2\u00bc%\n\nFOR IMMEDIATE RELEASE\n\nMedia Relations\n\nOttawa, Ontario\n\nJuly 15, 2026\n\nShare this page on Facebook   Share this page on X   Share this page on LinkedIn   Share this page by email\n\nThe Bank of Canada today held its target for the overnight rate at 2.25%, with the Bank Rate at 2.5% and the deposit rate at 2.20%. [...] ## Information note\n\nThe next scheduled date for announcing the overnight rate target is September 2, 2026. The Bank\u2019s next MPR will be released on October 28, 2026.\n\nContent Type(s): Press, Press releases\n\n## Monetary Policy Report\u2014July 2026\n\nCanada\u2019s economy has been weak but is showing signs of improvement. Growth is expected to pick up, and inflation is projected to ease to around 2%. Uncertainty remains elevated.\n\n## Press Conference: Monetary Policy Report \u2013 July 2026 [...] This is an account of the deliberations of the Bank of Canada\u2019s Governing Council leading to the monetary policy decision on July 15, 2026.\n\nWe use cookies to help us keep improving this website.\n\nAccept and continue",
+       "published_date": "Wed, 15 Jul 2026 00:00:00 GMT",
+       "query": "Bank of Canada policy interest rate: The Bank of Canada policy interest rate is 2.25%. (as of 2026)",
        "is_authoritative": true,
-       "retrieved_at": "2026-11-13T09:20:24.886121Z"
+       "retrieved_at": "2026-11-13T09:26:25.643607Z"
       },
       {
-       "url": "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2025/may-2025",
-       "title": "Bank Rate reduced to 4.25% - May 2025 | Bank of England \u2013 the UK's central bank",
-       "content": "Bank of England home\n\n\u00a92026 Bank of England [...] David Roberts was also present on 29 April and 2 May, as an observer for the purpose of exercising oversight functions in his role as a member of the Bank\u2019s Court of Directors.\n\n### Latest and upcoming MPC dates\n\n## Other Monetary Policy Committee news\n\n### Bank Rate maintained at 3.75% - July 2026...\n\n### Bank Rate maintained at 3.75% - July 2026 Monetary Policy Summary and Minutes\n\n### Bank Rate maintained at 3.75% - June 2026... [...] ### Bank Rate maintained at 3.75% - June 2026 Monetary Policy Summary and Minutes\n\n### Announcement of the publication of the Governor's...\n\n### Announcement of the publication of the Governor's interview transcript\n\n### Bank Rate maintained at 3.75% - April 2026...\n\n### Bank Rate maintained at 3.75% - April 2026 Monetary Policy Summary and Minutes\n\nBack to top\n\n### Follow us Follow us\n\n### Museum\n\n### Useful links Useful links\n\n### Bank of England\n\n### Bank of England Museum",
-       "published_date": "Thu, 30 Jul 2026 00:00:00 GMT",
-       "query": "Bank of England base rate: The Bank of England base rate is 5.25%. (as of 2026)",
+       "url": "https://www.bankofcanada.ca/2026/03/fad-press-release-2026-03-18",
+       "title": "Bank of Canada maintains policy rate at 2\u00bc% - Bank of Canada",
+       "content": "Skip to content\n\nFR\n\n# Bank of Canada maintains policy rate at 2\u00bc%\n\nFOR IMMEDIATE RELEASE\n\nMedia Relations\n\nOttawa, Ontario\n\nMarch 18, 2026\n\nShare this page on Facebook   Share this page on X   Share this page on LinkedIn   Share this page by email\n\nThe Bank of Canada today held its target for the overnight rate at 2.25%, with the Bank Rate at 2.5% and the deposit rate at 2.20%. [...] Against this overall backdrop, Governing Council decided to maintain the policy rate at 2.25%. With recent data pointing to weaker economic activity and uncertainty elevated, risks to growth look tilted to the downside. At the same time, inflation risks have gone up due to higher energy prices. We will continue to assess the impact of US tariffs and trade policy uncertainty, and how the Canadian economy is adjusting. We are also monitoring the unfolding conflict in the Middle East closely and [...] ## Information note\n\nThe next scheduled date for announcing the overnight rate target is April 29, 2026. The Bank\u2019s next MPR will be released at the same time.\n\nContent Type(s): Press, Press releases\n\n## Press Conference: Policy Rate Announcement \u2013 March 2026\n\nInterest Rate Announcement \u2014 Press conference by Governor Tiff Macklem and Senior Deputy Governor Carolyn Rogers (10:30 (ET) approx.).\n\n## Monetary Policy Decision Press Conference Opening Statement",
+       "published_date": "Wed, 18 Mar 2026 00:00:00 GMT",
+       "query": "Bank of Canada policy interest rate: The Bank of Canada policy interest rate is 2.25%. (as of 2026)",
        "is_authoritative": true,
-       "retrieved_at": "2026-11-13T09:20:24.886121Z"
+       "retrieved_at": "2026-11-13T09:26:25.643607Z"
+      },
+      {
+       "url": "https://www.bankofcanada.ca/press/press-releases",
+       "title": "Press releases - Bank of Canada",
+       "content": "September 2, 2026\n\n### Bank of Canada maintains the policy rate at 2\u00bc%\n\nMedia Relations  Ottawa, Ontario\n\nThe Bank of Canada today held its target for the overnight rate at 2.25%, with the Bank Rate at 2.5% and the deposit rate at 2.20%.\n\nContent Type(s): Press, Press releases\n\nJuly 31, 2026\n\n### G7 2026 Cross-Border Coordination Exercise (CBCE)\n\nMedia Relations  Ottawa, Ontario [...] The Bank of Canada today published its 2027 schedule for policy interest rate announcements and the release of the quarterly Monetary Policy Report.\n\nContent Type(s): Press, Press releases\n\nJuly 15, 2026\n\n### Bank of Canada maintains the policy rate at 2\u00bc%\n\nMedia Relations  Ottawa, Ontario\n\nThe Bank of Canada today held its target for the overnight rate at 2.25%, with the Bank Rate at 2.5% and the deposit rate at 2.20%.\n\nContent Type(s): Press, Press releases\n\nJune 25, 2026 [...] The Bank of Canada today held its target for the overnight rate at 2.25%, with the Bank Rate at 2.5% and the deposit rate at 2.20%.\n\nContent Type(s): Press, Press releases\n\nMay 27, 2026\n\n### Bank of Canada joins BIS Project Agor\u00e1 to test improvements in wholesale cross-border payments\n\nMedia Relations  Ottawa, Ontario",
+       "published_date": "Tue, 29 Jun 2010 00:00:00 GMT",
+       "query": "Bank of Canada policy interest rate: The Bank of Canada policy interest rate is 2.25%. (as of 2026)",
+       "is_authoritative": true,
+       "retrieved_at": "2026-11-13T09:26:25.643607Z"
+      },
+      {
+       "url": "https://www.bankofcanada.ca/core-functions/monetary-policy/key-interest-rate",
+       "title": "Policy interest rate - Bank of Canada",
+       "content": "## Recent data\n\n| Date\\ | Target (%) | Change (%) |\n --- \n| October 28, 2026 | 2.50 | +0.25 |\n| September 2, 2026 | 2.25 \n| July 15, 2026 | 2.25 \n| June 10, 2026 | 2.25 \n| April 29, 2026 | 2.25 \n| March 18, 2026 | 2.25 \n| January 28, 2026 | 2.25 \n| December 10, 2025 | 2.25 \n| October 29, 2025 | 2.25 | -0.25 |\n| September 17, 2025 | 2.50 | -0.25 |\n| July 30, 2025 | 2.75 \n| June 4, 2025 | 2.75 \n\n\\As of 2021, a change takes effect the day after its announcement.\n\nMore data [...] Schedule for 2026\n\n    | Dates | Publications |\n| January 28 | Interest rate announcement and Monetary Policy Report |\n| March 18 | Interest rate announcement |\n| April 29 | Interest rate announcement and Monetary Policy Report |\n| June 10 | Interest rate announcement |\n| July 15 | Interest rate announcement and Monetary Policy Report |\n| September 2 | Interest rate announcement |\n| October 28 | Interest rate announcement and Monetary Policy Report |\n| December 9 | Interest rate announcement | [...] More data\n\nSee also Market Operations Indicators related to the implementation of monetary policy\u2014including the operating band, settlement balances and other Bank of Canada operations.\n\nSchedule for 2026",
+       "published_date": "Tue, 01 Jun 2010 00:00:00 GMT",
+       "query": "Bank of Canada policy interest rate: The Bank of Canada policy interest rate is 2.25%. (as of 2026)",
+       "is_authoritative": true,
+       "retrieved_at": "2026-11-13T09:26:25.643607Z"
+      },
+      {
+       "url": "https://www.bankofcanada.ca",
+       "title": "Bank of Canada",
+       "content": "Skip to content\n\nFR\n\nMore than a bank. We are the Central Bank of Canada.\n\nPolicy interest rate\n\n2.50%\n\nOct 28, 2026\n\nTotal CPI inflation\n\n3.1%\n\n09/01/2026\n\nCPI-trim\n\n1.8%\n\n09/01/2026\n\nCPI-median\n\n1.9%\n\n09/01/2026\n\n## What does the Bank of Canada do?\n\nOur primary responsibility is to preserve the value of your money by keeping inflation low, stable and predictable.\n\n## Counterfeit prevention\n\nFeel, look, tilt and flip! Learn how to check your bank notes and protect yourself from fraud. [...] Find the latest updates and Bank of Canada communications, answers to frequently asked questions, and other related content.\n\n## News\n\nOctober 28, 2026\n\n### Bank of Canada raises the policy rate by 25 basis points to 2\u00bd%\n\nMedia Relations  Ottawa, Ontario\n\nThe Bank of Canada today increased its target for the overnight rate by 25 basis points to 2.5%, with the Bank Rate at 2.75% and the deposit rate at 2.45%.\n\nContent Type(s): Press, Press releases\n\nOctober 28, 2026",
+       "published_date": "Mon, 07 Dec 2009 00:00:00 GMT",
+       "query": "Bank of Canada policy interest rate: The Bank of Canada policy interest rate is 2.25%. (as of 2026)",
+       "is_authoritative": true,
+       "retrieved_at": "2026-11-13T09:26:25.643607Z"
       }
      ],
      "verdict": {
       "claim_id": "c1",
       "label": "changed",
-      "supporting_quote": "In November 2026 they were raised to 4.0%.",
-      "supporting_url": "https://commonslibrary.parliament.uk/research-briefings/sn02802",
-      "current_value": "4.0%",
+      "supporting_quote": "The Bank of Canada today increased its target for the overnight rate by 25 basis points to 2.5%",
+      "supporting_url": "https://www.bankofcanada.ca",
+      "current_value": "2.5%",
       "source_urls": [
-       "https://commonslibrary.parliament.uk/research-briefings/sn02802",
-       "https://www.bankofengland.co.uk/explainers/current-interest-rate"
+       "https://www.bankofcanada.ca"
       ],
-      "reasoning": "The claim that the base rate is 5.25% was true only as a past peak (August 2023 to August 2024) and the rate was later cut to 3.75%. The Commons Library briefing states the rate was raised to 4.0% in November 2026.",
+      "reasoning": "The official Bank of Canada homepage reports a October 28, 2026 increase of the overnight rate target to 2.5%, and the official key-interest-rate page lists a 2.50 target from October 28, 2026. This supersedes the 2.25% figure, which was accurate only for dates before that increase.",
       "quote_verified": true
      },
      "freshness_score": 5.0,
@@ -136,120 +144,130 @@
     {
      "claim": {
       "id": "c2",
-      "text": "The latest LTS release of Node.js is Node 20.",
-      "span": "The latest LTS release of Node.js is Node 20.",
-      "volatility_class": "software_version",
+      "text": "Justin Trudeau is the Prime Minister of Canada.",
+      "span": "Justin Trudeau is the Prime Minister of Canada.",
+      "volatility_class": "office_holder",
       "explicit_date": null,
       "is_past_event": false,
-      "subject": "Node.js LTS release",
-      "authoritative_domain": "nodejs.org",
+      "subject": "Prime Minister of Canada",
+      "authoritative_domain": "pm.gc.ca",
       "p_outdated_model": 0.9
      },
      "risk": {
       "claim_id": "c2",
       "age_days": 136.0,
       "age_basis": "model_cutoff",
-      "half_life_days": 120.0,
+      "half_life_days": 900.0,
       "half_life_source": "prior_guess",
-      "p_stale": 0.5441,
-      "recommended_ttl_days": 8.88,
+      "p_stale": 0.0994,
+      "recommended_ttl_days": 66.6,
       "rank_score": 0.9,
       "rank_basis": "model_p"
      },
      "searched": true,
      "evidence": [
       {
-       "url": "http://nodesource.com/blog/nodejs-18-20-eol-136-million-downloads-july-2026",
-       "title": "Node.js 18 and 20 Are EOL\u2014Yet They Were Downloaded More Than 136 Million Times in July 2026",
-       "content": "| Release line | Status | Operational meaning |\n --- \n| Node.js 26 | Current | Actively developed and patched; the Current phase gives the ecosystem time to adopt the release |\n| Node.js 24 | LTS | The latest LTS line and the primary upgrade target for production applications |\n| Node.js 22 | LTS | Still supported and receiving security fixes |\n| Node.js 20 | EOL since April 30, 2026 | No official upstream security releases | [...] Node.js 24 is the latest Long-Term Support release, and Node.js 26 is the Current release line. Node.js 18 and Node.js 20, meanwhile, have both reached End-of-Life (EOL).\n\nThat should make the direction of travel obvious.\n\nInstead, Matteo Collina\u2019s analysis of Node.js download data showed that even discontinued Node.js 12, 14, and 16 release lines were still generating tens of millions of downloads per month, highlighting how slowly the ecosystem moves away from unsupported versions. [...] The official Node.js release schedule recommends that production applications use supported LTS releases.\n\nOnce a release line reaches EOL, it no longer receives updates\u2014including security patches\u2014even when later research shows that an applicable vulnerability also exists in the retired branch.",
-       "published_date": "Thu, 06 Aug 2026 00:00:00 GMT",
-       "query": "Node.js LTS release: The latest LTS release of Node.js is Node 20. (as of 2026)",
+       "url": "https://linkedin.com/in/justintrudeau",
+       "title": "Justin Trudeau - 23rd Prime Minister of Canada | 23e premier ministre du Canada",
+       "content": "# Justin Trudeau\n\n23rd Prime Minister of Canada | 23e premier ministre du Canada\n\nOttawa, Ontario, Canada \u00b7 500 connections \u00b7 5474651 followers\n\n## Experience\n\n### Co-founder | Co-fondateur\nHope & Hard Work \u00b7 September 2026 - Present \u00b7 2 months\n\n## Education\n\n### The University of British Columbia\nBachelor of Education (B.Ed.) \u00b7 1997 - 1998\n\n### McGill University\nBachelor of Arts (B.A.) \u00b7 1991 - 1994\n\n## Languages [...] ## Languages\n\nEnglish (Native or bilingual proficiency), French (Native or bilingual proficiency)\n\n## Skills\n\nchef, co-founder, leadership, minister, parliament, premier, prime [...] - Shared: Beyond thrilled to launch Hope & Hard Work . Our goal: bring people together through stories that help us see, understand, and connect with one another. We have\u2026 (post)\n- Shared: En cette F\u00eate nationale fran\u00e7aise, je pense au lien exceptionnel qui unit le Canada et la France, forg\u00e9 au fil des ann\u00e9es par le partenariat, la solidarit\u00e9 et l\u2026 (post)",
+       "published_date": "Sat, 04 Apr 2026 19:01:09 GMT",
+       "query": "Prime Minister of Canada: Justin Trudeau is the Prime Minister of Canada. (as of 2026)",
        "is_authoritative": false,
-       "retrieved_at": "2026-11-13T09:20:24.884972Z"
+       "retrieved_at": "2026-11-13T09:26:25.643128Z"
       },
       {
-       "url": "https://tuxcare.com/blog/node-eol",
-       "title": "Node.js End-of-Life: Dates, Risks & What to Do Next",
-       "content": "Node.js 20 reaches end of life on April 30, 2026. For a version that entered Active LTS in October 2023, it has seen broad adoption in production environments. However, from May 1, 2026, any vulnerability discovered in Node.js 20 won\u2019t receive an official patch. Given how widely it\u2019s deployed, it is likely to remain an active target for researchers and threat actors when new CVEs surface affecting this version. [...] After six months, even-numbered versions (12, 14, 16, 18, 20, 22) move to the Active LTS phase. Odd-numbered versions (13, 15, 17, 19) do not receive LTS status. They are dropped after six months. For production systems, only LTS versions are relevant.\n\nLTS versions continue to receive security patches, bug fixes, and stability improvements for about 12 months.\n\n### 3. Maintenance LTS\n\nAfter Active LTS ends, the Node.js version enters the Maintenance LTS. In this phase:",
-       "published_date": "Tue, 14 Apr 2026 16:36:21 GMT",
-       "query": "Node.js LTS release: The latest LTS release of Node.js is Node 20. (as of 2026)",
+       "url": "https://www.facebook.com/itsmaplelife/posts/announced-on-november-6-2026-the-appointment-will-see-trudeau-share-his-politica/1114741544860263",
+       "title": "MAPLE LIFE",
+       "content": "After leading Canada for nearly a decade as Prime Minister from 2015 to 2025, Trudeau is keeping busy beyond politics. In September 2026, he also announced his own production company, Hope & Hard Work, which plans to develop television series and other creative projects. Now, with Oxford on his resume, his post-political career is taking another interesting turn! Image 1: \ud83d\udc40",
+       "published_date": "Sun, 08 Nov 2026 18:00:00 GMT",
+       "query": "Prime Minister of Canada: Justin Trudeau is the Prime Minister of Canada. (as of 2026)",
        "is_authoritative": false,
-       "retrieved_at": "2026-11-13T09:20:24.884972Z"
+       "retrieved_at": "2026-11-13T09:26:25.643128Z"
       },
       {
-       "url": "https://hidekazu-konishi.com/entry/nodejs_release_and_eol_timeline.html",
-       "title": "Node.js Release and EOL Timeline - LTS Schedule, Active LTS and Maintenance, and End-of-Life Dates | hidekazu-konishi.com",
-       "content": "| 2026-04-30 | Node.js 20 \"Iron\" reaches End-of-Life. Because Node.js 20 was so widely deployed, its EOL left a large installed base needing to move to Node.js 22 or 24. Source: Node.js Releases (nodejs.org). |\n| 2026-05-05 | Node.js 26 is released as the new Current line (scheduled to enter Active LTS on 2026-10-28). Node.js 26 is the last major to follow the existing odd/even model. Source: Node.js v26.0.0 released. | [...] Having followed the chronology, this section summarizes the current picture: how the release phases fit together, which versions are supported right now, and the full per-version schedule. As of 2026-07-24, the supported (non-EOL) lines are Node.js 22 (Maintenance LTS), Node.js 24 (Active LTS), and Node.js 26 (Current). Everything from Node.js 20 and earlier, along with the odd-numbered lines 21, 23, and 25, has reached End-of-Life and no longer receives security updates. [...] Only even-numbered major versions are promoted to Long Term Support (LTS). As of 2026-07-24 the supported LTS lines are Node.js 24 (Active LTS) and Node.js 22 (Maintenance LTS), while Node.js 26 is the current Current release and is scheduled to become Active LTS on 2026-10-28. Odd-numbered versions (such as 23 and 25) never become LTS. Note that from Node.js 27 the odd/even distinction is being retired and every major will become LTS.  \n\n### How long is a Node.js LTS version supported?",
-       "published_date": "Sun, 26 Jul 2026 00:00:00 GMT",
-       "query": "Node.js LTS release: The latest LTS release of Node.js is Node 20. (as of 2026)",
+       "url": "https://www.instagram.com/p/Dfc6ZgUkhXX",
+       "title": "Instagram",
+       "content": "After leading Canada for nearly a decade as Prime Minister from 2015 to 2025, Trudeau is keeping busy beyond politics. In September 2026, he also announced his own production company, Hope & Hard Work, which plans to develop television series and other creative projects. Now, with Oxford on his resume, his post-political career is taking another interesting turn! \ud83d\udc40 [...] Announced on November 6, 2026, the appointment will see Trudeau share his political experience with students, researchers and former world leaders while exploring the future of global governance.",
+       "published_date": "Sun, 08 Nov 2026 18:00:00 GMT",
+       "query": "Prime Minister of Canada: Justin Trudeau is the Prime Minister of Canada. (as of 2026)",
        "is_authoritative": false,
-       "retrieved_at": "2026-11-13T09:20:24.884972Z"
+       "retrieved_at": "2026-11-13T09:26:25.643128Z"
       },
       {
-       "url": "https://nodejs.org/en/blog/release/v20.20.0",
-       "title": "Node.js \u2014 Node.js 20.20.0 (LTS)",
-       "content": "Skip to content\n\n# Node.js 20.20.0 (LTS)\n\nMI\n\nMarco Ippolito\n\nNode.js 20.20.0 (LTS)\n\n## 2026-01-13, Version 20.20.0 'Iron' (LTS), @marco-ippolito\n\nThis is a security release.\n\n### Notable Changes [...] d72d2a5b7d944a28eb59e0477bdc0c40b7b0a817bca057d5e882c0e0013590f3    node-v20.20.0-win-x86.zip8b8f5cbf7f1800c74e19cef0182bb6b9144e154e57fc01dd945bd36edaf32c65  node-v20.20.0-x64.msi 8b8f5cbf7f1800c74e19cef0182bb6b9144e154e57fc01dd945bd36edaf32c65    node-v20.20.0-x64.msi93698ab6cca1cbff4ffb545f15078509ae706cfbb9a646449ccfe1c8d7abad4b  node-v20.20.0-x86.msi 93698ab6cca1cbff4ffb545f15078509ae706cfbb9a646449ccfe1c8d7abad4b [...] 2fa932df38d6f1612154153a9c8c2048596518d5a46c34490f2c3603fc836d94    win-arm64/node_pdb.7zcda800fafb789404acbe98548fe1f4e71fbc3889a747eb3fef67155e67b29513  win-arm64/node_pdb.zip cda800fafb789404acbe98548fe1f4e71fbc3889a747eb3fef67155e67b29513    win-arm64/node_pdb.zipfda2b2a8857735f7958ba9771a2b24734ff36434e85ae606bcf7744d41d7adc0  win-x64/node.exe fda2b2a8857735f7958ba9771a2b24734ff36434e85ae606bcf7744d41d7adc0    win-x64/node.exe919d900bb9d589ebbcfda17e6f6e8f6b49d8d6a8d782b6f5efd6b6c6c5f0d1b1",
-       "published_date": "Tue, 13 Jan 2026 00:00:00 GMT",
-       "query": "Node.js LTS release: The latest LTS release of Node.js is Node 20. (as of 2026)",
-       "is_authoritative": true,
-       "retrieved_at": "2026-11-13T09:20:24.884972Z"
-      },
-      {
-       "url": "https://aws.amazon.com/blogs/developer/aws-sdk-for-javascript-aligns-with-node-js-release-schedule",
-       "title": "AWS SDK for JavaScript aligns with Node.js release schedule | AWS Developer Tools Blog",
-       "content": "The Node.js release schedule states that LTS versions reach EOL in April, and there are three LTS versions supported at any point in time. For example, Node.js 18.x was supported until April 2025 (until Node.js 24.x was published), and Node.js 20.x will be supported until April 2026 (until the next LTS version of Node.js will be published). In accordance with the AWS SDKs and Tools maintenance policy for language runtimes, the JS SDK will support each Node.js major version for an additional 8 [...] | Node.js Version | Release Date | Node.js End of Life | JS SDK End of Support |\n ---  --- |\n| 18.x | April 2022 | April 2025 | January 2026: Migrate to 20.x+ and ES2023+ |\n| 20.x | April 2023 | April 2026\\ | January 2027\\: Migrate to 22.x+ and ES2024+ |\n| 22.x | April 2024 | April 2027\\ | January 2028\\: Migrate to 24.x+ and ES2025+ |\n| 24.x | April 2025 | April 2028\\ | January 2029\\: Migrate to 26.x+ and ES2026+ |\n\n\\ These dates are speculative based on Node.js release schedule.",
-       "published_date": "Mon, 08 Dec 2025 17:32:10 GMT",
-       "query": "Node.js LTS release: The latest LTS release of Node.js is Node 20. (as of 2026)",
+       "url": "https://www.queens.edu/blog/2026/06/17/right-honourable-justin-trudeau-former-canadian-prime-minister-named-as-next-learning-society-speaker",
+       "title": "Justin Trudeau named next Learning Society Speaker",
+       "content": "# Right Honourable Justin Trudeau, former Canadian Prime Minister, Named as Next Learning Society Speaker\n\nJun 17, 2026 By Queens University Communications\n\nThe Learning Society at Queens University of Charlotte is proud to announce that the Right Honourable Justin Trudeau, the 23rd Prime Minister of Canada, will serve as the featured speaker for its upcoming lecture event on Tuesday, October 27, 2026, at 7 p.m. in the Sarah Belk Gambrell Center for the Arts and Civic Engagement. [...] After leading the Liberal Party to a historic majority in 2015, Mr. Trudeau oversaw significant milestones in Canada, including the appointment of its first gender-balanced cabinet, the creation of the Canada Child Benefit, and the implementation of robust climate action.",
+       "published_date": "Wed, 17 Jun 2026 14:34:00 GMT",
+       "query": "Prime Minister of Canada: Justin Trudeau is the Prime Minister of Canada. (as of 2026)",
        "is_authoritative": false,
-       "retrieved_at": "2026-11-13T09:20:24.884972Z"
+       "retrieved_at": "2026-11-13T09:26:25.643128Z"
       },
       {
-       "url": "https://nodejs.org/en/about/previous-releases",
-       "title": "Node.js \u2014 Node.js Releases",
-       "content": "| Node.js | Codename | First released | Last updated | Status |\n ---  --- \n| v27   |  | Alpha |  |\n| v26 | Lithium |  |  | LTS |  |\n| v25   |  | EOL |  |\n| v24 | Krypton |  |  | LTS |  |\n| v23   |  | EOL |  |\n| v22 | Jod |  |  | LTS |  |\n| v21   |  | EOL |  |\n| v20 | Iron |  |  | EOL |  |\n| v19   |  | EOL |  |\n| v18 | Hydrogen |  |  | EOL |  |\n| v17   |  | EOL |  |\n| v16 | Gallium |  |  | EOL |  |\n| v15   |  | EOL |  |\n| v14 | Fermium |  |  | EOL |  |\n| v13   |  | EOL |  | [...] Major Node.js versions enter Current release status for six months, which gives library authors time to add support for them. Historically (up to Node.js 26), odd-numbered releases (9, 11, etc.) become unsupported after six months, and even-numbered releases (10, 12, etc.) move to Active LTS status and are ready for general use. Starting with Node.js 27, the release cycle will be annual and every major version will move to LTS status after its six-month Current phase (and six additional months [...] additional months of Alpha phase). LTS release status is \"long-term support\", which typically guarantees that critical bugs will be fixed for a total of 30 months. Production applications should only use Active LTS or Maintenance LTS releases.",
-       "published_date": "Wed, 11 Nov 2026 00:00:00 GMT",
-       "query": "Node.js LTS release: The latest LTS release of Node.js is Node 20. (as of 2026)",
-       "is_authoritative": true,
-       "retrieved_at": "2026-11-13T09:20:24.885121Z"
-      },
-      {
-       "url": "https://nodejs.org/en/blog/announcements/evolving-the-nodejs-release-schedule",
-       "title": "Node.js \u2014 Evolving the Node.js Release Schedule",
-       "content": "| Milestone | Date |\n --- |\n| 26.0.0 | April 2026 |\n| Enters LTS | October 2026 |\n| Maintenance | October 2027 |\n| End of Life | April 2029 |\n\nNode.js 26 follows the existing schedule. This is the last release line under the current model.\n\n### Node.js 27 Schedule (new model)\n\n| Milestone | Date |\n --- |\n| Alpha begins | October 2026 |\n| 27.0.0 | April 2027 |\n| Enters LTS | October 2027 |\n| End of Life | April 2030 |\n\nNode.js 27 is the first release line under the new schedule. [...] | Version | Alpha | Current | LTS | End of Life |\n ---  --- \n| 27.x | Oct 2026 | Apr 2027 | Oct 2027 | Apr 2030 |\n| 28.x | Oct 2027 | Apr 2028 | Oct 2028 | Apr 2031 |\n| 29.x | Oct 2028 | Apr 2029 | Oct 2029 | Apr 2032 |\n| 30.x | Oct 2029 | Apr 2030 | Oct 2030 | Apr 2033 |\n| 31.x | Oct 2030 | Apr 2031 | Oct 2031 | Apr 2034 |\n| 32.x | Oct 2031 | Apr 2032 | Oct 2032 | Apr 2035 |\n| 33.x | Oct 2032 | Apr 2033 | Oct 2033 | Apr 2036 |\n| 34.x | Oct 2033 | Apr 2034 | Oct 2034 | Apr 2037 | [...] One major release per year (April), with LTS promotion in October.\n Every release becomes LTS. No more odd/even distinction - Node.js 27 will become LTS.\n Alpha channel for early testing with semver-major changes allowed.\n Alpha versioning follows semver prerelease format (e.g., `27.0.0-alpha.1`).\n Version numbers align with the calendar year of their initial Current release: 27.0.0 in 2027, 28.0.0 in 2028.\n Reduced Releasers' burden.\n\n### New Schedule",
-       "published_date": "Tue, 10 Mar 2026 00:00:00 GMT",
-       "query": "Node.js LTS release: The latest LTS release of Node.js is Node 20. (as of 2026)",
-       "is_authoritative": true,
-       "retrieved_at": "2026-11-13T09:20:24.885121Z"
-      },
-      {
-       "url": "https://nodejs.org/en/blog/release/v24.20.0",
-       "title": "Node.js \u2014 Node.js 24.20.0 (LTS)",
-       "content": "Skip to content\n\n# Node.js 24.20.0 (LTS)\n\nADH\n\nAntoine du Hamel\n\nNode.js 24.20.0 (LTS)\n\n## 2026-08-26, Version 24.20.0 'Krypton' (LTS), @aduh95\n\n### Notable Changes [...] PreviousNode.js 26.8.0 (Current)NextNode.js 26.7.0 (Current) [...] d5e5a9043145392e4db85567d34abf7c070126ad35d2a7ee40399af2a5482f04    win-arm64/node_pdb.7z07725b0c16bd32876f44a0315e251aafa84568b0b1d98c9b76991873174e2637  win-arm64/node_pdb.zip 07725b0c16bd32876f44a0315e251aafa84568b0b1d98c9b76991873174e2637    win-arm64/node_pdb.zip5c976096e04e5c2c1f091938926234cc9fbebfe9787ddd149351b3b0ecc707b5  win-x64/node.exe 5c976096e04e5c2c1f091938926234cc9fbebfe9787ddd149351b3b0ecc707b5    win-x64/node.exe63ec831bbf164d1b23197d6fac1944dfb146534e332889ca0755d250e8dedff9",
-       "published_date": "Wed, 26 Aug 2026 00:00:00 GMT",
-       "query": "Node.js LTS release: The latest LTS release of Node.js is Node 20. (as of 2026)",
-       "is_authoritative": true,
-       "retrieved_at": "2026-11-13T09:20:24.885121Z"
-      },
-      {
-       "url": "https://nodejs.org/en/blog/vulnerability/october-2026-security-releases",
-       "title": "Node.js \u2014 Wednesday, October 21, 2026 Security Releases",
-       "content": "Skip to content\n\nCommercial support for versions past the Maintenance LTS phase is available through our OpenJS Ecosystem Sustainability Program partners\n\n# Wednesday, October 21, 2026 Security Releases\n\nTNJP\n\nThe Node.js Project\n\nWednesday, October 21, 2026 Security Releases\n\n## Security releases available\n\nUpdates are now available for the 26.x, 24.x, 22.x Node.js release lines for the following issues. [...] It's important to note that End-of-Life versions are always affected when a security release occurs. To ensure your system's security, please use an up-to-date version as outlined in our Release Schedule.\n\n## Release timing\n\nReleases will be available on, or shortly after, Wednesday, October 21, 2026.\n\n## Contact and future updates\n\nThe current Node.js security policy can be found at . Please follow the process outlined in  if you wish to report a vulnerability in Node.js.",
+       "url": "https://bapacthousandoaks.com/show-details/justin-trudeau-23rd-prime-minister-of-canada-2015-2025",
+       "title": "Bank of America Performing Arts Center Thousand Oaks | JUSTIN TRUDEAU - 23rd Prime Minister of Canada (2015-2025)",
+       "content": "As the leader of the Liberal Party, Justin Trudeau transformed third-place status into a historic 2015 majority victory and went on to serve as prime minister for a remarkable decade, a rare achievement in modern Canadian politics. During that time he advanced an ambitious national agenda, including appointing a gender-balanced cabinet, expanding childcare support, reducing child poverty, accelerating climate action, and advancing Indigenous reconciliation. He also led Canada through the global [...] through the global challenges of the COVID-19 pandemic and Russia\u2019s invasion of Ukraine, navigating economic upheaval and high-stakes diplomacy in a period of profound disruption. [...] In this rare keynote appearance, Trudeau offers perspective from the highest levels of North American and global leadership, including working closely with successive U.S. administrations across party lines at moments of both alignment and strain. At a time of shifting alliances, trade tensions, and renewed questions about the durability of democratic partnerships, he reflects on what sustains alliances through disagreement, how nations safeguard shared prosperity, and what principled",
        "published_date": "Wed, 21 Oct 2026 00:00:00 GMT",
-       "query": "Node.js LTS release: The latest LTS release of Node.js is Node 20. (as of 2026)",
+       "query": "Prime Minister of Canada: Justin Trudeau is the Prime Minister of Canada. (as of 2026)",
+       "is_authoritative": false,
+       "retrieved_at": "2026-11-13T09:26:25.643128Z"
+      },
+      {
+       "url": "https://www.pm.gc.ca/en/news/readouts/2024/10/10/prime-minister-justin-trudeau-meets-prime-minister-cambodia-hun-manet",
+       "title": "Prime Minister Justin Trudeau meets with Prime Minister of Cambodia Hun Manet | Prime Minister of Canada",
+       "content": "The prime ministers discussed how the deepening trade link between Canada and Cambodia would benefit from a Canada-ASEAN free-trade agreement, helping drive prosperity and create good jobs in both our countries and across the region.\n\nPrime Minister Trudeau welcomed Cambodia\u2019s selection to host the 20th Sommet de la Francophonie in 2026, and committed to co-operating on reinforcing common values shared by the Francophone community, including promoting peace, democracy, and human rights. [...] The leaders discussed the growing ties between the two countries, including the upgrade of Canada\u2019s office in Phnom Penh to a full Canadian embassy. Prime Minister Trudeau also announced plans for a Team Canada Trade Mission to Cambodia in 2025 under Canada\u2019s Indo-Pacific Strategy. [...] The leaders agreed to stay in close contact and looked forward to ongoing collaboration.\n\n## Associated Links\n\n Canada-Cambodia relations\n Canada and the Association of Southeast Asian Nations (ASEAN)\n Prime Minister to participate in ASEAN Summit and the 25th meeting of the Ukraine Defense Contact Group\n Canada\u2019s Indo-Pacific Strategy",
+       "published_date": "Thu, 10 Oct 2024 10:24:00 GMT",
+       "query": "Prime Minister of Canada: Justin Trudeau is the Prime Minister of Canada. (as of 2026)",
        "is_authoritative": true,
-       "retrieved_at": "2026-11-13T09:20:24.885121Z"
+       "retrieved_at": "2026-11-13T09:26:25.643182Z"
+      },
+      {
+       "url": "https://www.pm.gc.ca/en/news/news-releases/2024/09/26/prime-minister-concludes-successful-visit-president-france-canada",
+       "title": "Prime Minister concludes successful visit from President of France to Canada | Prime Minister of Canada",
+       "content": "## Quote\n\n> \u201cCanada and France\u2019s relationship is built on shared history, a common language, and democratic values. President Macron\u2019s visit to Canada is a testament to the enduring friendship between our two countries, and with the progress we have made over this visit, we will move forward to build a fairer and more prosperous future for our peoples.\u201d\n>\n> The Rt. Hon. Justin Trudeau, Prime Minister of Canada\n\n## Quick Facts [...] Prime Minister Trudeau and President Macron reaffirmed their commitment to promoting the French language and La Francophonie\u2019s institutions ahead of the next Sommet de la Francophonie, which will be held in Villers-Cotter\u00eats and Paris, France, on October 4 and 5, 2024. They also renewed their commitment to strengthening strategic coordination in preparation for the successive G7 Presidencies that Canada and France will hold, in 2025 and 2026 respectively.\n\n## Quote [...] ## Share this Page\n\n -\n\nGo to the translated article\n\nOttawa, Ontario\n\nThe Prime Minister, Justin Trudeau, welcomed the President of France, Emmanuel Macron, to Canada from September 25 to 26, 2024. With stops in Ottawa, Ontario, and Montr\u00e9al, Quebec, the visit helped further strengthen the close ties between our countries and advance our shared priorities.",
+       "published_date": "Thu, 26 Sep 2024 15:04:00 GMT",
+       "query": "Prime Minister of Canada: Justin Trudeau is the Prime Minister of Canada. (as of 2026)",
+       "is_authoritative": true,
+       "retrieved_at": "2026-11-13T09:26:25.643182Z"
+      },
+      {
+       "url": "https://www.pm.gc.ca/en",
+       "title": "Mark Carney - Prime Minister of Canada | Prime Minister of Canada",
+       "content": "Budget 2026 invests in growth, people, and sovereignty to build a stronger, more united country where Canadians are free to live as we choose.\n\nPublished [...] Published\n\n54522\n\nSpeeches\n\nPrime Minister Carney launches plan to put Canada on a path to end homelessness within 10 years in Budget 2026, starting with a landmark partnership in Manitoba\n\nPublished\n\n54521\n\nNews Releases\n\nPrime Minister Carney launches plan to put Canada on a path to end homelessness within 10 years in Budget 2026, starting with a landmark partnership in Manitoba\n\nPublished\n\n54520\n\nMedia Advisories\n\nFriday, November 6, 2026\n\nPublished\n\n54519\n\nSee all news\n\n## Featured [...] # Main Container\n\nPrime Minister Crest\n\nPrime Minister of Canada\n\n fr\n\nPrime Minister Crest  \n Mark Carney\n\nMark Carney\n\n## Main Content\n\n## Latest news\n\nSubscribe to updates\n\nMedia Advisories\n\nTuesday, November 10, 2026\n\nPublished\n\n54527\n\nNews Releases\n\nPrime Minister Carney announces Chief Executive Officer of the Canada Strong Fund\n\nPublished\n\n54526\n\nStatements\n\nStatement by Prime Minister Carney on Bandi Chhor Divas\n\nPublished\n\n54523\n\nStatements\n\nStatement by Prime Minister Carney on Diwali",
+       "published_date": "Fri, 10 Jan 2020 00:00:00 GMT",
+       "query": "Prime Minister of Canada: Justin Trudeau is the Prime Minister of Canada. (as of 2026)",
+       "is_authoritative": true,
+       "retrieved_at": "2026-11-13T09:26:25.643182Z"
+      },
+      {
+       "url": "https://www.pm.gc.ca/en/cabinet",
+       "title": "Cabinet | Prime Minister of Canada",
+       "content": "President of the King\u2019s Privy Council for Canada and Minister responsible for Canada-U.S. Trade, Intergovernmental Affairs, Internal Trade and One Canadian Economy\n M\u00e9lanie Joly\n\n  The Honourable M\u00e9lanie Joly\n\n  Minister of Industry and Minister responsible for Canada Economic Development for Quebec Regions\n Fran\u00e7ois-Philippe Champagne\n\n  The Honourable Fran\u00e7ois-Philippe Champagne\n\n  Minister of Finance and National Revenue\n The Honourable Anita Anand\n\n  The Honourable Anita Anand [...] # Main Container\n\nPrime Minister Crest\n\nPrime Minister of Canada\n\n fr\n\n## Main Content\n\n## Share this Page\n\n -\n\nThe Canadian Ministry is commonly referred to as Cabinet. It is the body of ministerial advisors that sets the federal government\u2019s policies and priorities for the country.\n\n Mark Carney\n\n  The Right Honourable Mark Carney\n\n  Prime Minister of Canada\n Dominic LeBlanc\n\n  The Honourable Dominic LeBlanc [...] Minister of Foreign Affairs\n Patty Hajdu\n\n  The Honourable Patty Hajdu\n\n  Minister of Jobs and Families and Minister responsible for the Federal Economic Development Agency for Northern Ontario\n Marc Miller\n\n  The Honourable Marc Miller\n\n  Minister of Canadian Identity and Culture and Minister responsible for Official Languages\n Sean Fraser\n\n  The Honourable Sean Fraser",
+       "published_date": null,
+       "query": "Prime Minister of Canada: Justin Trudeau is the Prime Minister of Canada. (as of 2026)",
+       "is_authoritative": true,
+       "retrieved_at": "2026-11-13T09:26:25.643182Z"
+      },
+      {
+       "url": "https://www.pm.gc.ca/en/about",
+       "title": "About | Prime Minister of Canada",
+       "content": "Mark Carney is Canada\u2019s 24th Prime Minister. He was elected Leader of the Liberal Party of Canada and sworn in as Prime Minister in March 2025. He leads a government that will take action to unite Canadians, defend Canada\u2019s sovereignty, and build the strongest economy in the G7. [...] # Main Container\n\nPrime Minister Crest\n\nPrime Minister of Canada\n\n fr\n\nPrime Minister Crest\n\n# About\n\n## Main Content\n\n1. Home\n2. About\n\n## Share this Page\n\n -\n\n## The Right Honourable Mark Carney, Prime Minister of Canada [...] Bank of England, stewarding the United Kingdom\u2019s economy through Brexit and the economic and political crises that followed. In 2020, he began serving as the United Nations Special Envoy on Climate Action and Finance, helping rally the world to build stronger economies as we fight climate change.",
+       "published_date": "Sun, 09 Jun 2013 02:19:00 GMT",
+       "query": "Prime Minister of Canada: Justin Trudeau is the Prime Minister of Canada. (as of 2026)",
+       "is_authoritative": true,
+       "retrieved_at": "2026-11-13T09:26:25.643182Z"
       }
      ],
      "verdict": {
       "claim_id": "c2",
       "label": "changed",
-      "supporting_quote": "Node.js 24 is the latest Long-Term Support release, and Node.js 26 is the Current release line. Node.js 18 and Node.js 20, meanwhile, have both reached End-of-Life (EOL).",
-      "supporting_url": "http://nodesource.com/blog/nodejs-18-20-eol-136-million-downloads-july-2026",
-      "current_value": "Node.js 24",
+      "supporting_quote": "Mark Carney is Canada\u2019s 24th Prime Minister. He was elected Leader of the Liberal Party of Canada and sworn in as Prime Minister in March 2025.",
+      "supporting_url": "https://www.pm.gc.ca/en/about",
+      "current_value": "Mark Carney",
       "source_urls": [
-       "http://nodesource.com/blog/nodejs-18-20-eol-136-million-downloads-july-2026"
+       "https://www.pm.gc.ca/en/about",
+       "https://www.pm.gc.ca/en"
       ],
-      "reasoning": "The claim that Node 20 is the latest LTS is no longer true; Node 20 reached EOL on April 30, 2026. The evidence states Node.js 24 is the latest LTS release.",
+      "reasoning": "The official Prime Minister of Canada website states Mark Carney, sworn in March 2025, is the 24th Prime Minister, and its homepage refers to Prime Minister Carney in November 2026. Trudeau's own non-official pages describe him as a former Prime Minister who served 2015 to 2025.",
       "quote_verified": true
      },
      "freshness_score": 5.0,
@@ -260,11 +278,11 @@
    "answer_score": 5.0,
    "usage": {
     "model_calls": 3,
-    "model_cost_usd": 0.001403,
+    "model_cost_usd": 0.001492,
     "tavily_calls": 4,
     "tavily_credits": 0,
     "tavily_cache_hits": 4,
-    "latency_ms": 3259.0,
+    "latency_ms": 3380.0,
     "models_used": [
      "claude-haiku-5-5"
     ],
@@ -277,12 +295,12 @@
  },
  "timeless": {
   "answer": "Water boils at 100 degrees Celsius at sea level, and the speed of light is about 299,792 km/s.",
-  "recorded_at": "2026-11-13T09:20:27.893214+00:00",
+  "recorded_at": "2026-11-13T09:26:28.778143+00:00",
   "report": {
    "answer": "Water boils at 100 degrees Celsius at sea level, and the speed of light is about 299,792 km/s.",
    "model": "anthropic/claude-haiku-5-5",
    "mode": "check",
-   "checked_at": "2026-11-13T09:20:27.893119Z",
+   "checked_at": "2026-11-13T09:26:28.778049Z",
    "verification_budget": null,
    "claims": [
     {
@@ -349,11 +367,11 @@
    "answer_score": null,
    "usage": {
     "model_calls": 1,
-    "model_cost_usd": 0.000209,
+    "model_cost_usd": 0.000207,
     "tavily_calls": 0,
     "tavily_credits": 0,
     "tavily_cache_hits": 0,
-    "latency_ms": 1368.8,
+    "latency_ms": 1533.5,
     "models_used": [
      "claude-haiku-5-5"
     ],
@@ -366,12 +384,12 @@
  },
  "mixed": {
   "answer": "Satya Nadella is the CEO of Microsoft. A Netflix Standard plan costs $15.49 per month.",
-  "recorded_at": "2026-11-13T09:20:33.533135+00:00",
+  "recorded_at": "2026-11-13T09:26:31.923484+00:00",
   "report": {
    "answer": "Satya Nadella is the CEO of Microsoft. A Netflix Standard plan costs $15.49 per month.",
    "model": "anthropic/claude-haiku-5-5",
    "mode": "check",
-   "checked_at": "2026-11-13T09:20:33.533073Z",
+   "checked_at": "2026-11-13T09:26:31.923439Z",
    "verification_budget": null,
    "claims": [
     {
@@ -406,7 +424,7 @@
        "published_date": null,
        "query": "Satya Nadella: Satya Nadella is the CEO of Microsoft. (as of 2026)",
        "is_authoritative": false,
-       "retrieved_at": "2026-11-13T09:20:31.749192Z"
+       "retrieved_at": "2026-11-13T09:26:30.315237Z"
       },
       {
        "url": "https://www.youtube.com/watch?v=BKx0Dp8y-6g",
@@ -415,7 +433,7 @@
        "published_date": "Fri, 05 Jun 2026 00:00:00 GMT",
        "query": "Satya Nadella: Satya Nadella is the CEO of Microsoft. (as of 2026)",
        "is_authoritative": false,
-       "retrieved_at": "2026-11-13T09:20:31.749192Z"
+       "retrieved_at": "2026-11-13T09:26:30.315237Z"
       },
       {
        "url": "https://stratechery.com/2026/an-interview-with-microsoft-ceo-satya-nadella-about-finding-core-competencies",
@@ -424,7 +442,7 @@
        "published_date": "Thu, 04 Jun 2026 10:00:00 GMT",
        "query": "Satya Nadella: Satya Nadella is the CEO of Microsoft. (as of 2026)",
        "is_authoritative": false,
-       "retrieved_at": "2026-11-13T09:20:31.749192Z"
+       "retrieved_at": "2026-11-13T09:26:30.315237Z"
       },
       {
        "url": "https://www.facebook.com/fareedzakaria/videos/microsoft-ceo-satya-nadella-made-headlines-earlier-this-month-when-he-warned-tha/1344036211210716",
@@ -433,7 +451,7 @@
        "published_date": "Fri, 14 Aug 2026 06:00:00 GMT",
        "query": "Satya Nadella: Satya Nadella is the CEO of Microsoft. (as of 2026)",
        "is_authoritative": false,
-       "retrieved_at": "2026-11-13T09:20:31.749192Z"
+       "retrieved_at": "2026-11-13T09:26:30.315237Z"
       },
       {
        "url": "https://finance.yahoo.com/technology/article/microsoft-ceo-satya-nadella-on-ai-trust-is-going-to-be-the-biggest-issue-for-us-163733897.html",
@@ -442,7 +460,7 @@
        "published_date": "Fri, 25 Sep 2026 00:00:00 GMT",
        "query": "Satya Nadella: Satya Nadella is the CEO of Microsoft. (as of 2026)",
        "is_authoritative": false,
-       "retrieved_at": "2026-11-13T09:20:31.749192Z"
+       "retrieved_at": "2026-11-13T09:26:30.315237Z"
       },
       {
        "url": "https://news.microsoft.com/source/exec/satya-nadella",
@@ -451,7 +469,7 @@
        "published_date": "Tue, 04 Feb 2014 00:00:00 GMT",
        "query": "Satya Nadella: Satya Nadella is the CEO of Microsoft. (as of 2026)",
        "is_authoritative": true,
-       "retrieved_at": "2026-11-13T09:20:31.749322Z"
+       "retrieved_at": "2026-11-13T09:26:30.315332Z"
       },
       {
        "url": "https://news.microsoft.com/build-2026",
@@ -460,7 +478,7 @@
        "published_date": "Sun, 27 Sep 2026 16:00:00 GMT",
        "query": "Satya Nadella: Satya Nadella is the CEO of Microsoft. (as of 2026)",
        "is_authoritative": true,
-       "retrieved_at": "2026-11-13T09:20:31.749322Z"
+       "retrieved_at": "2026-11-13T09:26:30.315332Z"
       },
       {
        "url": "https://news.microsoft.com/source/leadership",
@@ -469,7 +487,7 @@
        "published_date": "Mon, 08 Dec 2025 00:00:00 GMT",
        "query": "Satya Nadella: Satya Nadella is the CEO of Microsoft. (as of 2026)",
        "is_authoritative": true,
-       "retrieved_at": "2026-11-13T09:20:31.749322Z"
+       "retrieved_at": "2026-11-13T09:26:30.315332Z"
       },
       {
        "url": "https://blogs.microsoft.com/blog/2026/10/01/microsoft-365-and-linkedin-leadership-update",
@@ -478,7 +496,7 @@
        "published_date": "Thu, 01 Oct 2026 15:03:27 GMT",
        "query": "Satya Nadella: Satya Nadella is the CEO of Microsoft. (as of 2026)",
        "is_authoritative": true,
-       "retrieved_at": "2026-11-13T09:20:31.749322Z"
+       "retrieved_at": "2026-11-13T09:26:30.315332Z"
       },
       {
        "url": "https://www.microsoft.com/en-us/haxtoolkit/author/satya-nadella",
@@ -487,20 +505,20 @@
        "published_date": null,
        "query": "Satya Nadella: Satya Nadella is the CEO of Microsoft. (as of 2026)",
        "is_authoritative": true,
-       "retrieved_at": "2026-11-13T09:20:31.749322Z"
+       "retrieved_at": "2026-11-13T09:26:30.315332Z"
       }
      ],
      "verdict": {
       "claim_id": "c1",
       "label": "current",
-      "supporting_quote": "Microsoft Chairman and CEO Satya Nadella speaks onstage at Microsoft Build 2026 in San Francisco.",
-      "supporting_url": "https://news.microsoft.com/build-2026",
+      "supporting_quote": "Satya Nadella is Chairman and Chief Executive Officer of Microsoft.",
+      "supporting_url": "https://news.microsoft.com/source/exec/satya-nadella",
       "current_value": null,
       "source_urls": [
-       "https://news.microsoft.com/build-2026",
+       "https://news.microsoft.com/source/exec/satya-nadella",
        "https://blogs.microsoft.com/blog/2026/10/01/microsoft-365-and-linkedin-leadership-update"
       ],
-      "reasoning": "Multiple recent Microsoft sources, including an October 2026 Microsoft blog post, identify Satya Nadella as Chairman and CEO. No evidence states a different CEO.",
+      "reasoning": "Official Microsoft sources, including an October 2026 blog post, identify Satya Nadella as Chairman and CEO. No evidence indicates a change in the role.",
       "quote_verified": true
      },
      "freshness_score": 95.0,
@@ -539,7 +557,7 @@
        "published_date": null,
        "query": "Netflix Standard plan: A Netflix Standard plan costs $15.49 per month. (as of 2026)",
        "is_authoritative": false,
-       "retrieved_at": "2026-11-13T09:20:32.027610Z"
+       "retrieved_at": "2026-11-13T09:26:30.313650Z"
       },
       {
        "url": "https://checkthat.ai/brands/netflix/pricing",
@@ -548,7 +566,7 @@
        "published_date": "Fri, 07 Aug 2026 00:00:00 GMT",
        "query": "Netflix Standard plan: A Netflix Standard plan costs $15.49 per month. (as of 2026)",
        "is_authoritative": false,
-       "retrieved_at": "2026-11-13T09:20:32.027610Z"
+       "retrieved_at": "2026-11-13T09:26:30.313650Z"
       },
       {
        "url": "https://www.businessinsider.com/guides/streaming/netflix-price",
@@ -557,7 +575,7 @@
        "published_date": "Tue, 31 Mar 2026 20:29:51 GMT",
        "query": "Netflix Standard plan: A Netflix Standard plan costs $15.49 per month. (as of 2026)",
        "is_authoritative": false,
-       "retrieved_at": "2026-11-13T09:20:32.027610Z"
+       "retrieved_at": "2026-11-13T09:26:30.313650Z"
       },
       {
        "url": "https://variety.com/2026/tv/news/netflix-raising-prices-second-time-in-a-year-1236700999",
@@ -566,7 +584,7 @@
        "published_date": "Thu, 26 Mar 2026 19:08:25 GMT",
        "query": "Netflix Standard plan: A Netflix Standard plan costs $15.49 per month. (as of 2026)",
        "is_authoritative": false,
-       "retrieved_at": "2026-11-13T09:20:32.027610Z"
+       "retrieved_at": "2026-11-13T09:26:30.313650Z"
       },
       {
        "url": "https://www.facebook.com/thewaystowealth/posts/-twelve-streaming-services-raised-their-prices-in-2026-and-most-of-the-increases/1628328352023031",
@@ -575,7 +593,7 @@
        "published_date": "Mon, 19 Oct 2026 20:00:00 GMT",
        "query": "Netflix Standard plan: A Netflix Standard plan costs $15.49 per month. (as of 2026)",
        "is_authoritative": false,
-       "retrieved_at": "2026-11-13T09:20:32.027610Z"
+       "retrieved_at": "2026-11-13T09:26:30.313650Z"
       },
       {
        "url": "https://help.netflix.com/en/node/24926",
@@ -584,7 +602,7 @@
        "published_date": "Sat, 04 Apr 2015 00:00:00 GMT",
        "query": "Netflix Standard plan: A Netflix Standard plan costs $15.49 per month. (as of 2026)",
        "is_authoritative": true,
-       "retrieved_at": "2026-11-13T09:20:32.027755Z"
+       "retrieved_at": "2026-11-13T09:26:30.313778Z"
       },
       {
        "url": "https://www.netflix.com/ms/title/81702550",
@@ -593,7 +611,7 @@
        "published_date": null,
        "query": "Netflix Standard plan: A Netflix Standard plan costs $15.49 per month. (as of 2026)",
        "is_authoritative": true,
-       "retrieved_at": "2026-11-13T09:20:32.027755Z"
+       "retrieved_at": "2026-11-13T09:26:30.313778Z"
       },
       {
        "url": "https://www.netflix.com/sx/title/81788927",
@@ -602,7 +620,7 @@
        "published_date": null,
        "query": "Netflix Standard plan: A Netflix Standard plan costs $15.49 per month. (as of 2026)",
        "is_authoritative": true,
-       "retrieved_at": "2026-11-13T09:20:32.027755Z"
+       "retrieved_at": "2026-11-13T09:26:30.313778Z"
       },
       {
        "url": "https://about.netflix.com/news/announcing-basic-with-ads-us",
@@ -611,7 +629,7 @@
        "published_date": "Thu, 13 Oct 2022 00:00:00 GMT",
        "query": "Netflix Standard plan: A Netflix Standard plan costs $15.49 per month. (as of 2026)",
        "is_authoritative": true,
-       "retrieved_at": "2026-11-13T09:20:32.027755Z"
+       "retrieved_at": "2026-11-13T09:26:30.313778Z"
       },
       {
        "url": "https://www.netflix.com/ai/title/81703047",
@@ -620,7 +638,7 @@
        "published_date": null,
        "query": "Netflix Standard plan: A Netflix Standard plan costs $15.49 per month. (as of 2026)",
        "is_authoritative": true,
-       "retrieved_at": "2026-11-13T09:20:32.027755Z"
+       "retrieved_at": "2026-11-13T09:26:30.313778Z"
       }
      ],
      "verdict": {
@@ -628,12 +646,12 @@
       "label": "changed",
       "supporting_quote": "The Standard plan (no ads, viewing on up to two devices simultaneously) is rising by $2, from $17.99/month to $19.99/month.",
       "supporting_url": "https://variety.com/2026/tv/news/netflix-raising-prices-second-time-in-a-year-1236700999",
-      "current_value": "19.99",
+      "current_value": "$19.99",
       "source_urls": [
        "https://variety.com/2026/tv/news/netflix-raising-prices-second-time-in-a-year-1236700999",
        "https://help.netflix.com/en/node/24926"
       ],
-      "reasoning": "The claim's $15.49 price is outdated; multiple sources state the US Standard plan is now $19.99/month, after increases in 2025 and 2026. The Instagram post also notes the $15.49 price was superseded.",
+      "reasoning": "The claim that the Netflix Standard plan costs $15.49 per month is outdated; multiple sources show the price rose to $17.99 and then to $19.99. The official Netflix help page lists the current Standard price as $19.99/month.",
       "quote_verified": true
      },
      "freshness_score": 5.0,
@@ -644,11 +662,11 @@
    "answer_score": 50.0,
    "usage": {
     "model_calls": 3,
-    "model_cost_usd": 0.001467,
+    "model_cost_usd": 0.001454,
     "tavily_calls": 4,
-    "tavily_credits": 4,
-    "tavily_cache_hits": 0,
-    "latency_ms": 5639.7,
+    "tavily_credits": 0,
+    "tavily_cache_hits": 4,
+    "latency_ms": 3145.1,
     "models_used": [
      "claude-haiku-5-5"
     ],

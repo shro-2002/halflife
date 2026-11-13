@@ -62,7 +62,7 @@ Optional pieces:
 Checking one answer: each claim gets a verdict, a freshness score, the corrected value, and the verbatim evidence
 quote with its source, shown apart from the model's reasoning.
 
-![Check view: a stale Bank of England rate and Node.js version caught with corrected values and sources](docs/img/check.png)
+![Check view: a stale Bank of Canada rate and Canadian prime minister caught with corrected values and official sources](docs/img/check.png)
 
 The Evidence view (`docs/img/evidence.png`) shows the budget curve and every measured table from `results/`.
 
@@ -171,8 +171,12 @@ $0.0011 and 2.8 Tavily credits per check, median latency 5.9 s (max 9.3 s), `rea
   prices and laws are not in it. The labelled set is 108 cases from one annotator; several classes are too thin to
   read alone (product spec 5, rates 12, prices 13, software versions 14). Stale cases' as-of dates are approximate,
   and 22 of 38 stale cases take the former value from annotator notes.
-- **Search index lag:** a verdict is only as fresh as Tavily's copy of a page (one missed stale case: the Bank of
-  England page still showed the old rate days after a change).
+- **Search index lag:** a verdict is only as fresh as Tavily's copy of a page. Named example (2026-11-13): for
+  "the latest Node.js LTS is Node 20", an older non-official page led the judge to Node.js 24 although nodejs.org's
+  release page (Node.js 26 LTS) was also retrieved. Ordering evidence official-first, then newest, removed the wrong
+  value but left no correction; and the same rule picked the official Bank of England explainer, whose indexed copy
+  still said 3.75% after the November 2026 rise to 4.0%. Publication dates in the index do not reliably reflect page
+  content, so the replay example uses claims that verify correctly today.
 - **Judge errors:** the judge can over-read evidence (an announced resignation treated as done); every verdict ships
   its verbatim quote and URL so it can be audited. See [errors.md](results/2026-11-12-detector/errors.md).
 - **Rate limiter is per process** (in-memory). Behind several replicas, use a shared store. Setting `HALFLIFE_API_KEY`

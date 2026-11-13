@@ -144,3 +144,21 @@ async def test_no_value_shown_when_no_quote_states_it():
     out = await verify_claim(BOE, judge(supports=[{"url": boe["url"], "quote": "Bank Rate was cut from 5.25% down to 3.75% in December 2025."}],
                                         current_value="4.0%"), FakeSearch({"bank": [boe]}), today=TODAY)
     assert out.verdict.current_value is None
+
+
+def test_judge_sees_official_then_newest_evidence_first():  # Node 26 LTS case, 2026-11-13
+    from datetime import UTC, datetime as dt
+    from halflife.schemas import Evidence
+    from halflife.verify import _judge_messages, judge_order
+    mk = lambda url, auth, pub: Evidence(url=url, content="Node.js LTS status table", published_date=pub, query="q",
+                                         is_authoritative=auth, retrieved_at=dt.now(UTC))
+    blog = mk("http://nodesource.com/blog/x", False, "Thu, 06 Aug 2026 00:00:00 GMT")
+    old_official = mk("https://nodejs.org/en/blog/release/v24.20.0", True, "Wed, 26 Aug 2026 00:00:00 GMT")
+    new_official = mk("https://nodejs.org/en/about/previous-releases", True, "Wed, 11 Nov 2026 00:00:00 GMT")
+    undated = mk("https://example.org/n", False, None)
+    assert [e.url for e in judge_order([blog, undated, old_official, new_official])] == [
+        new_official.url, old_official.url, blog.url, undated.url]
+    msgs = _judge_messages(BOE, [blog, new_official], TODAY)
+    assert "prefer evidence marked \"official: yes\", then the most recently published" in msgs[0]["content"]
+    user = msgs[1]["content"]
+    assert user.index(new_official.url) < user.index(blog.url) and "official: yes" in user

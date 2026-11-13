@@ -8,6 +8,7 @@ but tomorrow's check searches again.
 
 import hashlib
 import json
+import os
 import time
 from dataclasses import dataclass
 from datetime import UTC, date, datetime
@@ -63,7 +64,9 @@ class TavilyViaRelay:
 
     async def search(self, query: str, **params: Any) -> SearchResult:
         payload = {"query": query, "search_depth": "basic", "max_results": 5, "include_usage": True, **params}
-        key = DiskCache.key(payload, datetime.now(UTC).date())
+        # HALFLIFE_CACHE_DATE pins the cache day (reproducing an eval from its own day's evidence).
+        day = os.environ.get("HALFLIFE_CACHE_DATE")
+        key = DiskCache.key(payload, date.fromisoformat(day) if day else datetime.now(UTC).date())
         cached = self._cache.get(key)
         if cached is not None:
             return SearchResult(payload, cached.get("results", []), True, 0, 0.0)

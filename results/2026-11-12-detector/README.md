@@ -35,6 +35,11 @@ recall **0.948** (0.921–0.974); caught@25% of claims: model 0.470, half-life 0
 differently on every run, so search queries change, and in these runs a query never seen before could not be
 searched and counted as unverifiable. Runs 3–5 made 0 Tavily calls. All values: `variance.json`.
 
+**Run 6 (2026-11-13, judge evidence order):** the judge prompt now prefers official-domain evidence, then the newest
+publication date, when sources disagree (evidence is also listed in that order). Rerun once from the eval date's
+cached evidence (`run6-judge-order/`, `HALFLIFE_CACHE_DATE=2026-11-12`, 0 Tavily credits): precision 0.865 (cached-only
+runs 3–5: 0.861–0.889), recall 0.842 (lower bound) — no precision drop.
+
 ## Run 2 in detail
 
 | Metric | Value | 95% CI (by source URL) |

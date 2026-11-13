@@ -24,7 +24,7 @@ const TABS = ["gateway", "check", "evidence"];
 const DEMO_KEY_PREFIX = "demo-";
 
 const EXAMPLES = {
-  stale: "The Bank of England base rate is 5.25%. The latest LTS release of Node.js is Node 20.",
+  stale: "The Bank of Canada policy interest rate is 2.25%. Justin Trudeau is the Prime Minister of Canada.",
   timeless: "Water boils at 100 degrees Celsius at sea level, and the speed of light is about 299,792 km/s.",
   mixed: "Satya Nadella is the CEO of Microsoft. A Netflix Standard plan costs $15.49 per month.",
 };
