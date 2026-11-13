@@ -12,7 +12,7 @@ Demo video: <link>
 - **Traffic-wide stale-rate estimate:** the audit spends part of its verification budget on a stratified random
   sample of all time-sensitive claims in Bifrost's logged traffic and estimates the stale rate over all of them —
   validated on 1,763 claims with known labels: unbiased at every sample size (|bias| ≤ 0.004) and 95% interval coverage 0.74 at 18 samples, 0.89 at 30, 0.945 at 60 — so aim for about 60 random samples ([validation](results/2026-11-13-estimator-validation/README.md)). On seeded **demo traffic**: **0.477**,
-  95% CI [0.369, 0.590]. The interval covers sampling error only: labels come from the detector (live-run precision 0.847, recall 0.948), and the population is the time-sensitive claims the extractor found in the sampled answers.
+  95% CI [0.369, 0.590]. The interval covers sampling error only: labels come from the detector (live-run precision 0.847, recall 0.948), and the population is the time-sensitive claims the extractor found in the sampled answers (75 of 177 extracted claims here; timeless facts and dated past events cannot go stale and are excluded).
 - **Budgeted verification:** claims are ranked by the extractor model's own probability that they are outdated, then
   checked against live Tavily search. Verifying half the claims caught **83%** of the stale ones, against 47% in
   random order (108 labelled cases; mean of the two live runs).
@@ -136,7 +136,7 @@ on disk per day so repeat checks cost no credits.
 | **B1** Real operator problem | stale rate per model and virtual key: `halflife/gateway/audit.py`; TTL proxy: `halflife/gateway/proxy.py` |
 | **B2** Public extension points | logging API (`GET /api/logs`, `/api/logs/{id}`), governance (virtual keys, budgets, relay and MCP grants), Relays, cache headers, MCP gateway — no Go plugin, no fork |
 | **B3** Reproducible on standard Bifrost | `scripts/bifrost.sh` (stock `npx @maximhq/bifrost`), `make setup`, `scripts/spike.sh`, `Dockerfile` |
-| **B4** Contribution quality | 148 offline tests + live tests (`make test`), CI (`.github/workflows/ci.yml`), `docs/UPSTREAM.md`, `CONTRIBUTING.md`, Apache-2.0 |
+| **B4** Contribution quality | 158 offline tests + live tests (`make test`), CI (`.github/workflows/ci.yml`), `docs/UPSTREAM.md`, `CONTRIBUTING.md`, Apache-2.0 |
 
 ## What Bifrost contributes, what Tavily contributes
 
@@ -198,8 +198,10 @@ samples each and are shown greyed, not reported as findings.
 *Stale rate among verified claims* = claims with a `changed` verdict ÷ claims verified, where "verified" means the
 verdict was `current` or `changed` (unverifiable claims are excluded). The audit verifies only the riskiest claims,
 ranked across the run, up to a verification budget, so this is **not** a stale rate over all traffic; the *verified
-share* (claims verified ÷ claims found) is reported beside it. On 50 seeded demo answers (2 keys × 2 models):
-stale rate among verified claims 0.27–0.78 per slice, 0.569 overall, with 29.7% of found claims verified.
+share* is reported beside it. On 50 seeded demo answers (2 keys × 2 models), this earlier run measured stale rate
+among verified claims 0.27–0.78 per slice, 0.569 overall, with 29.7% of all extracted claims verified (that run did not
+record the time-sensitive count). In the 2026-11-13 rerun: 32 changed of 63 verified = 0.508, and 63 of the 75
+time-sensitive claims (84%) got a verdict; the other 102 of 177 extracted claims are timeless or dated past events.
 
 **Cost per check** ([results/2026-11-12-checks10](results/2026-11-12-checks10/README.md)): 10 multi-claim answers,
 $0.0011 and 2.8 Tavily credits per check, median latency 5.9 s (max 9.3 s), `reasoning: none` on Haiku 5.5.

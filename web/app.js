@@ -591,10 +591,11 @@ function staleRateRow(r) {
     h("th", { scope: "row" }, r.model),
     h("td", null, r.virtual_key || h("span", { class: "muted" }, "none"), isDemoKey(r.virtual_key) ? [" ", demoBadge()] : null),
     h("td", { class: "num" }, fmt.num(r.answers_seen)), h("td", { class: "num" }, fmt.num(r.answers_checked)),
-    h("td", { class: "num" }, fmt.num(r.claims_found)), h("td", { class: "num" }, fmt.num(r.claims_verified)),
+    h("td", { class: "num" }, fmt.num(r.claims_found)), h("td", { class: "num" }, fmt.num(r.time_sensitive_claims)),
+    h("td", { class: "num" }, fmt.num(r.claims_verified)),
     h("td", { class: "num" }, fmt.num(r.claims_changed)),
     h("td", { class: "num muted" }, estText(r)),
-    h("td", { class: "num" }, r.claims_found ? fmt.pct(r.claims_verified / r.claims_found, 1) : "—"),
+    h("td", { class: "num" }, r.time_sensitive_claims ? fmt.pct(r.claims_verified / r.time_sensitive_claims, 1) : "—"),
     h("td", { class: "num" }, isNil(r.stale_rate) ? h("span", { class: "muted" }, "— nothing verified") : fmt.pct(r.stale_rate, 1)),
     h("td", { class: "num" }, fmt.num(r.mean_answer_score, 1)));
 }
@@ -645,7 +646,7 @@ function renderGateway(summary) {
 
   out.replaceChildren(...[
     h("h2", null, "Stale rate among verified claims, by model and virtual key"),
-    h("p", { class: "section-note" }, "Half-Life samples answers from Bifrost's own logs, extracts the time-sensitive claims, and verifies them with Tavily. Stale rate among verified claims = claims whose current value changed ÷ claims verified (verdict current or changed; unverifiable excluded). Only the riskiest claims, up to the verification budget, are verified, so this is not a stale rate over all traffic; the verified share is shown beside it. The estimated stale rate comes from a stratified random sample of all time-sensitive claims. The 95% interval covers sampling error only: labels come from the detector (live-run precision 0.847, recall 0.948), and the population is the time-sensitive claims the extractor found in the sampled answers. Per-slice estimates are greyed: too few samples to read."),
+    h("p", { class: "section-note" }, "Half-Life samples answers from Bifrost's own logs and extracts every factual claim; only time-sensitive claims (not timeless facts or dated past events) can go stale, so they are the population for both verification and the estimate. Stale rate among verified claims = claims whose current value changed ÷ claims verified (verdict current or changed; unverifiable excluded). Only the riskiest claims, up to the verification budget, are verified, so this is not a stale rate over all traffic; the verified share is shown beside it. The estimated stale rate comes from a stratified random sample of all time-sensitive claims. The 95% interval covers sampling error only: labels come from the detector (live-run precision 0.847, recall 0.948), and the population is the time-sensitive claims the extractor found in the sampled answers. Per-slice estimates are greyed: too few samples to read."),
     summary.recorded ? h("div", { class: "demo-banner", role: "note" }, h("span", { class: "badge" }, "RECORDED"),
       ` Replay mode: the saved audit from ${fmt.when(summary.generated_at)}, not a live audit.`) : null,
     allDemo ? h("div", { class: "demo-banner", role: "note" }, demoBadge(),
@@ -656,7 +657,8 @@ function renderGateway(summary) {
     h("dl", { class: "stats", style: { marginTop: "14px" } },
       stat("Estimated stale rate, all time-sensitive claims", estText(summary.estimate_overall)),
       stat("Stale among verified (top-risk slice)", verified ? fmt.pct(changed / verified, 1) : "—"),
-      stat("Share of claims verified", sum("claims_found") ? fmt.pct(verified / sum("claims_found"), 1) : "—"),
+      stat("Time-sensitive claims", fmt.num(sum("time_sensitive_claims")), `of ${fmt.num(sum("claims_found"))} extracted; the population for verification and the estimate`),
+      stat("Share of time-sensitive claims verified", sum("time_sensitive_claims") ? fmt.pct(verified / sum("time_sensitive_claims"), 1) : "—"),
       stat("Logs scanned", fmt.num(summary.logs_scanned)),
       stat("Answers seen", fmt.num(sum("answers_seen"))),
       stat("Answers checked", fmt.num(sum("answers_checked"))),
@@ -670,7 +672,7 @@ function renderGateway(summary) {
       h("summary", null, `Audit errors (${summary.errors.length}) — failures recorded, not hidden`),
       errorList("", summary.errors)) : null,
     rows.length ? table("Stale rate per model and virtual key",
-      ["Model", "Virtual key", "Answers seen", "Checked", "Claims found", "Verified", "Changed", "Estimated stale (95% CI)", "Verified share", "Stale among verified", "Mean score"]
+      ["Model", "Virtual key", "Answers seen", "Checked", "Claims extracted", "Time-sensitive", "Verified", "Changed", "Estimated stale (95% CI)", "Verified share", "Stale among verified", "Mean score"]
         .map((label, i) => ({ label, num: i >= 2 })),
       rows.map(staleRateRow)) : null,
     h("h3", { style: { marginTop: "18px" } }, "Cost of this audit"),
