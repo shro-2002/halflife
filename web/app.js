@@ -99,6 +99,14 @@ function stateBox(kind, title, ...lines) {
     h("h3", null, title), ...lines.map((line) => (line instanceof Node ? line : h("p", null, line))));
 }
 
+// Traffic-wide estimate from the stratified random sample: "12.3% [5.0–20.1%]", unverifiable bounds on hover.
+function estText(e) {
+  if (!e || e.est_stale_rate === null || e.est_stale_rate === undefined) return "not estimated";
+  const ci = e.est_ci95 ? ` [${fmt.pct(e.est_ci95[0], 0)}–${fmt.pct(e.est_ci95[1], 0)}]` : "";
+  const b = e.est_bounds_unverifiable ? `; unverifiable as current/stale: ${fmt.pct(e.est_bounds_unverifiable[0], 0)}–${fmt.pct(e.est_bounds_unverifiable[1], 0)}` : "";
+  return h("span", { title: `n sampled = ${e.est_n_sampled}${b}` }, `${fmt.pct(e.est_stale_rate, 1)}${ci}`, e.est_n_sampled < 60 ? h("span", { class: "muted" }, ` (n=${e.est_n_sampled}, wide)`) : null);
+}
+
 function errorList(title, errors) {
   if (!errors || !errors.length) return null;
   return h("div", { class: "errors" }, h("p", null, h("strong", null, title)),
@@ -585,6 +593,7 @@ function staleRateRow(r) {
     h("td", { class: "num" }, fmt.num(r.answers_seen)), h("td", { class: "num" }, fmt.num(r.answers_checked)),
     h("td", { class: "num" }, fmt.num(r.claims_found)), h("td", { class: "num" }, fmt.num(r.claims_verified)),
     h("td", { class: "num" }, fmt.num(r.claims_changed)),
+    h("td", { class: "num" }, estText(r)),
     h("td", { class: "num" }, r.claims_found ? fmt.pct(r.claims_verified / r.claims_found, 1) : "—"),
     h("td", { class: "num" }, isNil(r.stale_rate) ? h("span", { class: "muted" }, "— nothing verified") : fmt.pct(r.stale_rate, 1)),
     h("td", { class: "num" }, fmt.num(r.mean_answer_score, 1)));
@@ -645,7 +654,8 @@ function renderGateway(summary) {
       h("span", null, `window ${fmt.when(summary.window_start)} → ${fmt.when(summary.window_end)}`),
       h("span", null, `generated ${fmt.when(summary.generated_at)}`)),
     h("dl", { class: "stats", style: { marginTop: "14px" } },
-      stat("Stale rate among verified claims", verified ? fmt.pct(changed / verified, 1) : "—"),
+      stat("Estimated stale rate, all time-sensitive claims", estText(summary.estimate_overall)),
+      stat("Stale among verified (top-risk slice)", verified ? fmt.pct(changed / verified, 1) : "—"),
       stat("Share of claims verified", sum("claims_found") ? fmt.pct(verified / sum("claims_found"), 1) : "—"),
       stat("Logs scanned", fmt.num(summary.logs_scanned)),
       stat("Answers seen", fmt.num(sum("answers_seen"))),
@@ -660,7 +670,7 @@ function renderGateway(summary) {
       h("summary", null, `Audit errors (${summary.errors.length}) — failures recorded, not hidden`),
       errorList("", summary.errors)) : null,
     rows.length ? table("Stale rate per model and virtual key",
-      ["Model", "Virtual key", "Answers seen", "Checked", "Claims found", "Verified", "Changed", "Verified share", "Stale among verified", "Mean score"]
+      ["Model", "Virtual key", "Answers seen", "Checked", "Claims found", "Verified", "Changed", "Estimated stale (95% CI)", "Verified share", "Stale among verified", "Mean score"]
         .map((label, i) => ({ label, num: i >= 2 })),
       rows.map(staleRateRow)) : null,
     h("h3", { style: { marginTop: "18px" } }, "Cost of this audit"),

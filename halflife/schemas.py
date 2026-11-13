@@ -166,6 +166,11 @@ class StaleRateRow(BaseModel):
     claims_changed: int
     stale_rate: float | None = Field(description="claims_changed / claims_verified; None if nothing verified")
     mean_answer_score: float | None = None
+    est_stale_rate: float | None = Field(default=None, description="Traffic-wide estimate from the stratified random sample")
+    est_ci95: tuple[float, float] | None = None
+    est_bounds_unverifiable: tuple[float, float] | None = Field(default=None, description="(all current, all stale)")
+    est_n_sampled: int = 0
+    time_sensitive_claims: int = 0
 
 
 class GatewaySummary(BaseModel):
@@ -179,5 +184,7 @@ class GatewaySummary(BaseModel):
     half_lives: dict[str, float] = Field(description="Class -> half-life days in use")
     half_life_source: dict[str, Literal["prior_guess", "fitted"]]
     recorded: bool = Field(default=False, description="Replay mode: the saved audit, not a live one")
+    random_share: float = Field(default=0.0, description="Share of the verification budget spent on the random sample")
+    estimate_overall: dict | None = Field(default=None, description="Traffic-wide estimate over all slices")
     usage: Usage = Field(default_factory=Usage)
     errors: list[str] = Field(default_factory=list)

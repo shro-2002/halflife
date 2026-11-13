@@ -15,6 +15,7 @@
 import argparse
 import asyncio
 import json
+import random
 from collections import defaultdict
 from datetime import UTC, date, datetime, timedelta
 from typing import Any
@@ -23,6 +24,7 @@ from halflife.clients.bifrost import BifrostClient, ChatModel
 from halflife.clients.tavily import DiskCache, Searcher, TavilyViaRelay
 from halflife.config import ROOT, load_settings
 from halflife.extract import extract_claims
+from halflife.gateway.estimate import estimate, strata_of, stratified_sample
 from halflife.ledger import Ledger
 from halflife.pipeline import (CheckOptions, MeteredModel, assess_risk, build_claim_report, is_time_sensitive,
                                select_for_verification)
@@ -98,7 +100,8 @@ async def sample_logs(bf: BifrostClient, *, hours: float, cap: int, request_ids:
 
 async def audit(bf: BifrostClient, model: ChatModel, searcher: Searcher, *, hours: float = 24, cap: int = 50,
                 budget: int = 60, today: date | None = None, half_lives: dict | None = None,
-                request_ids: set[str] | None = None, ledger: Ledger | None = None) -> tuple[GatewaySummary, list[AnswerReport]]:
+                request_ids: set[str] | None = None, ledger: Ledger | None = None,
+                random_share: float = 0.3, seed: int = 0) -> tuple[GatewaySummary, list[AnswerReport]]:
     today = today or datetime.now(UTC).date()
     started = datetime.now(UTC)
     logs, scanned = await sample_logs(bf, hours=hours, cap=cap, request_ids=request_ids)
@@ -116,8 +119,16 @@ async def audit(bf: BifrostClient, model: ChatModel, searcher: Searcher, *, hour
     extracted = await asyncio.gather(*(extract(lg) for lg in logs))
     # Rank every time-sensitive claim across the run; verify the top `budget`.
     pool = [(ai, ci, ex.claims[ci], risks[ci]) for ai, (_, _, ex, risks) in enumerate(extracted) for ci in range(len(ex.claims))]
-    order = select_for_verification([p[2] for p in pool], [p[3] for p in pool], budget)
-    chosen = {(pool[i][0], pool[i][1]) for i in order}
+    # Budget split: (1 - random_share) to the riskiest claims, random_share to a stratified random sample of ALL
+    # time-sensitive claims (for the traffic-wide estimate). A claim in both sets is verified once.
+    n_random = round(budget * random_share)
+    order = select_for_verification([p[2] for p in pool], [p[3] for p in pool], budget - n_random)
+    ts = [i for i, p in enumerate(pool) if is_time_sensitive(p[2])]
+    ts_scores = [pool[i][3].rank_score for i in ts]
+    ts_strata = strata_of(ts_scores)
+    sample = [ts[j] for j in stratified_sample(ts_scores, n_random, random.Random(seed))] if ts else []
+    stratum_of = {ts[j]: ts_strata[j] for j in range(len(ts))}
+    chosen = {(pool[i][0], pool[i][1]) for i in list(order) + sample}
 
     async def verify(key):
         ai, ci = key
@@ -140,6 +151,7 @@ async def audit(bf: BifrostClient, model: ChatModel, searcher: Searcher, *, hour
     usage.latency_ms = round((datetime.now(UTC) - started).total_seconds() * 1000, 1)
 
     rows = aggregate(logs, reports)
+    rows, overall = add_estimates(rows, logs, pool, ts, stratum_of, sample, outcomes, extracted)
     if ledger is not None:
         for log, rep in zip(logs, reports):
             ledger.record(rep, model=log["model"], virtual_key=log["virtual_key"])
@@ -148,9 +160,38 @@ async def audit(bf: BifrostClient, model: ChatModel, searcher: Searcher, *, hour
         generated_at=datetime.now(UTC), window_start=started - timedelta(hours=hours), window_end=started,
         logs_scanned=scanned, sample_cap=cap, verification_budget=budget, rows=rows,
         half_lives={k.value: v[0] for k, v in hl.items()}, half_life_source={k.value: v[1] for k, v in hl.items()},
-        usage=usage, errors=[e for r in reports for e in r.errors],
+        usage=usage, errors=[e for r in reports for e in r.errors], random_share=random_share, estimate_overall=overall,
     )
     return summary, reports
+
+
+def _outcome(o: VerifyOutcome | None) -> bool | None:
+    if o is None or o.verdict is None:
+        return None
+    return {"changed": True, "current": False}.get(o.verdict.label.value)
+
+
+def _est_fields(e) -> dict:
+    return {"est_stale_rate": None if e.stale_rate is None else round(e.stale_rate, 4),
+            "est_ci95": None if e.ci95 is None else (round(e.ci95[0], 4), round(e.ci95[1], 4)),
+            "est_bounds_unverifiable": None if e.bound_low is None else (round(e.bound_low, 4), round(e.bound_high, 4)),
+            "est_n_sampled": e.n_sampled}
+
+
+def add_estimates(rows, logs, pool, ts, stratum_of, sample, outcomes, extracted):
+    """Traffic-wide estimate per (model, key) and overall, from the random sample only."""
+    def slice_key(i):
+        lg = logs[pool[i][0]]
+        return (lg["model"], lg["virtual_key"])
+    sampled = {i: _outcome(outcomes.get((pool[i][0], pool[i][1]))) for i in sample}
+    out = []
+    for r in rows:
+        members = [i for i in ts if slice_key(i) == (r.model, r.virtual_key)]
+        e = estimate([stratum_of[i] for i in members], [(stratum_of[i], sampled[i]) for i in members if i in sampled])
+        out.append(r.model_copy(update={**_est_fields(e), "time_sensitive_claims": len(members)}))
+    e_all = estimate([stratum_of[i] for i in ts], [(stratum_of[i], y) for i, y in sampled.items()])
+    overall = {**_est_fields(e_all), "time_sensitive_claims": len(ts)}
+    return out, overall
 
 
 def aggregate(logs: list[dict], reports: list[AnswerReport]) -> list[StaleRateRow]:
@@ -178,7 +219,7 @@ async def main_async(args) -> None:
     searcher = TavilyViaRelay(bf, s.relay_name, DiskCache(s.cache_dir))
     with Ledger(s.db_path) as ledger:
         summary, reports = await audit(bf, bf, searcher, hours=args.hours, cap=args.sample_cap, budget=args.budget,
-                                       half_lives=ledger.half_lives(), ledger=ledger)
+                                       half_lives=ledger.half_lives(), ledger=ledger, random_share=args.random_share)
         if args.refit:
             for row in ledger.refit():
                 print("refit", row)
@@ -193,6 +234,7 @@ def main() -> None:
     ap.add_argument("--hours", type=float, default=24)
     ap.add_argument("--sample-cap", type=int, default=50)
     ap.add_argument("--budget", type=int, default=60, help="claims verified per run, riskiest first")
+    ap.add_argument("--random-share", type=float, default=0.3, help="share of the budget for the random sample")
     ap.add_argument("--refit", action="store_true")
     asyncio.run(main_async(ap.parse_args()))
 

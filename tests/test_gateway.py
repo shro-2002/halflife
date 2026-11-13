@@ -91,3 +91,24 @@ def test_proxy_ttl_follows_half_life_and_bounds():
     assert a == cache_key(dict(body), "sk-bf-a") and a.startswith("halflife:")
     assert a != cache_key(body, "sk-bf-b")  # no cross-tenant sharing
     assert a != cache_key({**body, "temperature": 0.9}, "sk-bf-a")  # generation params are part of the key
+
+
+def test_add_estimates_uses_only_the_random_sample_per_slice():
+    from types import SimpleNamespace as NS
+
+    from halflife.gateway.audit import add_estimates
+    from halflife.schemas import StaleRateRow, VerdictLabel
+    logs = [{"model": "m1", "virtual_key": "k1"}, {"model": "m2", "virtual_key": "k2"}]
+    pool = [(0, 0, None, None), (0, 1, None, None), (1, 0, None, None), (1, 1, None, None)]
+    ts = [0, 1, 2, 3]
+    stratum_of = {0: 0, 1: 3, 2: 0, 3: 3}
+    out = lambda lab: NS(verdict=NS(label=VerdictLabel(lab)))
+    outcomes = {(0, 0): out("changed"), (0, 1): out("current"), (1, 0): out("current"), (1, 1): out("unverifiable")}
+    rows = [StaleRateRow(model="m1", virtual_key="k1", answers_seen=1, answers_checked=1, claims_found=2, claims_verified=2,
+                         claims_changed=1, stale_rate=0.5),
+            StaleRateRow(model="m2", virtual_key="k2", answers_seen=1, answers_checked=1, claims_found=2, claims_verified=1,
+                         claims_changed=0, stale_rate=0.0)]
+    new, overall = add_estimates(rows, logs, pool, ts, stratum_of, [0, 1, 2, 3], outcomes, None)
+    assert new[0].est_stale_rate == 0.5 and new[0].est_n_sampled == 2 and new[0].time_sensitive_claims == 2
+    assert new[1].est_stale_rate == 0.0 and new[1].est_bounds_unverifiable == (0.0, 0.5)
+    assert overall["time_sensitive_claims"] == 4 and overall["est_n_sampled"] == 4
