@@ -208,6 +208,9 @@ def _verdict_from_judge(claim: Claim, data: dict[str, Any], evidence: list[Evide
     )
     if label is VerdictLabel.CHANGED and isinstance(value, str) and value.strip() and _contains_token(claim.span, value):
         label, supports = VerdictLabel.UNVERIFIABLE, []
+    if keep_value:
+        # The displayed (first) quote must be one that states the corrected value; others follow as context.
+        supports = sorted(supports, key=lambda uq: not _contains_token(uq[1], value))
     return Verdict(
         claim_id=claim.id,
         label=label,

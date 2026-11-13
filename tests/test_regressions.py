@@ -123,3 +123,24 @@ async def test_changed_with_numerically_equal_value_is_not_a_change():  # J3 run
     out = await verify_claim(claim, judge(supports=[{"url": ev["url"], "quote": "Policy interest rate 2.50% Oct 28, 2026"}],
                                           current_value="2.50%"), FakeSearch({"canada": [ev]}), today=TODAY)
     assert out.verdict.label is VerdictLabel.UNVERIFIABLE
+
+
+async def test_first_displayed_quote_states_the_corrected_value():  # docs/img/check.png, 2026-11-13
+    boe = {"url": "https://www.bankofengland.co.uk/explainers/current-interest-rate",
+           "content": "we were able to start reducing interest rates in August 2024 from 5.25% down to 3.75% in December 2025."}
+    lib = {"url": "https://commonslibrary.parliament.uk/research-briefings/sn02802",
+           "content": "Bank Rate history. In November 2026 they were raised to 4.0%."}
+    supports = [{"url": boe["url"], "quote": "we were able to start reducing interest rates in August 2024 from 5.25% down to 3.75% in December 2025."},
+                {"url": lib["url"], "quote": "In November 2026 they were raised to 4.0%."}]
+    out = await verify_claim(BOE, judge(supports=supports, current_value="4.0%"), FakeSearch({"bank": [boe, lib]}), today=TODAY)
+    v = out.verdict
+    assert v.label is VerdictLabel.CHANGED and v.current_value == "4.0%"
+    assert v.supporting_quote == "In November 2026 they were raised to 4.0%." and v.supporting_url == lib["url"]
+    assert v.source_urls == [lib["url"], boe["url"]]
+
+
+async def test_no_value_shown_when_no_quote_states_it():
+    boe = {"url": "https://www.bankofengland.co.uk/x", "content": "Bank Rate was cut from 5.25% down to 3.75% in December 2025."}
+    out = await verify_claim(BOE, judge(supports=[{"url": boe["url"], "quote": "Bank Rate was cut from 5.25% down to 3.75% in December 2025."}],
+                                        current_value="4.0%"), FakeSearch({"bank": [boe]}), today=TODAY)
+    assert out.verdict.current_value is None

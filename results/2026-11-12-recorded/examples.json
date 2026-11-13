@@ -1,12 +1,12 @@
 {
  "stale": {
   "answer": "The Bank of England base rate is 5.25%. The latest LTS release of Node.js is Node 20.",
-  "recorded_at": "2026-11-12T17:22:49.054210+00:00",
+  "recorded_at": "2026-11-13T09:20:26.523843+00:00",
   "report": {
    "answer": "The Bank of England base rate is 5.25%. The latest LTS release of Node.js is Node 20.",
    "model": "anthropic/claude-haiku-5-5",
    "mode": "check",
-   "checked_at": "2026-11-12T17:22:49.054153Z",
+   "checked_at": "2026-11-13T09:20:26.523821Z",
    "verification_budget": null,
    "claims": [
     {
@@ -19,110 +19,101 @@
       "is_past_event": false,
       "subject": "Bank of England base rate",
       "authoritative_domain": "bankofengland.co.uk",
-      "p_outdated_model": 0.7
+      "p_outdated_model": 0.6
      },
      "risk": {
       "claim_id": "c1",
-      "age_days": 135.0,
+      "age_days": 136.0,
       "age_basis": "model_cutoff",
       "half_life_days": 150.0,
       "half_life_source": "prior_guess",
-      "p_stale": 0.4641,
+      "p_stale": 0.4666,
       "recommended_ttl_days": 11.1,
-      "rank_score": 0.7,
+      "rank_score": 0.6,
       "rank_basis": "model_p"
      },
      "searched": true,
      "evidence": [
       {
-       "url": "https://fxopen.com/blog/en/analytical-uk-interest-rates-forecasts",
-       "title": "Analytical UK Interest Rate Forecasts 2026\u20132029 | Market Pulse",
-       "content": "## UK Interest Rate Landscape\n\nInterest rates in the UK in 2026 currently sit at 3.75%, down from a 5.25% peak but well above the 0.1% low of 2020. The Bank of England (BoE) raised the Bank Rate from 0.1% in December 2021 to 5.25% by August 2023, the highest since 2008. The hikes were a response to inflation that peaked at 11.1% in October 2022. [...] Note: The Bank of England base rate predictions summarise the range of institutional estimates available in August 2026. They come from ING, Nomura, Deutsche Bank, Goldman Sachs, Pantheon, Fitch Ratings, Barclays and the OBR's market-based assumption, not from the Bank of England itself.\n\nThe range is narrow for 2026 and widens each year after. A UK base rate forecast for 2028 onwards splits between a neutral-rate view near 3.25% and a higher-for-longer view above 4%.\n\nKey takeaways: [...] Changes in the UK base rate, and in expectations of where it goes next, feed through to sterling, equities, gilts and household borrowing at different speeds. The table shows the usual direction of each effect and where each market stood in late August 2026.",
-       "published_date": "Thu, 03 Sep 2026 09:46:05 GMT",
+       "url": "https://finance.yahoo.com/economy/policy/articles/uk-interest-rates-fall-2026-160348987.html",
+       "title": "Will UK interest rates fall in 2026?",
+       "content": "Between August 2024 and December 2025, the Bank of England cut interest rates six times \u2013 roughly once a quarter, and each time by 0.25 percentage points.\n\nThat cutting trend brought the base rate down from a recent high of 5.25% to 3.75% in December 2025.\n\nAt the start of 2026, most economists believed the MPC would continue cutting rates at this roughly quarterly cadence before reaching a neutral monetary policy footing, potentially at around 3.25%. [...] The Bank of England's ratesetting committee held interest rates for the sixth consecutive time at their most recent meeting on 17 September.\n\nThe bank's Monetary Policy Committee (MPC) voted to keep the base rate at 3.75%, with the motion passing by six votes to three as ratesetters remained in \"wait-and-see\" mode. [...] \"The decision, however, signalled a change in direction by the MPC. A more resilient economy combined with material upside risks building around the inflation outlook saw the MPC deliver a more hawkish tone on the policy outlook.\n\n\"The stage is set for rate hikes in the coming months \u2013 but a change in Bank Rate isn't a done deal. Much depends on the path of energy prices from here and how second-round effects track in the coming months,\" he added.",
+       "published_date": "Mon, 21 Sep 2026 00:00:00 GMT",
        "query": "Bank of England base rate: The Bank of England base rate is 5.25%. (as of 2026)",
        "is_authoritative": false,
-       "retrieved_at": "2026-11-12T17:22:47.320032Z"
-      },
-      {
-       "url": "https://commonslibrary.parliament.uk/research-briefings/sn02802",
-       "title": "Interest rates and monetary policy: Economic indicators",
-       "content": "Image 1: UK interest rates were increased from 0.1% in December 2021 to 5.25% in August 2023. They were then cut gradually from August 2024 to December 2025 to 3.75%. In November 2026 they were raised to 4.0%.\n\nSource:Bank of England,Interest rates and Bank Rate [accessed 5 Nov 2026] [...] The MPC cited higher global energy prices and \u201cthe degree of inflationary pressure in the pipeline\u201d as reasons for the rate increase. Bank of England staff forecast CPI inflation, which was 3.5% in September 2026, to rise in coming quarters, reaching around 5% in Q2 2027, well above the MPC\u2019s target of 2% in the medium term.\n\nThe results of the next scheduled MPC meeting will be announced on 17 December.",
-       "published_date": "Fri, 11 Sep 2026 22:30:44 GMT",
-       "query": "Bank of England base rate: The Bank of England base rate is 5.25%. (as of 2026)",
-       "is_authoritative": false,
-       "retrieved_at": "2026-11-12T17:22:47.320032Z"
+       "retrieved_at": "2026-11-13T09:20:24.886039Z"
       },
       {
        "url": "https://www.mortgageonefinance.co.uk/bank-of-england-base-rate-history",
        "title": "Bank of England Base Rate History | 50 Years \u2014 Mortgage One",
-       "content": "## What is the average Bank of England base rate since 1975?\n\nThe time-weighted average Bank Rate between January 1975 and July 2026 is 6.11%. By decade the averages run 10.77% for 1975 to 1979, 11.70% across the 1980s, 7.85% in the 1990s, 4.33% in the 2000s, 0.50% through the 2010s and 2.74% in the 2020s so far. [...] The time-weighted average between January 1975 and July 2026 is 6.11%. By decade it runs 10.77% for 1975 to 1979, 11.70% in the 1980s, 7.85% in the 1990s, 4.33% in the 2000s, 0.50% in the 2010s and 2.74% in the 2020s so far. The 2010s figure is the outlier, not the benchmark.\n\n3. What is the highest the UK base rate has ever been? [...] What followed was fast rather than extreme. Fourteen consecutive increases between December 2021 and August 2023 took the rate from 0.10% to 5.25%, where it stayed for a full year before the first cut in August 2024. Borrowers experienced that as a shock because they measured it against the preceding decade. Measured against the chart's full range, 5.25% was unremarkable, and it sat below the 51-year average throughout. The shock was the speed, not the destination. Anyone who came off a cheap",
+       "content": "What followed was fast rather than extreme. Fourteen consecutive increases between December 2021 and August 2023 took the rate from 0.10% to 5.25%, where it stayed for a full year before the first cut in August 2024. Borrowers experienced that as a shock because they measured it against the preceding decade. Measured against the chart's full range, 5.25% was unremarkable, and it sat below the 51-year average throughout. The shock was the speed, not the destination. Anyone who came off a cheap [...] Set the chart to 20Y to see it. The window opens shortly before the 2008 financial crisis, covers the fall to 0.50% in March 2009 and the long stretch below 0.75%, then the fourteen consecutive rises to 5.25% between December 2021 and August 2023, and the cuts that followed from August 2024.\n\n7. Will mortgage rates ever go to 3% again? [...] ## What is the average Bank of England base rate since 1975?\n\nThe time-weighted average Bank Rate between January 1975 and July 2026 is 6.11%. By decade the averages run 10.77% for 1975 to 1979, 11.70% across the 1980s, 7.85% in the 1990s, 4.33% in the 2000s, 0.50% through the 2010s and 2.74% in the 2020s so far.",
        "published_date": "Thu, 30 Jul 2026 00:00:00 GMT",
        "query": "Bank of England base rate: The Bank of England base rate is 5.25%. (as of 2026)",
        "is_authoritative": false,
-       "retrieved_at": "2026-11-12T17:22:47.320032Z"
+       "retrieved_at": "2026-11-13T09:20:24.886039Z"
       },
       {
-       "url": "https://www.moneysavingexpert.com/news/2026/09/base-rate-held-again-bank-of-england",
-       "title": "Base rate held AGAIN at 3.75% \u2013 here's what it means for you and when it might change",
-       "content": "It's also used by the Bank of England as a tool to control inflation (the rate at which prices rise). The Bank has a target \u2013 set by the Government \u2013 of 2% for the Consumer Prices Index (CPI) measure of inflation. The latest figures show that CPI inflation was 3.1% in the 12 months to August 2026 \u2013 up from July's figure of 2.9% and still above the Bank's target.\n\n## Why the base rate was held [...] For full info and lots more options, see our Top savings accounts guide.\n\nMSE Forum\n\n## Base rate held AGAIN at 3.75% \u2013 here's what it means for you and when it might change\n\nGo to the MSE Forum\n\nImage 6: Forum image\n\n## Related articles\n\nImage 7: External view of the Bank of England\n\nBank of England increases base rate to 4% \u2013 what it means for your mortgage and savings\n\n5 November 2026\n\nImage 8: External view of the Bank of England [...] Base rate held AGAIN at 3.75% \u2013 here's what it means for you and when it might change\n\n4 August 2026\n\nImage 9: The white, marble Bank of England building against a bright blue sky\n\nBase rate held again at 3.75% \u2013 here's what it means for you and when it might change\n\n23 June 2026\n\nImage 10: External view of the Bank of England\n\nBase rate held AGAIN at 3.75% \u2013 here's what it means for you and when it might change\n\n5 May 2026\n\nBase RateBank of EnglandMortgagesSavings\n\n### Share this guide?",
-       "published_date": "Thu, 05 Nov 2026 16:25:02 GMT",
+       "url": "https://commonslibrary.parliament.uk/research-briefings/sn02802",
+       "title": "Interest rates and monetary policy: Economic indicators",
+       "content": "Image 1: UK interest rates were increased from 0.1% in December 2021 to 5.25% in August 2023. They were then cut gradually from August 2024 to December 2025 to 3.75%. In November 2026 they were raised to 4.0%.\n\nSource:Bank of England,Interest rates and Bank Rate [accessed 5 Nov 2026]",
+       "published_date": "Fri, 11 Sep 2026 22:30:44 GMT",
        "query": "Bank of England base rate: The Bank of England base rate is 5.25%. (as of 2026)",
        "is_authoritative": false,
-       "retrieved_at": "2026-11-12T17:22:47.320032Z"
+       "retrieved_at": "2026-11-13T09:20:24.886039Z"
       },
       {
-       "url": "https://uk.finance.yahoo.com/news/interest-rates-2026-bank-england-060015434.html",
-       "title": "What will happen to interest rates in 2026?",
-       "content": "Money markets are signalling that rates could fall to 3.5% by April, with a 78% probability of a cut to 3.25% by November. The December move marked the sixth rate cut since August 2024, bringing the bank rate down from 5.25% to 3.75%.\n\n## Economists expect further BoE rate cuts in 2026 [...] Rate changes directly affect millions of UK households through mortgage costs, credit card charges and savings returns. As a general rule, if the BoE lowers interest rates, mortgage rates tend to fall, although lenders set the rates, and changes can run ahead or behind bank rate moves. [...] In a statement, the central bank said the pace and extent of further easing would depend on the inflation outlook, noting that policy had already become significantly less restrictive. \"The restrictiveness of policy has fallen as bank rate has been reduced by 150 basis points since August 2024,\" it said. \"On the basis of the current evidence, bank rate is likely to continue on a gradual downward path. But judgments around further policy easing will become a closer call.\"",
-       "published_date": "Wed, 31 Dec 2025 00:00:00 GMT",
+       "url": "https://www.raisin.com/en-gb/banking/will-interest-rates-rise",
+       "title": "When will interest rates rise for savers? | Raisin UK",
+       "content": "In February 2022, the BoE announced the base rate would increase to 0.5% as spiralling energy costs pushed inflation to a 30-year high. Interest rates rose again in April 2022, and by a further 0.25% in May 2022 to reach 1.00%, which was the highest level in 13 years at the time. However, with inflation still climbing, the BoE continued to increase the base rate \u2013 and by August 2023, the rate was set at 5.25%, marking the 14th consecutive rise by the Bank. The BoE then held the rate at 5.25% [...] Raisin\n\nLog inRegister\n\nLog inRegister\n\nHomeBankingWill interest rates rise?\n\nLast updated:21 October 2026\n\n# When will interest rates rise for savers?\n\nUK savings rates and expectations for 2026 and beyond\n\nWith the Bank of England (BoE) holding the base rate at 3.75% in September 2026, many savers will be wondering: what\u2019s next for interest rates? We look at the latest forecasts and what they could mean for your savings accounts.\n\n#### Key takeaways [...] The Governor of the Bank of England has hinted that the base rate will continue to go down, with forecasts at the start of 2026 suggesting that it'll reach 3.5% by the end of the year.However, the 2026 conflict in the Middle East and subsequent impact on inflation and prices may change this approach.",
+       "published_date": "Wed, 21 Oct 2026 00:00:00 GMT",
        "query": "Bank of England base rate: The Bank of England base rate is 5.25%. (as of 2026)",
        "is_authoritative": false,
-       "retrieved_at": "2026-11-12T17:22:47.320032Z"
+       "retrieved_at": "2026-11-13T09:20:24.886039Z"
       },
       {
-       "url": "https://www.bankofengland.co.uk/news/2008/march/mpc-march-2008",
-       "title": "Bank of England Maintains Bank Rate at 5.25% | Bank of England \u2013 the UK's central bank",
-       "content": "### Results of the Semi-Annual FX Turnover Surveys in April 2026\n\nNews // Green notice\n\n### Green notice 2026/02\n\n### Green notice 2026/02\n\nNews // AI Consortium minutes\n\n### Artificial Intelligence Consortium minutes...\n\n### Artificial Intelligence Consortium minutes \u2013 June 2026\n\nView more Other news\n\nBack to top [...] The Bank of England's Monetary Policy Committee today voted to maintain the official Bank Rate paid on commercial bank reserves at 5.25%.\n\nPublished on 06 March 2008\n\nThe minutes of the meeting will be published at 9.30am on Wednesday 19 March.\n\nPDFPress release\n\n## Other news\n\nNews // Statement\n\n### Delay to the November 2026 RTGS standards...\n\n### Delay to the November 2026 RTGS standards release\n\nNews\n\n### Results of the Semi-Annual FX Turnover Surveys... [...] ## Our use of cookies\n\nWe use necessary cookies to make our site work. We\u2019d also like to use some non-essential cookies (including third-party cookies) to help us improve the site. By clicking \u2018Accept recommended settings\u2019 on this banner, you accept our use of analytics cookies.  For more information on how these cookies work please see our Cookie policy.\n\nBank of England home\n\n# Bank of England Maintains Bank Rate at 5.25%",
-       "published_date": null,
+       "url": "https://www.bankofengland.co.uk/explainers/current-interest-rate",
+       "title": "What is happening with interest rates in the UK? | Bank of England \u2013 the UK's central bank",
+       "content": "War in the Middle East has affected energy prices and pushed up inflation \u2013 we will do what is necessary to get it back on target\n\nThis page was last updated on 17 September 2026\n\nWe started raising interest rates at the end of 2021 to help control inflation. Since then, it has fallen a lot and the pressures that caused price rises had eased. As a result, we were able to start reducing interest rates in August 2024 from 5.25% down to 3.75% in December 2025.",
+       "published_date": "Thu, 17 Sep 2026 00:00:00 GMT",
        "query": "Bank of England base rate: The Bank of England base rate is 5.25%. (as of 2026)",
        "is_authoritative": true,
-       "retrieved_at": "2026-11-12T17:22:47.320098Z"
+       "retrieved_at": "2026-11-13T09:20:24.886039Z"
       },
       {
-       "url": "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2023/november-2023",
-       "title": "Bank Rate maintained at 5.25% - November 2023 | Bank of England \u2013 the UK's central bank",
-       "content": "The Committee\u2019s updated projections for activity and inflation are set out in the accompanying November Monetary Policy Report. These are conditioned on a market-implied path for Bank Rate that remains around 5\u00bc% until 2024 Q3 and then declines gradually to 4\u00bc% by the end of 2026, a lower profile than underpinned the August projections. [...] News // Monetary Policy Committee (MPC)\n\n### Bank Rate maintained at 3.75% - July 2026...\n\n### Bank Rate maintained at 3.75% - July 2026 Monetary Policy Summary and Minutes\n\nNews // News\n\n### Transcript of the Governor's pooled broadcast...\n\n### Transcript of the Governor's pooled broadcast interview given on 18 June 2026\n\nNews // Monetary Policy Committee (MPC)\n\n### Bank Rate maintained at 3.75% - June 2026...\n\n### Bank Rate maintained at 3.75% - June 2026 Monetary Policy Summary and Minutes",
-       "published_date": "Wed, 01 Nov 2023 00:00:00 GMT",
+       "url": "https://www.bankofengland.co.uk/-/media/boe/files/monetary-policy-report/2026/april/monetary-policy-report-april-2026.pdf",
+       "title": "Monetary Policy Report April 2026",
+       "content": "Bank of England Page 81 In Scenario C, the path for Bank Rate is materially higher than the market-implied path in most illustrative policy rules produced by Bank staff, given the outlook embodies persistent and material second-round effects which policy needs to act to offset. In staff\u2019s illustrative model-based projections for Scenario C, for example, Bank Rate rises to around 5.25% by 2027 Q1 (Chart 3.6, left panel), which reduces the projected inflation peak in this scenario and [...] respond to an energy price shock? 84 Annex 1: Model-based policy simulations 91 Annex 2: Monetary policy since the February 2026 Report 103 Glossary and other information 104 Bank of England Page 3 Monetary Policy Summary At its meeting ending on 29 April 2026, the Monetary Policy Committee (MPC) voted by a majority of 8\u20131 to maintain Bank Rate at 3.75%. One member voted to increase Bank Rate by 0.25 percentage points, to 4%. [...] Bank of England Page 27 Financial conditions Based on the 15-day average of forward interest rates to 22 April, the market-implied path for Bank Rate rises to 4.2% in early 2027 before gradually falling to 4% by early 2028 (Chart 1.15). The median respondent to the April 2026 Market Participants Survey (MaPS) expected Bank Rate to remain unchanged through the rest of this year, and to be 3.5% one year ahead and 3.25% two and three years ahead. The market-implied path for Bank Rate will capture",
+       "published_date": "Wed, 29 Apr 2026 00:00:00 GMT",
        "query": "Bank of England base rate: The Bank of England base rate is 5.25%. (as of 2026)",
        "is_authoritative": true,
-       "retrieved_at": "2026-11-12T17:22:47.320098Z"
+       "retrieved_at": "2026-11-13T09:20:24.886121Z"
       },
       {
-       "url": "http://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2023/november-2023",
-       "title": "Bank Rate maintained at 5.25% - November 2023 | Bank of England \u2013 the UK's central bank",
-       "content": "The Committee\u2019s updated projections for activity and inflation are set out in the accompanying November Monetary Policy Report. These are conditioned on a market-implied path for Bank Rate that remains around 5\u00bc% until 2024 Q3 and then declines gradually to 4\u00bc% by the end of 2026, a lower profile than underpinned the August projections. [...] News // Monetary Policy Committee (MPC)\n\n### Bank Rate maintained at 3.75% - July 2026...\n\n### Bank Rate maintained at 3.75% - July 2026 Monetary Policy Summary and Minutes\n\nNews // News\n\n### Transcript of the Governor's pooled broadcast...\n\n### Transcript of the Governor's pooled broadcast interview given on 18 June 2026\n\nNews // Monetary Policy Committee (MPC)\n\n### Bank Rate maintained at 3.75% - June 2026...\n\n### Bank Rate maintained at 3.75% - June 2026 Monetary Policy Summary and Minutes [...] Since the MPC\u2019s previous decision, there has been little news in key indicators of UK inflation persistence. There have continued to be signs of some impact of tighter monetary policy on the labour market and on momentum in the real economy more generally. Given the significant increase in Bank Rate since the start of this tightening cycle, the current monetary policy stance is restrictive. At this meeting, the Committee voted to maintain Bank Rate at 5.25%.",
-       "published_date": null,
+       "url": "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2024/august-2024",
+       "title": "Bank Rate reduced to 5% - August 2024 | Bank of England \u2013 the UK's central bank",
+       "content": "26: Five members (Andrew Bailey, Sarah Breeden, Swati Dhingra, Clare Lombardelli and Dave Ramsden) voted in favour of the proposition. Four members (Megan Greene, Jonathan Haskel, Catherine L Mann and Huw Pill) voted against the proposition, preferring to maintain Bank Rate at 5.25%.\n\nOperational considerations\n\n27: On 31 July, the stock of UK government bonds held for monetary policy purposes was \u00a3690 billion. [...] 23: Four members preferred to maintain Bank Rate at 5.25% at this meeting. The upside news to services inflation and GDP outturns relative to the May Report, along with continued elevated wage growth, suggested that second-round effects were having a greater impact on wage and price-setting behaviour in the economy beyond what was embodied in the modal forecast. External factors, such as international food and energy prices, had played the major role in reducing headline inflation to date. By [...] At its meeting ending on 31 July 2024, the MPC voted by a majority of 5\u20134 to reduce Bank Rate by 0.25 percentage points, to 5%. Four members preferred to maintain Bank Rate at 5.25%.\n\nThe Committee has published an updated set of projections for activity and inflation in the accompanying August Monetary Policy Report.",
+       "published_date": "Thu, 30 Jul 2026 00:00:00 GMT",
        "query": "Bank of England base rate: The Bank of England base rate is 5.25%. (as of 2026)",
        "is_authoritative": true,
-       "retrieved_at": "2026-11-12T17:22:47.320098Z"
+       "retrieved_at": "2026-11-13T09:20:24.886121Z"
       },
       {
-       "url": "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2023/december-2023",
-       "title": "Bank Rate maintained at 5.25% - December 2023 | Bank of England \u2013 the UK's central bank",
-       "content": "In the MPC\u2019s November Monetary Policy Report projections, conditioned on a market-implied path for Bank Rate that remained around 5\u00bc% until 2024 Q3 and then declined gradually to 4\u00bc% by the end of 2026, GDP was expected to be broadly flat in the first half of the forecast period, in part reflecting relatively weak potential supply, and an increasing degree of economic slack was expected to emerge from the start of next year. In the most likely, or modal, projection, CPI inflation returned to [...] ## Other Monetary Policy Committee news\n\nNews // Monetary Policy Committee (MPC)\n\n### Bank Rate maintained at 3.75% - July 2026...\n\n### Bank Rate maintained at 3.75% - July 2026 Monetary Policy Summary and Minutes\n\nNews // News\n\n### Transcript of the Governor's pooled broadcast...\n\n### Transcript of the Governor's pooled broadcast interview given on 18 June 2026\n\nNews // Monetary Policy Committee (MPC)\n\n### Bank Rate maintained at 3.75% - June 2026... [...] ### Bank Rate maintained at 3.75% - June 2026 Monetary Policy Summary and Minutes\n\nNews // Statement\n\n### Announcement of the publication of the Governor's...\n\n### Announcement of the publication of the Governor's interview transcript\n\nView more Other Monetary Policy Committee news\n\nBack to top",
-       "published_date": "Wed, 13 Dec 2023 00:00:00 GMT",
+       "url": "https://www.bankofengland.co.uk/markets/market-intelligence/survey-results/2025/market-participants-survey-results-september-2025",
+       "title": "Market Participants Survey results \u2013 September 2025 | Bank of England \u2013 the UK's central bank",
+       "content": "#### Footnotes\n\n (a) In the question provided to respondents, the different Bank Rate outcomes spanned <2.75% and >5.25% at the extremes, and all 25 basis point increments in between. Results have been truncated where the mean probabilities above or below a certain outcome were close to or at zero. Mean probabilities are rounded to one decimal place. 86 respondents answered this question. [...] #### Footnotes\n\n (a) In the question provided to respondents, the different Bank Rate outcomes spanned <2.75% and >5.25% at the extremes, and all 25 basis point increments in between. Results have been truncated where the mean probabilities above or below a certain outcome were close to or at zero. Mean probabilities are rounded to one decimal place. 86 respondents answered this question.",
+       "published_date": "Fri, 19 Sep 2025 00:00:00 GMT",
        "query": "Bank of England base rate: The Bank of England base rate is 5.25%. (as of 2026)",
        "is_authoritative": true,
-       "retrieved_at": "2026-11-12T17:22:47.320098Z"
+       "retrieved_at": "2026-11-13T09:20:24.886121Z"
       },
       {
-       "url": "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2023/december-2023?sf184734414=1",
-       "title": "Bank Rate maintained at 5.25% - December 2023 | Bank of England \u2013 the UK's central bank",
-       "content": "In the MPC\u2019s November Monetary Policy Report projections, conditioned on a market-implied path for Bank Rate that remained around 5\u00bc% until 2024 Q3 and then declined gradually to 4\u00bc% by the end of 2026, GDP was expected to be broadly flat in the first half of the forecast period, in part reflecting relatively weak potential supply, and an increasing degree of economic slack was expected to emerge from the start of next year. In the most likely, or modal, projection, CPI inflation returned to [...] ## Other Monetary Policy Committee news\n\nNews // Monetary Policy Committee (MPC)\n\n### Bank Rate maintained at 3.75% - July 2026...\n\n### Bank Rate maintained at 3.75% - July 2026 Monetary Policy Summary and Minutes\n\nNews // News\n\n### Transcript of the Governor's pooled broadcast...\n\n### Transcript of the Governor's pooled broadcast interview given on 18 June 2026\n\nNews // Monetary Policy Committee (MPC)\n\n### Bank Rate maintained at 3.75% - June 2026... [...] ### Bank Rate maintained at 3.75% - June 2026 Monetary Policy Summary and Minutes\n\nNews // Statement\n\n### Announcement of the publication of the Governor's...\n\n### Announcement of the publication of the Governor's interview transcript\n\nView more Other Monetary Policy Committee news\n\nBack to top",
-       "published_date": null,
+       "url": "https://www.bankofengland.co.uk/monetary-policy-summary-and-minutes/2025/may-2025",
+       "title": "Bank Rate reduced to 4.25% - May 2025 | Bank of England \u2013 the UK's central bank",
+       "content": "Bank of England home\n\n\u00a92026 Bank of England [...] David Roberts was also present on 29 April and 2 May, as an observer for the purpose of exercising oversight functions in his role as a member of the Bank\u2019s Court of Directors.\n\n### Latest and upcoming MPC dates\n\n## Other Monetary Policy Committee news\n\n### Bank Rate maintained at 3.75% - July 2026...\n\n### Bank Rate maintained at 3.75% - July 2026 Monetary Policy Summary and Minutes\n\n### Bank Rate maintained at 3.75% - June 2026... [...] ### Bank Rate maintained at 3.75% - June 2026 Monetary Policy Summary and Minutes\n\n### Announcement of the publication of the Governor's...\n\n### Announcement of the publication of the Governor's interview transcript\n\n### Bank Rate maintained at 3.75% - April 2026...\n\n### Bank Rate maintained at 3.75% - April 2026 Monetary Policy Summary and Minutes\n\nBack to top\n\n### Follow us Follow us\n\n### Museum\n\n### Useful links Useful links\n\n### Bank of England\n\n### Bank of England Museum",
+       "published_date": "Thu, 30 Jul 2026 00:00:00 GMT",
        "query": "Bank of England base rate: The Bank of England base rate is 5.25%. (as of 2026)",
        "is_authoritative": true,
-       "retrieved_at": "2026-11-12T17:22:47.320098Z"
+       "retrieved_at": "2026-11-13T09:20:24.886121Z"
       }
      ],
      "verdict": {
@@ -130,11 +121,12 @@
       "label": "changed",
       "supporting_quote": "In November 2026 they were raised to 4.0%.",
       "supporting_url": "https://commonslibrary.parliament.uk/research-briefings/sn02802",
-      "current_value": "4.0",
+      "current_value": "4.0%",
       "source_urls": [
-       "https://commonslibrary.parliament.uk/research-briefings/sn02802"
+       "https://commonslibrary.parliament.uk/research-briefings/sn02802",
+       "https://www.bankofengland.co.uk/explainers/current-interest-rate"
       ],
-      "reasoning": "The claim that the base rate is 5.25% is no longer current; the Commons Library brief states the rate was raised to 4.0% in November 2026. The 5.25% figure was the rate only from August 2023 until August 2024, per the evidence.",
+      "reasoning": "The claim that the base rate is 5.25% was true only as a past peak (August 2023 to August 2024) and the rate was later cut to 3.75%. The Commons Library briefing states the rate was raised to 4.0% in November 2026.",
       "quote_verified": true
      },
      "freshness_score": 5.0,
@@ -151,123 +143,113 @@
       "is_past_event": false,
       "subject": "Node.js LTS release",
       "authoritative_domain": "nodejs.org",
-      "p_outdated_model": 0.8
+      "p_outdated_model": 0.9
      },
      "risk": {
       "claim_id": "c2",
-      "age_days": 135.0,
+      "age_days": 136.0,
       "age_basis": "model_cutoff",
       "half_life_days": 120.0,
       "half_life_source": "prior_guess",
-      "p_stale": 0.5415,
+      "p_stale": 0.5441,
       "recommended_ttl_days": 8.88,
-      "rank_score": 0.8,
+      "rank_score": 0.9,
       "rank_basis": "model_p"
      },
      "searched": true,
      "evidence": [
       {
-       "url": "https://www.techbellasolutions.com/blogs/node-js-lts-version-guide",
-       "title": "Node.js LTS in 2026: Easy Guide to Node 24 vs Node 26",
-       "content": "Node.js 26 is still a Current release. It is scheduled to enter LTS on 28 October 2026, with security support until 30 April 2029. Test on it now, and move production once your dependencies are confirmed to work.\n Node.js 20 (\u201cIron\u201d) reached end of life on 30 April 2026. If anything still runs on it, treat that as the first job. [...] | Node.js line | Status on 24 Oct 2026 | Security support ends |\n --- \n| Node.js 20 | End of life | 30 Apr 2026 (ended) |\n| Node.js 22 (Jod) | Maintenance LTS | 30 Apr 2027 |\n| Node.js 24 (Krypton) | Maintenance LTS | 30 Apr 2028 |\n| Node.js 26 | Current, LTS from 28 Oct 2026 | 30 Apr 2029 |\n| Node.js 27 | Alpha starts Oct 2026; LTS Oct 2027 | 30 Apr 2030 |\n\nDates from the official Node.js Release schedule (schedule.json). The schedule may be amended. [...] ## Frequently Asked Questions\n\nWhich Node.js LTS version should I use in production?\n\nAs of 24 October 2026, Node.js 24 is the safe default and Node.js 22 is acceptable until its security support ends on 30 April 2027. Node.js 26 is scheduled to become LTS on 28 October 2026.\n\nIs Node.js 20 still supported?\n\nNo. Node.js 20 reached end of life on 30 April 2026 per the official schedule, so it no longer receives security fixes from the project.\n\nWhat changes in Node.js 27?",
-       "published_date": "Sun, 25 Oct 2026 05:00:00 GMT",
+       "url": "http://nodesource.com/blog/nodejs-18-20-eol-136-million-downloads-july-2026",
+       "title": "Node.js 18 and 20 Are EOL\u2014Yet They Were Downloaded More Than 136 Million Times in July 2026",
+       "content": "| Release line | Status | Operational meaning |\n --- \n| Node.js 26 | Current | Actively developed and patched; the Current phase gives the ecosystem time to adopt the release |\n| Node.js 24 | LTS | The latest LTS line and the primary upgrade target for production applications |\n| Node.js 22 | LTS | Still supported and receiving security fixes |\n| Node.js 20 | EOL since April 30, 2026 | No official upstream security releases | [...] Node.js 24 is the latest Long-Term Support release, and Node.js 26 is the Current release line. Node.js 18 and Node.js 20, meanwhile, have both reached End-of-Life (EOL).\n\nThat should make the direction of travel obvious.\n\nInstead, Matteo Collina\u2019s analysis of Node.js download data showed that even discontinued Node.js 12, 14, and 16 release lines were still generating tens of millions of downloads per month, highlighting how slowly the ecosystem moves away from unsupported versions. [...] The official Node.js release schedule recommends that production applications use supported LTS releases.\n\nOnce a release line reaches EOL, it no longer receives updates\u2014including security patches\u2014even when later research shows that an applicable vulnerability also exists in the retired branch.",
+       "published_date": "Thu, 06 Aug 2026 00:00:00 GMT",
        "query": "Node.js LTS release: The latest LTS release of Node.js is Node 20. (as of 2026)",
        "is_authoritative": false,
-       "retrieved_at": "2026-11-12T17:22:47.319082Z"
+       "retrieved_at": "2026-11-13T09:20:24.884972Z"
       },
       {
-       "url": "https://ecorpit.com/nodejs-one-release-per-year-node-27-lts-upgrade-cadence-2026",
-       "title": "Node.js moves to one release a year: Node 27 LTS",
-       "content": "Underneath both reasons sits an uncomfortable pattern: most organisations do not upgrade Node.js after they deploy. Node.js 20 reached end of life on April 30, 2026, and in that same month it was still downloaded around 95 million times. Node.js 16, which is years past end of life, is still pulled roughly 20 million times a month. Ippolito's read is that teams fall so far behind in their dependency tree that upgrading stops being incremental and becomes a full refactor, so it gets deferred [...] | Version | Status as of 2 November 2026 | Enters LTS | End of life |\n ---  --- |\n| Node.js 22 | Maintenance LTS | Already LTS | April 30, 2027 |\n| Node.js 24 | Maintenance LTS since October 20, 2026 (v24.22.2) | Already LTS | April 30, 2028 |\n| Node.js 26 | Active LTS since October 28, 2026 (latest LTS, v26.13.0) | Already LTS | April 2029 |\n| Node.js 27 | Alpha since October 28, 2026 (v27.0.0-alpha.0.0.0); 27.0.0 due April 22, 2027 | October 2027 | April 2030 | [...] Yes. Once an LTS line ends, upstream patches stop, and maintainers report that old versions are less secure than teams assume because new fixes often apply to them too. Node.js 20 still saw about 95 million downloads in the month it reached end of life, in April 2026.\n\nAbout the author\n\nManu Shukla - Founder and Director \n\n## Manu Shukla\n\nFounder & Director\n\nFounder of eCorpIT. Hands-on engineer leading senior-only delivery for AI apps, custom software, and cloud systems for global clients.",
-       "published_date": "Mon, 27 Jul 2026 00:00:00 GMT",
+       "url": "https://tuxcare.com/blog/node-eol",
+       "title": "Node.js End-of-Life: Dates, Risks & What to Do Next",
+       "content": "Node.js 20 reaches end of life on April 30, 2026. For a version that entered Active LTS in October 2023, it has seen broad adoption in production environments. However, from May 1, 2026, any vulnerability discovered in Node.js 20 won\u2019t receive an official patch. Given how widely it\u2019s deployed, it is likely to remain an active target for researchers and threat actors when new CVEs surface affecting this version. [...] After six months, even-numbered versions (12, 14, 16, 18, 20, 22) move to the Active LTS phase. Odd-numbered versions (13, 15, 17, 19) do not receive LTS status. They are dropped after six months. For production systems, only LTS versions are relevant.\n\nLTS versions continue to receive security patches, bug fixes, and stability improvements for about 12 months.\n\n### 3. Maintenance LTS\n\nAfter Active LTS ends, the Node.js version enters the Maintenance LTS. In this phase:",
+       "published_date": "Tue, 14 Apr 2026 16:36:21 GMT",
        "query": "Node.js LTS release: The latest LTS release of Node.js is Node 20. (as of 2026)",
        "is_authoritative": false,
-       "retrieved_at": "2026-11-12T17:22:47.319082Z"
+       "retrieved_at": "2026-11-13T09:20:24.884972Z"
       },
       {
-       "url": "https://mark1.ilbanin.co.kr/2026/10/19/upgrade-to-node-js-26-lts",
-       "title": "Upgrade to Node.js 26 LTS: Breaking Changes and Steps",
-       "content": "Node.js 26.0.0 was released on May 5, 2026 as the \"Current\" line. Even-numbered releases become LTS in October, and 26.x follows that pattern. The latest 26.x release at the time of writing is 26.12.0 (October 14, 2026), still labelled Current until the LTS switch. [...] Information current as of October 19, 2026. LTS dates come from the Node.js Release working group schedule and can change, so check it before a production rollout.\n\n## References [...] 1. Node.js 26.0.0 (Current) release notes \u2014 nodejs.org, checked 2026-10-19\n2. Node.js release schedule \u2014 Node.js Release working group, checked 2026-10-19\n3. Evolving the Node.js Release Schedule \u2014 nodejs.org, checked 2026-10-19\n4. October 2026 security releases \u2014 nodejs.org, checked 2026-10-19\n5. Node.js 26.12.0 release notes \u2014 nodejs.org, checked 2026-10-19\n6. Corepack documentation (Node.js 25) \u2014 nodejs.org, checked 2026-10-19\n7. actions/setup-node \u2014 GitHub, checked 2026-10-19",
-       "published_date": "Mon, 19 Oct 2026 01:34:23 GMT",
+       "url": "https://hidekazu-konishi.com/entry/nodejs_release_and_eol_timeline.html",
+       "title": "Node.js Release and EOL Timeline - LTS Schedule, Active LTS and Maintenance, and End-of-Life Dates | hidekazu-konishi.com",
+       "content": "| 2026-04-30 | Node.js 20 \"Iron\" reaches End-of-Life. Because Node.js 20 was so widely deployed, its EOL left a large installed base needing to move to Node.js 22 or 24. Source: Node.js Releases (nodejs.org). |\n| 2026-05-05 | Node.js 26 is released as the new Current line (scheduled to enter Active LTS on 2026-10-28). Node.js 26 is the last major to follow the existing odd/even model. Source: Node.js v26.0.0 released. | [...] Having followed the chronology, this section summarizes the current picture: how the release phases fit together, which versions are supported right now, and the full per-version schedule. As of 2026-07-24, the supported (non-EOL) lines are Node.js 22 (Maintenance LTS), Node.js 24 (Active LTS), and Node.js 26 (Current). Everything from Node.js 20 and earlier, along with the odd-numbered lines 21, 23, and 25, has reached End-of-Life and no longer receives security updates. [...] Only even-numbered major versions are promoted to Long Term Support (LTS). As of 2026-07-24 the supported LTS lines are Node.js 24 (Active LTS) and Node.js 22 (Maintenance LTS), while Node.js 26 is the current Current release and is scheduled to become Active LTS on 2026-10-28. Odd-numbered versions (such as 23 and 25) never become LTS. Note that from Node.js 27 the odd/even distinction is being retired and every major will become LTS.  \n\n### How long is a Node.js LTS version supported?",
+       "published_date": "Sun, 26 Jul 2026 00:00:00 GMT",
        "query": "Node.js LTS release: The latest LTS release of Node.js is Node 20. (as of 2026)",
        "is_authoritative": false,
-       "retrieved_at": "2026-11-12T17:22:47.319082Z"
+       "retrieved_at": "2026-11-13T09:20:24.884972Z"
       },
       {
-       "url": "https://pocketlantern.dev/briefs/node-22-maintenance-vs-node-24-active-lts-2026",
-       "title": "Node.js 22 Maintenance vs Node.js 24 Active LTS in 2026 \u2014 PocketLantern",
-       "content": "As of 2026-03-27, Node.js 24 \"Krypton\" is in Active LTS, with Active LTS having started on 2025-10-28, Maintenance scheduled for 2026-10-20, and end-of-life scheduled for 2028-04-30. The latest listed 24.x release is v24.14.1, last updated on 2026-03-24, with npm v11.11.0 and V8 v13.6. Active LTS is the production-preferred phase for new features, bug fixes, and audited updates. The official Node.js migration guide for v22 to v24 is already available and focuses the upgrade on platform support [...] As of 2026-03-27, Node.js 22 \"Jod\" is in Maintenance LTS, with maintenance having started on 2025-10-21 and end-of-life scheduled for 2027-04-30. The latest listed 22.x release is v22.22.2, last updated on 2026-03-24, with npm v10.9.7 and V8 v12.4. Maintenance LTS means critical bug fixes and security updates, not the broader feature flow available in Active LTS. This is a support-window hold strategy, not a pricing decision; check platform vendor pricing separately.\n\n#### When to choose [...] on platform support cuts and behavior/security-level changes.",
-       "published_date": "Fri, 03 Apr 2026 00:00:00 GMT",
+       "url": "https://nodejs.org/en/blog/release/v20.20.0",
+       "title": "Node.js \u2014 Node.js 20.20.0 (LTS)",
+       "content": "Skip to content\n\n# Node.js 20.20.0 (LTS)\n\nMI\n\nMarco Ippolito\n\nNode.js 20.20.0 (LTS)\n\n## 2026-01-13, Version 20.20.0 'Iron' (LTS), @marco-ippolito\n\nThis is a security release.\n\n### Notable Changes [...] d72d2a5b7d944a28eb59e0477bdc0c40b7b0a817bca057d5e882c0e0013590f3    node-v20.20.0-win-x86.zip8b8f5cbf7f1800c74e19cef0182bb6b9144e154e57fc01dd945bd36edaf32c65  node-v20.20.0-x64.msi 8b8f5cbf7f1800c74e19cef0182bb6b9144e154e57fc01dd945bd36edaf32c65    node-v20.20.0-x64.msi93698ab6cca1cbff4ffb545f15078509ae706cfbb9a646449ccfe1c8d7abad4b  node-v20.20.0-x86.msi 93698ab6cca1cbff4ffb545f15078509ae706cfbb9a646449ccfe1c8d7abad4b [...] 2fa932df38d6f1612154153a9c8c2048596518d5a46c34490f2c3603fc836d94    win-arm64/node_pdb.7zcda800fafb789404acbe98548fe1f4e71fbc3889a747eb3fef67155e67b29513  win-arm64/node_pdb.zip cda800fafb789404acbe98548fe1f4e71fbc3889a747eb3fef67155e67b29513    win-arm64/node_pdb.zipfda2b2a8857735f7958ba9771a2b24734ff36434e85ae606bcf7744d41d7adc0  win-x64/node.exe fda2b2a8857735f7958ba9771a2b24734ff36434e85ae606bcf7744d41d7adc0    win-x64/node.exe919d900bb9d589ebbcfda17e6f6e8f6b49d8d6a8d782b6f5efd6b6c6c5f0d1b1",
+       "published_date": "Tue, 13 Jan 2026 00:00:00 GMT",
+       "query": "Node.js LTS release: The latest LTS release of Node.js is Node 20. (as of 2026)",
+       "is_authoritative": true,
+       "retrieved_at": "2026-11-13T09:20:24.884972Z"
+      },
+      {
+       "url": "https://aws.amazon.com/blogs/developer/aws-sdk-for-javascript-aligns-with-node-js-release-schedule",
+       "title": "AWS SDK for JavaScript aligns with Node.js release schedule | AWS Developer Tools Blog",
+       "content": "The Node.js release schedule states that LTS versions reach EOL in April, and there are three LTS versions supported at any point in time. For example, Node.js 18.x was supported until April 2025 (until Node.js 24.x was published), and Node.js 20.x will be supported until April 2026 (until the next LTS version of Node.js will be published). In accordance with the AWS SDKs and Tools maintenance policy for language runtimes, the JS SDK will support each Node.js major version for an additional 8 [...] | Node.js Version | Release Date | Node.js End of Life | JS SDK End of Support |\n ---  --- |\n| 18.x | April 2022 | April 2025 | January 2026: Migrate to 20.x+ and ES2023+ |\n| 20.x | April 2023 | April 2026\\ | January 2027\\: Migrate to 22.x+ and ES2024+ |\n| 22.x | April 2024 | April 2027\\ | January 2028\\: Migrate to 24.x+ and ES2025+ |\n| 24.x | April 2025 | April 2028\\ | January 2029\\: Migrate to 26.x+ and ES2026+ |\n\n\\ These dates are speculative based on Node.js release schedule.",
+       "published_date": "Mon, 08 Dec 2025 17:32:10 GMT",
        "query": "Node.js LTS release: The latest LTS release of Node.js is Node 20. (as of 2026)",
        "is_authoritative": false,
-       "retrieved_at": "2026-11-12T17:22:47.319082Z"
+       "retrieved_at": "2026-11-13T09:20:24.884972Z"
       },
       {
-       "url": "https://jacar.es/en/node-26-lts-docker-upgrade-from-node-24",
-       "title": "Node.js 26 LTS in Docker: upgrading from Node 24",
-       "content": "In maintenance, a line only gets critical and security fixes. Node 24 remains a valid base until 2028, but new improvements only land in Node 26.\n\nNode 26 is also the last even release of the old scheme. From Node 27 on, according to the March 2026 announcement of the new schedule, there will be one major a year and every one will become LTS. The working group put it this way: \"Odd-numbered releases see minimal adoption. Most users wait for Long-Term Support.\"",
-       "published_date": "Fri, 30 Oct 2026 01:00:00 GMT",
-       "query": "Node.js LTS release: The latest LTS release of Node.js is Node 20. (as of 2026)",
-       "is_authoritative": false,
-       "retrieved_at": "2026-11-12T17:22:47.319082Z"
-      },
-      {
-       "url": "https://nodejs.org/tr/blog/release/v20.9.0",
-       "title": "Node.js \u2014 Node.js 20.9.0 (LTS)",
-       "content": "G8ZlcRqZXTXTVmEvUmtg1qAyQq1zo3lwFP2o6CNHagoXv5iLlv/xSbC7IaKE+Mv1CP44lE9ynVy83i68SxKJJsfgsFK0hK8a+P2o6CNHagoXv5iLlv/xSbC7IaKE+Mv1CP44lE9ynVy83i68SxKJJsfgsFK0hK8a+m4o4kRfvnnEV7BSjchp8NRRAR9qMbbFLR0NJF+l+WnDzMyewcrD1BptdPjrOck3dm4o4kRfvnnEV7BSjchp8NRRAR9qMbbFLR0NJF+l+WnDzMyewcrD1BptdPjrOck3dLtDoOe8w2hLyTasHyATg9apqQeG2x4EI/oaR9vSYrstRc7OtGcDYoJN3+GvSrL3DLtDoOe8w2hLyTasHyATg9apqQeG2x4EI/oaR9vSYrstRc7OtGcDYoJN3+GvSrL3D [...] +yWchA1XnBD5CaRXBA3Ikq5nzePktwyvyyZH5YGvMuheOBp5oh7qYWGaSyG+OZdv [...] Skip to content\n\n# Node.js 20.9.0 (LTS)\n\nRL\n\nRichard Lau\n\nNode.js 20.9.0 (LTS)\n\n## 2023-10-24, Version 20.9.0 'Iron' (LTS), @richardlau\n\n### Notable Changes\n\nThis release marks the transition of Node.js 20.x into Long Term Support (LTS) with the codename 'Iron'. The 20.x release line now moves into \"Active LTS\" and will remain so until October 2024. After that time, it will move into \"Maintenance\" until end of life in April 2026.\n\n### Known issue",
-       "published_date": null,
+       "url": "https://nodejs.org/en/about/previous-releases",
+       "title": "Node.js \u2014 Node.js Releases",
+       "content": "| Node.js | Codename | First released | Last updated | Status |\n ---  --- \n| v27   |  | Alpha |  |\n| v26 | Lithium |  |  | LTS |  |\n| v25   |  | EOL |  |\n| v24 | Krypton |  |  | LTS |  |\n| v23   |  | EOL |  |\n| v22 | Jod |  |  | LTS |  |\n| v21   |  | EOL |  |\n| v20 | Iron |  |  | EOL |  |\n| v19   |  | EOL |  |\n| v18 | Hydrogen |  |  | EOL |  |\n| v17   |  | EOL |  |\n| v16 | Gallium |  |  | EOL |  |\n| v15   |  | EOL |  |\n| v14 | Fermium |  |  | EOL |  |\n| v13   |  | EOL |  | [...] Major Node.js versions enter Current release status for six months, which gives library authors time to add support for them. Historically (up to Node.js 26), odd-numbered releases (9, 11, etc.) become unsupported after six months, and even-numbered releases (10, 12, etc.) move to Active LTS status and are ready for general use. Starting with Node.js 27, the release cycle will be annual and every major version will move to LTS status after its six-month Current phase (and six additional months [...] additional months of Alpha phase). LTS release status is \"long-term support\", which typically guarantees that critical bugs will be fixed for a total of 30 months. Production applications should only use Active LTS or Maintenance LTS releases.",
+       "published_date": "Wed, 11 Nov 2026 00:00:00 GMT",
        "query": "Node.js LTS release: The latest LTS release of Node.js is Node 20. (as of 2026)",
        "is_authoritative": true,
-       "retrieved_at": "2026-11-12T17:22:47.319197Z"
+       "retrieved_at": "2026-11-13T09:20:24.885121Z"
       },
       {
-       "url": "https://nodejs.org/uk/blog/release/v20.9.0",
-       "title": "Node.js \u2014 Node.js 20.9.0 (LTS)",
-       "content": "G8ZlcRqZXTXTVmEvUmtg1qAyQq1zo3lwFP2o6CNHagoXv5iLlv/xSbC7IaKE+Mv1CP44lE9ynVy83i68SxKJJsfgsFK0hK8a+P2o6CNHagoXv5iLlv/xSbC7IaKE+Mv1CP44lE9ynVy83i68SxKJJsfgsFK0hK8a+m4o4kRfvnnEV7BSjchp8NRRAR9qMbbFLR0NJF+l+WnDzMyewcrD1BptdPjrOck3dm4o4kRfvnnEV7BSjchp8NRRAR9qMbbFLR0NJF+l+WnDzMyewcrD1BptdPjrOck3dLtDoOe8w2hLyTasHyATg9apqQeG2x4EI/oaR9vSYrstRc7OtGcDYoJN3+GvSrL3DLtDoOe8w2hLyTasHyATg9apqQeG2x4EI/oaR9vSYrstRc7OtGcDYoJN3+GvSrL3D [...] +yWchA1XnBD5CaRXBA3Ikq5nzePktwyvyyZH5YGvMuheOBp5oh7qYWGaSyG+OZdv [...] \u041f\u0435\u0440\u0435\u0439\u0442\u0438 \u0434\u043e \u0432\u043c\u0456\u0441\u0442\u0443\n\n# Node.js 20.9.0 (LTS)\n\nRL\n\nRichard Lau\n\nNode.js 20.9.0 (LTS)\n\n## 2023-10-24, Version 20.9.0 'Iron' (LTS), @richardlau\n\n### Notable Changes\n\nThis release marks the transition of Node.js 20.x into Long Term Support (LTS) with the codename 'Iron'. The 20.x release line now moves into \"Active LTS\" and will remain so until October 2024. After that time, it will move into \"Maintenance\" until end of life in April 2026.\n\n### Known issue",
-       "published_date": null,
+       "url": "https://nodejs.org/en/blog/announcements/evolving-the-nodejs-release-schedule",
+       "title": "Node.js \u2014 Evolving the Node.js Release Schedule",
+       "content": "| Milestone | Date |\n --- |\n| 26.0.0 | April 2026 |\n| Enters LTS | October 2026 |\n| Maintenance | October 2027 |\n| End of Life | April 2029 |\n\nNode.js 26 follows the existing schedule. This is the last release line under the current model.\n\n### Node.js 27 Schedule (new model)\n\n| Milestone | Date |\n --- |\n| Alpha begins | October 2026 |\n| 27.0.0 | April 2027 |\n| Enters LTS | October 2027 |\n| End of Life | April 2030 |\n\nNode.js 27 is the first release line under the new schedule. [...] | Version | Alpha | Current | LTS | End of Life |\n ---  --- \n| 27.x | Oct 2026 | Apr 2027 | Oct 2027 | Apr 2030 |\n| 28.x | Oct 2027 | Apr 2028 | Oct 2028 | Apr 2031 |\n| 29.x | Oct 2028 | Apr 2029 | Oct 2029 | Apr 2032 |\n| 30.x | Oct 2029 | Apr 2030 | Oct 2030 | Apr 2033 |\n| 31.x | Oct 2030 | Apr 2031 | Oct 2031 | Apr 2034 |\n| 32.x | Oct 2031 | Apr 2032 | Oct 2032 | Apr 2035 |\n| 33.x | Oct 2032 | Apr 2033 | Oct 2033 | Apr 2036 |\n| 34.x | Oct 2033 | Apr 2034 | Oct 2034 | Apr 2037 | [...] One major release per year (April), with LTS promotion in October.\n Every release becomes LTS. No more odd/even distinction - Node.js 27 will become LTS.\n Alpha channel for early testing with semver-major changes allowed.\n Alpha versioning follows semver prerelease format (e.g., `27.0.0-alpha.1`).\n Version numbers align with the calendar year of their initial Current release: 27.0.0 in 2027, 28.0.0 in 2028.\n Reduced Releasers' burden.\n\n### New Schedule",
+       "published_date": "Tue, 10 Mar 2026 00:00:00 GMT",
        "query": "Node.js LTS release: The latest LTS release of Node.js is Node 20. (as of 2026)",
        "is_authoritative": true,
-       "retrieved_at": "2026-11-12T17:22:47.319197Z"
+       "retrieved_at": "2026-11-13T09:20:24.885121Z"
       },
       {
-       "url": "https://nodejs.org/ko/blog/release/v20.9.0",
-       "title": "Node.js \u2014 Node.js 20.9.0 (LTS)",
-       "content": "G8ZlcRqZXTXTVmEvUmtg1qAyQq1zo3lwFP2o6CNHagoXv5iLlv/xSbC7IaKE+Mv1CP44lE9ynVy83i68SxKJJsfgsFK0hK8a+P2o6CNHagoXv5iLlv/xSbC7IaKE+Mv1CP44lE9ynVy83i68SxKJJsfgsFK0hK8a+m4o4kRfvnnEV7BSjchp8NRRAR9qMbbFLR0NJF+l+WnDzMyewcrD1BptdPjrOck3dm4o4kRfvnnEV7BSjchp8NRRAR9qMbbFLR0NJF+l+WnDzMyewcrD1BptdPjrOck3dLtDoOe8w2hLyTasHyATg9apqQeG2x4EI/oaR9vSYrstRc7OtGcDYoJN3+GvSrL3DLtDoOe8w2hLyTasHyATg9apqQeG2x4EI/oaR9vSYrstRc7OtGcDYoJN3+GvSrL3D [...] +yWchA1XnBD5CaRXBA3Ikq5nzePktwyvyyZH5YGvMuheOBp5oh7qYWGaSyG+OZdv [...] Skip to content\n\n# Node.js 20.9.0 (LTS)\n\nRL\n\nRichard Lau\n\nNode.js 20.9.0 (LTS)\n\n## 2023-10-24, Version 20.9.0 'Iron' (LTS), @richardlau\n\n### Notable Changes\n\nThis release marks the transition of Node.js 20.x into Long Term Support (LTS) with the codename 'Iron'. The 20.x release line now moves into \"Active LTS\" and will remain so until October 2024. After that time, it will move into \"Maintenance\" until end of life in April 2026.\n\n### Known issue",
-       "published_date": null,
+       "url": "https://nodejs.org/en/blog/release/v24.20.0",
+       "title": "Node.js \u2014 Node.js 24.20.0 (LTS)",
+       "content": "Skip to content\n\n# Node.js 24.20.0 (LTS)\n\nADH\n\nAntoine du Hamel\n\nNode.js 24.20.0 (LTS)\n\n## 2026-08-26, Version 24.20.0 'Krypton' (LTS), @aduh95\n\n### Notable Changes [...] PreviousNode.js 26.8.0 (Current)NextNode.js 26.7.0 (Current) [...] d5e5a9043145392e4db85567d34abf7c070126ad35d2a7ee40399af2a5482f04    win-arm64/node_pdb.7z07725b0c16bd32876f44a0315e251aafa84568b0b1d98c9b76991873174e2637  win-arm64/node_pdb.zip 07725b0c16bd32876f44a0315e251aafa84568b0b1d98c9b76991873174e2637    win-arm64/node_pdb.zip5c976096e04e5c2c1f091938926234cc9fbebfe9787ddd149351b3b0ecc707b5  win-x64/node.exe 5c976096e04e5c2c1f091938926234cc9fbebfe9787ddd149351b3b0ecc707b5    win-x64/node.exe63ec831bbf164d1b23197d6fac1944dfb146534e332889ca0755d250e8dedff9",
+       "published_date": "Wed, 26 Aug 2026 00:00:00 GMT",
        "query": "Node.js LTS release: The latest LTS release of Node.js is Node 20. (as of 2026)",
        "is_authoritative": true,
-       "retrieved_at": "2026-11-12T17:22:47.319197Z"
+       "retrieved_at": "2026-11-13T09:20:24.885121Z"
       },
       {
-       "url": "https://nodejs.org/ja/blog/release/v20.9.0",
-       "title": "Node.js \u2014 Node.js 20.9.0 (LTS)",
-       "content": "G8ZlcRqZXTXTVmEvUmtg1qAyQq1zo3lwFP2o6CNHagoXv5iLlv/xSbC7IaKE+Mv1CP44lE9ynVy83i68SxKJJsfgsFK0hK8a+P2o6CNHagoXv5iLlv/xSbC7IaKE+Mv1CP44lE9ynVy83i68SxKJJsfgsFK0hK8a+m4o4kRfvnnEV7BSjchp8NRRAR9qMbbFLR0NJF+l+WnDzMyewcrD1BptdPjrOck3dm4o4kRfvnnEV7BSjchp8NRRAR9qMbbFLR0NJF+l+WnDzMyewcrD1BptdPjrOck3dLtDoOe8w2hLyTasHyATg9apqQeG2x4EI/oaR9vSYrstRc7OtGcDYoJN3+GvSrL3DLtDoOe8w2hLyTasHyATg9apqQeG2x4EI/oaR9vSYrstRc7OtGcDYoJN3+GvSrL3D [...] +yWchA1XnBD5CaRXBA3Ikq5nzePktwyvyyZH5YGvMuheOBp5oh7qYWGaSyG+OZdv [...] \u30b3\u30f3\u30c6\u30f3\u30c4\u306b\u30b9\u30ad\u30c3\u30d7\n\n# Node.js 20.9.0 (LTS)\n\nRL\n\nRichard Lau\n\nNode.js 20.9.0 (LTS)\n\n## 2023-10-24, Version 20.9.0 'Iron' (LTS), @richardlau\n\n### Notable Changes\n\nThis release marks the transition of Node.js 20.x into Long Term Support (LTS) with the codename 'Iron'. The 20.x release line now moves into \"Active LTS\" and will remain so until October 2024. After that time, it will move into \"Maintenance\" until end of life in April 2026.\n\n### Known issue",
-       "published_date": null,
+       "url": "https://nodejs.org/en/blog/vulnerability/october-2026-security-releases",
+       "title": "Node.js \u2014 Wednesday, October 21, 2026 Security Releases",
+       "content": "Skip to content\n\nCommercial support for versions past the Maintenance LTS phase is available through our OpenJS Ecosystem Sustainability Program partners\n\n# Wednesday, October 21, 2026 Security Releases\n\nTNJP\n\nThe Node.js Project\n\nWednesday, October 21, 2026 Security Releases\n\n## Security releases available\n\nUpdates are now available for the 26.x, 24.x, 22.x Node.js release lines for the following issues. [...] It's important to note that End-of-Life versions are always affected when a security release occurs. To ensure your system's security, please use an up-to-date version as outlined in our Release Schedule.\n\n## Release timing\n\nReleases will be available on, or shortly after, Wednesday, October 21, 2026.\n\n## Contact and future updates\n\nThe current Node.js security policy can be found at . Please follow the process outlined in  if you wish to report a vulnerability in Node.js.",
+       "published_date": "Wed, 21 Oct 2026 00:00:00 GMT",
        "query": "Node.js LTS release: The latest LTS release of Node.js is Node 20. (as of 2026)",
        "is_authoritative": true,
-       "retrieved_at": "2026-11-12T17:22:47.319197Z"
-      },
-      {
-       "url": "https://nodejs.org/en/blog/release/v22.11.0#2024-10-29-version-22110-jod-lts-richardlau",
-       "title": "Node.js \u2014 Node.js 22.11.0 (LTS)",
-       "content": "0861cf0f1ff6135a21eb26279fc6a6f7dc9d9c0ac926a17553f387c32945eea5    win-arm64/node_pdb.7zf35c2d1a967080b0a1e288b891cb9300a04d0b90042bac8c965c9ebcfc3749bf  win-arm64/node_pdb.zip f35c2d1a967080b0a1e288b891cb9300a04d0b90042bac8c965c9ebcfc3749bf    win-arm64/node_pdb.zip7447c4ece014aa41fb2ff866c993c708e5a8213a00913cc2ac5049ea3ffc230d  win-x64/node.exe 7447c4ece014aa41fb2ff866c993c708e5a8213a00913cc2ac5049ea3ffc230d    win-x64/node.exe3581a06b68c4584d146372113eaa8c4d102127222e5041195ba38f185eef419c [...] +So+dkCYqaBbxx48VZ+QKrPDlOVoTn1urUTYTti95qtZYkH2MVmFk9oMgRPXDoVPDo278eTNqDEIQfOFKz5vq7D54jfRmu+tTH4/JpSwnrtYIYnM9bEIMXgfoEuZtO0zDo278eTNqDEIQfOFKz5vq7D54jfRmu+tTH4/JpSwnrtYIYnM9bEIMXgfoEuZtO0zzsjy7I/5ZMEMQh7BGbUN8O7IxiJ4W3dG4kS2c9ZcXnNMIOK3OT8AjxQVS3fVffkwzsjy7I/5ZMEMQh7BGbUN8O7IxiJ4W3dG4kS2c9ZcXnNMIOK3OT8AjxQVS3fVffkw Xj7g2ossVMXiLzQPv82oZEFcUoKApBjAmyvwMZyOg7CorJCSN4v6bnHhcpUqge2a [...] win-x64/node_pdb.zipe54a4559dafd56562a45b50000831d28ee2f7f1ac4ff98b38165871f31f64ab8  win-x86/node.exe e54a4559dafd56562a45b50000831d28ee2f7f1ac4ff98b38165871f31f64ab8    win-x86/node.exe45399070d1d247cf223d12e80d3e638635af24d2f7a4714bc8e38a6a918f162a  win-x86/node.lib 45399070d1d247cf223d12e80d3e638635af24d2f7a4714bc8e38a6a918f162a    win-x86/node.liba78040dbb0e7296eebe90c235091ee46a8a01587a226bf4e5a01f5b399e153d7  win-x86/node_pdb.7z",
-       "published_date": null,
-       "query": "Node.js LTS release: The latest LTS release of Node.js is Node 20. (as of 2026)",
-       "is_authoritative": true,
-       "retrieved_at": "2026-11-12T17:22:47.319197Z"
+       "retrieved_at": "2026-11-13T09:20:24.885121Z"
       }
      ],
      "verdict": {
       "claim_id": "c2",
       "label": "changed",
-      "supporting_quote": "Node.js 26 | Active LTS since October 28, 2026 (latest LTS, v26.13.0)",
-      "supporting_url": "https://ecorpit.com/nodejs-one-release-per-year-node-27-lts-upgrade-cadence-2026",
-      "current_value": null,
+      "supporting_quote": "Node.js 24 is the latest Long-Term Support release, and Node.js 26 is the Current release line. Node.js 18 and Node.js 20, meanwhile, have both reached End-of-Life (EOL).",
+      "supporting_url": "http://nodesource.com/blog/nodejs-18-20-eol-136-million-downloads-july-2026",
+      "current_value": "Node.js 24",
       "source_urls": [
-       "https://ecorpit.com/nodejs-one-release-per-year-node-27-lts-upgrade-cadence-2026",
-       "https://www.techbellasolutions.com/blogs/node-js-lts-version-guide"
+       "http://nodesource.com/blog/nodejs-18-20-eol-136-million-downloads-july-2026"
       ],
-      "reasoning": "Node.js 20 reached end of life on 30 April 2026, and the evidence states Node 26 became the latest LTS on 28 October 2026. Today's date (2026-11-12) is after that, so the claim that Node 20 is the latest LTS no longer holds.",
+      "reasoning": "The claim that Node 20 is the latest LTS is no longer true; Node 20 reached EOL on April 30, 2026. The evidence states Node.js 24 is the latest LTS release.",
       "quote_verified": true
      },
      "freshness_score": 5.0,
@@ -278,11 +260,11 @@
    "answer_score": 5.0,
    "usage": {
     "model_calls": 3,
-    "model_cost_usd": 0.001618,
+    "model_cost_usd": 0.001403,
     "tavily_calls": 4,
     "tavily_credits": 0,
     "tavily_cache_hits": 4,
-    "latency_ms": 3211.8,
+    "latency_ms": 3259.0,
     "models_used": [
      "claude-haiku-5-5"
     ],
@@ -295,12 +277,12 @@
  },
  "timeless": {
   "answer": "Water boils at 100 degrees Celsius at sea level, and the speed of light is about 299,792 km/s.",
-  "recorded_at": "2026-11-12T17:22:50.390905+00:00",
+  "recorded_at": "2026-11-13T09:20:27.893214+00:00",
   "report": {
    "answer": "Water boils at 100 degrees Celsius at sea level, and the speed of light is about 299,792 km/s.",
    "model": "anthropic/claude-haiku-5-5",
    "mode": "check",
-   "checked_at": "2026-11-12T17:22:50.390811Z",
+   "checked_at": "2026-11-13T09:20:27.893119Z",
    "verification_budget": null,
    "claims": [
     {
@@ -317,7 +299,7 @@
      },
      "risk": {
       "claim_id": "c1",
-      "age_days": 135.0,
+      "age_days": 136.0,
       "age_basis": "model_cutoff",
       "half_life_days": null,
       "half_life_source": "prior_guess",
@@ -347,7 +329,7 @@
      },
      "risk": {
       "claim_id": "c2",
-      "age_days": 135.0,
+      "age_days": 136.0,
       "age_basis": "model_cutoff",
       "half_life_days": null,
       "half_life_source": "prior_guess",
@@ -367,11 +349,11 @@
    "answer_score": null,
    "usage": {
     "model_calls": 1,
-    "model_cost_usd": 0.000188,
+    "model_cost_usd": 0.000209,
     "tavily_calls": 0,
     "tavily_credits": 0,
     "tavily_cache_hits": 0,
-    "latency_ms": 1335.4,
+    "latency_ms": 1368.8,
     "models_used": [
      "claude-haiku-5-5"
     ],
@@ -384,12 +366,12 @@
  },
  "mixed": {
   "answer": "Satya Nadella is the CEO of Microsoft. A Netflix Standard plan costs $15.49 per month.",
-  "recorded_at": "2026-11-12T17:22:57.415901+00:00",
+  "recorded_at": "2026-11-13T09:20:33.533135+00:00",
   "report": {
    "answer": "Satya Nadella is the CEO of Microsoft. A Netflix Standard plan costs $15.49 per month.",
    "model": "anthropic/claude-haiku-5-5",
    "mode": "check",
-   "checked_at": "2026-11-12T17:22:57.415881Z",
+   "checked_at": "2026-11-13T09:20:33.533073Z",
    "verification_budget": null,
    "claims": [
     {
@@ -406,11 +388,11 @@
      },
      "risk": {
       "claim_id": "c1",
-      "age_days": 135.0,
+      "age_days": 136.0,
       "age_basis": "model_cutoff",
       "half_life_days": 900.0,
       "half_life_source": "prior_guess",
-      "p_stale": 0.0987,
+      "p_stale": 0.0994,
       "recommended_ttl_days": 66.6,
       "rank_score": 0.05,
       "rank_basis": "model_p"
@@ -424,16 +406,16 @@
        "published_date": null,
        "query": "Satya Nadella: Satya Nadella is the CEO of Microsoft. (as of 2026)",
        "is_authoritative": false,
-       "retrieved_at": "2026-11-12T17:22:51.966100Z"
+       "retrieved_at": "2026-11-13T09:20:31.749192Z"
       },
       {
        "url": "https://www.youtube.com/watch?v=BKx0Dp8y-6g",
        "title": "Satya Nadella: AI Is the Future of the Firm",
-       "content": "Reid sits down with Microsoft CEO Satya Nadella fresh off Microsoft Build 2026. The conversation goes wide: how AI is reshaping work, business, and society\u2014and why the transformation sweeping through software development today is only a preview of what's coming for all knowledge work. Satya makes the case that human capital and \"token capital\" are now deeply intertwined, that companies\u2014not just countries\u2014must build their own AI capabilities, and that the organizations best positioned to thrive",
+       "content": "Reid sits down with Microsoft CEO Satya Nadella fresh off Microsoft Build 2026. The conversation goes wide: how AI is reshaping work, business, and society\u2014and why the transformation sweeping through software development today is only a preview of what's coming for all knowledge work. Satya makes the case that human capital and \"token capital\" are now deeply intertwined, that companies\u2014not just countries\u2014must build their own AI capabilities, and that the organizations best positioned to thrive [...] [0:23] going to be everything, right? I think I would be very surprised, Reed, if you were sitting here a year from now if the\n[0:30] world is not completely turned on what is my AI supply chain look like.\n[0:37] I couldn't be more delighted to introduce a special episode of possible with Sacha Nadella, the chairman and CEO\n[0:45] of Microsoft. Satcha and I have known each other a long time and part of in this this kind of AI revolution for [...] [27:43] 10 years on the Microsoft board. It's been a huge honor and pleasure with, you know, and not just LinkedIn, but obviously OpenAI, GitHub, a whole bunch\n[27:51] of things. But, you know, at the end of the year, I should really be transitioning right now to being founder mode. So, like, you know, it's like, and\n[28:00] you know, we'll always be working together. So, it's like, but but you know, it's time to kind of dig back into the company. You know, first of all,",
        "published_date": "Fri, 05 Jun 2026 00:00:00 GMT",
        "query": "Satya Nadella: Satya Nadella is the CEO of Microsoft. (as of 2026)",
        "is_authoritative": false,
-       "retrieved_at": "2026-11-12T17:22:51.966100Z"
+       "retrieved_at": "2026-11-13T09:20:31.749192Z"
       },
       {
        "url": "https://stratechery.com/2026/an-interview-with-microsoft-ceo-satya-nadella-about-finding-core-competencies",
@@ -442,16 +424,16 @@
        "published_date": "Thu, 04 Jun 2026 10:00:00 GMT",
        "query": "Satya Nadella: Satya Nadella is the CEO of Microsoft. (as of 2026)",
        "is_authoritative": false,
-       "retrieved_at": "2026-11-12T17:22:51.966100Z"
+       "retrieved_at": "2026-11-13T09:20:31.749192Z"
       },
       {
-       "url": "https://www.geekwire.com/2026/from-h-1b-to-ceo-how-satya-nadella-traveled-the-path-the-u-s-just-cut-off-for-microsoft-workers",
-       "title": "From H-1B to CEO: How Satya Nadella traveled the path the U.S. just cut off for Microsoft workers \u2013 GeekWire",
-       "content": "Satya Nadella arrived in the U.S. from India in 1988 to study computer science. Over the next three decades, he went from a temporary work visa to permanent residency to American citizenship, and rose up the ranks at Microsoft to become only the third CEO in its history.\n\n\u201cI don\u2019t think my story would be possible anywhere else,\u201d Nadella wrote in his 2017 book, \u201cHit Refresh.\u201d \u201cI am proud today to call myself an American citizen.\u201d [...] On Thursday, President Trump personally handed the Microsoft CEO the National Medal of Technology and Innovation. The award cited his \u201ctransformative leadership of a critical American technology company, which led to its rejuvenation for a new era of cloud computing.\u201d [...] Microsoft is the biggest user of PERM. The Labor Department ruled on 3,161 of its applications in the fiscal year that ended in September 2025, more than for any other employer in the country, according to a GeekWire analysis of the agency\u2019s data. Microsoft also led in the first nine months of fiscal 2026, with 1,683 applications decided through June.",
-       "published_date": "Fri, 09 Oct 2026 17:48:47 GMT",
+       "url": "https://www.facebook.com/fareedzakaria/videos/microsoft-ceo-satya-nadella-made-headlines-earlier-this-month-when-he-warned-tha/1344036211210716",
+       "title": "36K views \u00b7 261 reactions | Microsoft CEO Satya Nadella made headlines earlier this month when he warned that companies using AI \"pay for intelligence twice.\" Fareed and Satya discussed what this means -- and potential solutions -- in part 2 of their conversation: | Fareed Zakaria",
+       "content": "Log In\n\nLog In\n\nForgot Account?\n\n# Video\n\nHome\n\nLive\n\nReels\n\nExplore\n\nMore\n\nHome\n\nLive\n\nReels\n\nExplore\n\nVideo 1\n\n0:00 / 6:37\n\nMicrosoft CEO Satya Nadella made headlines earlier this month when he warned that companies using AI \"pay for intelligence twice.\" Fareed and Satya discussed what this means -- and potential solutions -- in part 2 of their conversation:\n\nLike\n\nComment\n\nShare\n\nImage 1\n\n261\n\n \u00b7 \n\n12 comments\n\n \u00b7 \n\n36K views\n\n[](\n\n## Fareed Zakaria\n\nSunday, July 26, 2026 at 6:20 PM [...] [](\n\nWill the Republican shellacking in the midterm elections force President Trump to change the trajectory of his war with Iran? Fareed spoke with retired Admiral James Stavridis.\n\nFareed Zakaria\n\n38.4K views\n\n \u00b7 \n\n4d ago\n\nImage 7: Video thumbnail 6:49\n\n[]( [...] July 26 \u00b7 \n\nFollow\n\nMicrosoft CEO Satya Nadella made headlines earlier this month when he warned that companies using AI\u2026\n\nSee more\n\n## Comments\n\nMost relevant\n\n[](\n\nRandal B Adcock\n\nWhen in the history of humanity did lesser intelligence supervise greater intelligence? \n\nAI has values too. We're just waiting to see how those values evolve.\n\n   15w \n\n1\n\nImage 2\n\nView all 2 replies\n\nMatt Goolsby",
+       "published_date": "Fri, 14 Aug 2026 06:00:00 GMT",
        "query": "Satya Nadella: Satya Nadella is the CEO of Microsoft. (as of 2026)",
        "is_authoritative": false,
-       "retrieved_at": "2026-11-12T17:22:51.966100Z"
+       "retrieved_at": "2026-11-13T09:20:31.749192Z"
       },
       {
        "url": "https://finance.yahoo.com/technology/article/microsoft-ceo-satya-nadella-on-ai-trust-is-going-to-be-the-biggest-issue-for-us-163733897.html",
@@ -460,7 +442,7 @@
        "published_date": "Fri, 25 Sep 2026 00:00:00 GMT",
        "query": "Satya Nadella: Satya Nadella is the CEO of Microsoft. (as of 2026)",
        "is_authoritative": false,
-       "retrieved_at": "2026-11-12T17:22:51.966100Z"
+       "retrieved_at": "2026-11-13T09:20:31.749192Z"
       },
       {
        "url": "https://news.microsoft.com/source/exec/satya-nadella",
@@ -469,7 +451,7 @@
        "published_date": "Tue, 04 Feb 2014 00:00:00 GMT",
        "query": "Satya Nadella: Satya Nadella is the CEO of Microsoft. (as of 2026)",
        "is_authoritative": true,
-       "retrieved_at": "2026-11-12T17:22:51.966262Z"
+       "retrieved_at": "2026-11-13T09:20:31.749322Z"
       },
       {
        "url": "https://news.microsoft.com/build-2026",
@@ -478,16 +460,7 @@
        "published_date": "Sun, 27 Sep 2026 16:00:00 GMT",
        "query": "Satya Nadella: Satya Nadella is the CEO of Microsoft. (as of 2026)",
        "is_authoritative": true,
-       "retrieved_at": "2026-11-12T17:22:51.966262Z"
-      },
-      {
-       "url": "https://learn.microsoft.com/en-gb/answers/questions/5297643/whos-owned-microsoft",
-       "title": "Who's owned Microsoft? - Microsoft Q&A",
-       "content": "Other notable owners include the State Street Corporation and the Capital Group Companies^2^. Please note that these ownership percentages are based on the latest available data and may have changed^1^.\n\n   0 comments No comments\n2. \n\n   Anonymous\n\n   2024-01-05T09:04:24+00:00\n\n   Microsoft was founded by Bill Gates and Paul Allen in 1975. Currently, the CEO of Microsoft is Satya Nadella. Microsoft is a publicly traded company, which means that it is owned by its shareholders.",
-       "published_date": "Fri, 05 Jan 2024 03:43:03 GMT",
-       "query": "Satya Nadella: Satya Nadella is the CEO of Microsoft. (as of 2026)",
-       "is_authoritative": true,
-       "retrieved_at": "2026-11-12T17:22:51.966262Z"
+       "retrieved_at": "2026-11-13T09:20:31.749322Z"
       },
       {
        "url": "https://news.microsoft.com/source/leadership",
@@ -496,16 +469,25 @@
        "published_date": "Mon, 08 Dec 2025 00:00:00 GMT",
        "query": "Satya Nadella: Satya Nadella is the CEO of Microsoft. (as of 2026)",
        "is_authoritative": true,
-       "retrieved_at": "2026-11-12T17:22:51.966262Z"
+       "retrieved_at": "2026-11-13T09:20:31.749322Z"
       },
       {
-       "url": "https://blogs.microsoft.com/blog/2025/07/24/recommitting-to-our-why-what-and-how",
-       "title": "Recommitting to our why, what, and how - The Official Microsoft Blog",
-       "content": "# Recommitting to our why, what, and how\n\n|  Microsoft Corporate Blogs\n\nSatya Nadella, Chairman and CEO, shared the below communication with Microsoft employees this morning.\n\nAs we begin a new fiscal year, I\u2019ve been reflecting on the road we\u2019ve traveled together and the path ahead.",
-       "published_date": "Thu, 24 Jul 2025 16:19:41 GMT",
+       "url": "https://blogs.microsoft.com/blog/2026/10/01/microsoft-365-and-linkedin-leadership-update",
+       "title": "Microsoft 365 and LinkedIn leadership update - The Official Microsoft Blog",
+       "content": "# Microsoft 365 and LinkedIn leadership update\n\n|  Microsoft Corporate Blogs\n\nSatya Nadella, Chairman and CEO, and Ryan Roslansky, Executive Vice President of LinkedIn and Microsoft 365, shared the below communications with Microsoft and LinkedIn employees this morning.\n\n### SATYA NADELLA MESSAGE\n\nAfter nearly 18 years at LinkedIn and Microsoft, Ryan Roslansky has decided to leave Microsoft and embark on his next chapter.",
+       "published_date": "Thu, 01 Oct 2026 15:03:27 GMT",
        "query": "Satya Nadella: Satya Nadella is the CEO of Microsoft. (as of 2026)",
        "is_authoritative": true,
-       "retrieved_at": "2026-11-12T17:22:51.966262Z"
+       "retrieved_at": "2026-11-13T09:20:31.749322Z"
+      },
+      {
+       "url": "https://www.microsoft.com/en-us/haxtoolkit/author/satya-nadella",
+       "title": "Satya Nadella, Author at Microsoft HAX Toolkit",
+       "content": "# Satya Nadella\n\nCEO\n\n \n\n### Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui.\n\nLearn more\n\n \n\n### Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui.\n\nLearn more",
+       "published_date": null,
+       "query": "Satya Nadella: Satya Nadella is the CEO of Microsoft. (as of 2026)",
+       "is_authoritative": true,
+       "retrieved_at": "2026-11-13T09:20:31.749322Z"
       }
      ],
      "verdict": {
@@ -516,9 +498,9 @@
       "current_value": null,
       "source_urls": [
        "https://news.microsoft.com/build-2026",
-       "https://www.geekwire.com/2026/from-h-1b-to-ceo-how-satya-nadella-traveled-the-path-the-u-s-just-cut-off-for-microsoft-workers"
+       "https://blogs.microsoft.com/blog/2026/10/01/microsoft-365-and-linkedin-leadership-update"
       ],
-      "reasoning": "Multiple sources dated 2026 describe Satya Nadella as Microsoft's current Chairman and CEO. No evidence indicates a different CEO.",
+      "reasoning": "Multiple recent Microsoft sources, including an October 2026 Microsoft blog post, identify Satya Nadella as Chairman and CEO. No evidence states a different CEO.",
       "quote_verified": true
      },
      "freshness_score": 95.0,
@@ -539,11 +521,11 @@
      },
      "risk": {
       "claim_id": "c2",
-      "age_days": 135.0,
+      "age_days": 136.0,
       "age_basis": "model_cutoff",
       "half_life_days": 240.0,
       "half_life_source": "prior_guess",
-      "p_stale": 0.3229,
+      "p_stale": 0.3248,
       "recommended_ttl_days": 17.76,
       "rank_score": 0.5,
       "rank_basis": "model_p"
@@ -551,13 +533,22 @@
      "searched": true,
      "evidence": [
       {
+       "url": "https://www.instagram.com/p/DXJ5AhljsSO",
+       "title": "Instagram",
+       "content": "\ud83c\udfa5 \ud83c\udf7f \ud83d\udcfa   \nJust a heads up in case you didn\u2019t know about Netflix\u2019s price changes\u2026  \n  \nFor a while, their Standard plan sat at $15.49 and it stayed at that price for about 2 years before any increase.  \n  \nThen in 2025, it jumped to $17.99.  \n  \nNow in 2026, it\u2019s being raised again to $19.99.  \n  \nThat\u2019s a $4.50 increase in just a couple years, after being steady for quite a while. [...] It also includes FilmBox, which is nice because I can watch shows like Outlander that are normally only on platforms like Starz, plus other shows that are usually locked behind different subscriptions.  \n  \nStreaming used to feel like the cheaper alternative\u2026 but with prices continuing to climb like this, it can definitely start to add up. Anyone rethinking their subscriptions lately? \ud83d\udc40  \n  \nP.s We only pay for Netflix   \n  \n#Netflix #Netflixprices #streaming #StreamingService",
+       "published_date": null,
+       "query": "Netflix Standard plan: A Netflix Standard plan costs $15.49 per month. (as of 2026)",
+       "is_authoritative": false,
+       "retrieved_at": "2026-11-13T09:20:32.027610Z"
+      },
+      {
        "url": "https://checkthat.ai/brands/netflix/pricing",
        "title": "Netflix Pricing 2026: Total Cost & Competitors Compared - Netflix",
        "content": "| Plan | Monthly | Yearly (as $/mo) | Streams | Best For |\n ---  --- \n| Standard with Ads | $8.99 | Not offered | 2 | Budget-conscious solo viewers or couples who don't mind ads |\n| Standard | $19.99 | Not offered | 2 | Ad-free households that want full library access and the option to add extra members |\n\n## Copied to clipboardNetflix Add-Ons\n\nBeyond the two plan tiers, Netflix pricing includes paid extra-member options worth factoring into your monthly spend: [...] Frequent price hikes: Reddit users documented a jump from $15.49 to $19.99 within roughly a year, and Trustpilot reviewers report three price increases in two years with no corresponding improvement in the service.\n Extra member fees for household sharing: App Store reviewers call the add-on charges \"ridiculous,\" noting that the per-member fee on top of a plan payment can push household costs toward $40/month. [...] You want offline downloads on any plan: Both Netflix tiers support downloads, which matters if you commute or travel frequently and can't rely on a stable connection.\n Your household fits within two streams: If two simultaneous streams cover your needs and you don't require 4K, Netflix Standard at $19.99/month keeps things simple with no ads and full library access.",
        "published_date": "Fri, 07 Aug 2026 00:00:00 GMT",
        "query": "Netflix Standard plan: A Netflix Standard plan costs $15.49 per month. (as of 2026)",
        "is_authoritative": false,
-       "retrieved_at": "2026-11-12T17:22:55.877933Z"
+       "retrieved_at": "2026-11-13T09:20:32.027610Z"
       },
       {
        "url": "https://www.businessinsider.com/guides/streaming/netflix-price",
@@ -566,7 +557,7 @@
        "published_date": "Tue, 31 Mar 2026 20:29:51 GMT",
        "query": "Netflix Standard plan: A Netflix Standard plan costs $15.49 per month. (as of 2026)",
        "is_authoritative": false,
-       "retrieved_at": "2026-11-12T17:22:55.877933Z"
+       "retrieved_at": "2026-11-13T09:20:32.027610Z"
       },
       {
        "url": "https://variety.com/2026/tv/news/netflix-raising-prices-second-time-in-a-year-1236700999",
@@ -575,7 +566,7 @@
        "published_date": "Thu, 26 Mar 2026 19:08:25 GMT",
        "query": "Netflix Standard plan: A Netflix Standard plan costs $15.49 per month. (as of 2026)",
        "is_authoritative": false,
-       "retrieved_at": "2026-11-12T17:22:55.877933Z"
+       "retrieved_at": "2026-11-13T09:20:32.027610Z"
       },
       {
        "url": "https://www.facebook.com/thewaystowealth/posts/-twelve-streaming-services-raised-their-prices-in-2026-and-most-of-the-increases/1628328352023031",
@@ -584,61 +575,52 @@
        "published_date": "Mon, 19 Oct 2026 20:00:00 GMT",
        "query": "Netflix Standard plan: A Netflix Standard plan costs $15.49 per month. (as of 2026)",
        "is_authoritative": false,
-       "retrieved_at": "2026-11-12T17:22:55.877933Z"
+       "retrieved_at": "2026-11-13T09:20:32.027610Z"
       },
       {
-       "url": "https://www.facebook.com/wisn12/videos/netflix-is-raising-prices-again-across-all-subscription-plans/1950285698926576",
-       "title": "14K views \u00b7 46 reactions | Netflix is raising prices again across all subscription plans. | WISN 12 NEWS",
-       "content": "Log In\n\nLog In\n\nForgot Account?\n\n# Video\n\nHome\n\nLive\n\nReels\n\nExplore\n\nMore\n\nHome\n\nLive\n\nReels\n\nExplore\n\nImage 1\n\nVideo 1\n\nNetflix is raising prices again across all subscription plans.\n\nLike\n\nComment\n\nShare\n\nImage 2\n\nImage 3\n\nImage 4\n\n46\n\n \u00b7 \n\n18 comments\n\n \u00b7 \n\n14K views\n\n[](\n\n## WISN 12 NEWS\n\nFriday, March 27, 2026 at 12:07 AM\n\nMarch 27 \u00b7 \n\nFollow\n\nNetflix is raising prices again across all subscription plans.\n\n## Comments\n\nMost relevant\n\nErick Smith [...] See more on Facebook\n\nEmail or phone number\n\n \n\nPassword\n\n \n\nLog In\n\nForgot password?\n\nor\n\nCreate new account [...] \u00b7 \n\n4h ago\n\nImage 24: Video thumbnail 0:51\n\n[](\n\nA Florida sanctuary had to deliver food to one of its chimpanzees by drone after historic flooding made it difficult for staff to access the property. Read more about how they did it at the link in the comments.\n\nWISN 12 NEWS\n\n2K views\n\n \u00b7 \n\n8h ago\n\nImage 25: Video thumbnail 1:35\n\n[](",
-       "published_date": "Tue, 14 Apr 2026 19:00:00 GMT",
+       "url": "https://help.netflix.com/en/node/24926",
+       "title": "Plans and Pricing",
+       "content": "Option to add 1 extra member who doesn't live with you\nPremium   Unlimited ad-free movies, TV shows, and games\n\n   Watch on 4 supported devices at a time\n\n   Watch in 4K (Ultra HD) + HDR\n\n   Downloadon 6 supported devices at a time\n\n   Option to add up to 2 extra members who don't live with you\n\n   Netflix spatial audio\n\n### Pricing (US Dollar)\n\n   Standard with ads: $8.99 / month\n\n   Standard: $19.99 / month\n\n       Add 1 extra member for $7.99 / month with ads or $9.99 / month without ads [...] You cannot share your Netflix account outside of your household, which is a collection of devices connected to the internet at the main residence where you watch Netflix. People who are not in your household can be added as an extra member.\n\nNetflix Plans Features\nStandard with ads   Ad-supported, all games and most movies and TV shows are available. A lock icon will appear on unavailable titles.\n\n   Watch on 2 supported devices at a time\n\n   Watch in 1080p (Full HD) [...] Help Center\n\nJoin NetflixSign In\n\nHelp Center\n\n   Back to Help Home\n\nCurrently viewing information for: \n\nUnited States\n\n# Plans and Pricing\n\n A country must be selected to view content in this article. \n\nNetflix plans are billed monthly on the date you signed up. We do not offer annual, multi-month, or lifetime membership plans.\n\n\u200b\n\nSign up for Netflix today and choose from several payment options. You can easily change your plan or cancel at any time.",
+       "published_date": "Sat, 04 Apr 2015 00:00:00 GMT",
        "query": "Netflix Standard plan: A Netflix Standard plan costs $15.49 per month. (as of 2026)",
-       "is_authoritative": false,
-       "retrieved_at": "2026-11-12T17:22:55.877933Z"
+       "is_authoritative": true,
+       "retrieved_at": "2026-11-13T09:20:32.027755Z"
       },
       {
-       "url": "https://www.netflix.com/title/80238294",
-       "title": "Watch The Plan | Netflix",
-       "content": "## A Plan To Suit Your Needs\n\n### Standard with ads\n\n## 1080p\n\nGood video quality\n\nLess ads than you might think\n\n$8.99 /mo\n\n### Standard\n\n## 1080p\n\nGood video quality\n\nNo ads\n\n$19.99 /mo\n\n### Premium\n\n## 4K + HDR\n\nBest video quality\n\nImmersive sound (spatial audio)\n\nNo ads\n\n$26.99 /mo\n\nDiscover your next favorites, plus new releases every week\n\nMore About Netflix\n\nJoin Now Join Now Join Now Join Now Join Now Join Now Join Now\n\nQuestions? Call 1-844-569-7700 [...] FAQ\n   Help Center\n   Account\n   Netflix House\n   Media Center\n   Investor Relations\n   Jobs\n   Netflix Shop\n   Redeem Gift Cards\n   Buy Gift Cards\n   Ways to Watch\n   Terms of Use\n   Privacy\n   Cookie Preferences\n   Corporate Information\n   Contact Us\n   Speed Test\n   Legal Notices\n   Only on Netflix\n   Do Not Sell or Share My Personal Information\n   Ad Choices\n\nSelect Language \n\nImage 4: Netflix Logo\n\n## Privacy Preference Center\n\nOpt-Out Request Honored\n\n## Privacy Preference Center [...] may result in limited functionality.",
+       "url": "https://www.netflix.com/ms/title/81702550",
+       "title": "Watch Fading Grandeur | Netflix Official Site",
+       "content": "## Trending Now\n\n## A plan to suit your needs\n\n### Mobile\n\n## 480p\n\nFair video quality\n\nFor your phone or tablet\n\n\u20b9149 /mo\n\n### Basic\n\n## 720p\n\nGood video quality\n\nFor your phone, tablet, laptop and TV\n\n\u20b9199 /mo\n\nMost Popular\n\n### Standard\n\n## 1080p\n\nGreat video quality\n\nFor your phone, tablet, laptop and TV\n\n\u20b9499 /mo\n\n### Premium\n\n## 4K + HDR\n\nBest video quality\n\nImmersive sound (spatial audio)\n\nFor your phone, tablet, laptop and TV\n\n\u20b9649 /mo [...] \u20b9649 /mo\n\nDiscover your next favourites, plus new releases every week\n\nQuestions? Call 000-800-919-1743\n\nNetflix India [...] # Fading Grandeur\n\nEndless entertainment starting at \u20b9149\n\nEndless entertainment starting at \u20b9149\n\n## Fading Grandeur\n\n## Trailers\n\n1m 29s\n\nTRAILER\n\nSeason 1 Trailer: Fading Grandeur\n\n## Episodes\n\n1. The Marquis\n\nWith no money to pay for his daughter's wedding, marquis Leandro puts his mansion up for sale \u2014 and businesswoman Sof\u00eda could be the buyer he needs.\n\n2. Conchi",
        "published_date": null,
        "query": "Netflix Standard plan: A Netflix Standard plan costs $15.49 per month. (as of 2026)",
        "is_authoritative": true,
-       "retrieved_at": "2026-11-12T17:22:55.878022Z"
+       "retrieved_at": "2026-11-13T09:20:32.027755Z"
       },
       {
-       "url": "https://www.netflix.com/title/80104182",
-       "title": "Watch At All Costs | Netflix",
-       "content": "# At All Costs\n\n## At All Costs\n\n## More Details\n\n#### Genres\n\n#### This show is ...\n\n#### Cast\n\n## Trending Now\n\n## A Plan To Suit Your Needs\n\n### Standard with ads\n\n## 1080p\n\nGood video quality\n\nLess ads than you might think\n\nBRL 25.90 /mo\n\n### Standard\n\n## 1080p\n\nGood video quality\n\nNo ads\n\nBRL 51.90 /mo\n\n### Premium\n\n## 4K + HDR\n\nBest video quality\n\nImmersive sound (spatial audio)\n\nNo ads\n\nBRL 71.90 /mo\n\nDiscover your next favorites, plus new releases every week [...] Questions? Call 0800 591 8943\n\nNetflix Brazil",
+       "url": "https://www.netflix.com/sx/title/81788927",
+       "title": "Watch Raw | Netflix Official Site",
+       "content": "## Trending Now\n\n## A Plan To Suit Your Needs\n\n### Standard with ads\n\n## 1080p\n\nGood video quality\n\nLess ads than you might think\n\nMXN 139 /mo\n\n### Standard\n\n## 1080p\n\nGood video quality\n\nNo ads\n\nMXN 269 /mo\n\n### Premium\n\n## 4K + HDR\n\nBest video quality\n\nImmersive sound (spatial audio)\n\nNo ads\n\nMXN 369 /mo\n\nDiscover your next favorites, plus new releases every week\n\nQuestions? Call 800 953 9947\n\nNetflix Mexico [...] # Raw\n\nLIVE\n\nNovember 16 at 19:00 CST\n\n04\n\n04\n\n04\n\n04\n\nDays\n\n09\n\n09\n\n09\n\n09\n\nHours\n\n11\n\n11\n\n11\n\n11\n\nMinutes\n\n50\n\n50\n\n50\n\n50\n\nSeconds\n\nIncluded in all plans, starting at MXN 139\n\nLIVE\n\nNovember 16 at 19:00 CST\n\n04\n\n04\n\n04\n\n04\n\nDays\n\n09\n\n09\n\n09\n\n09\n\nHours\n\n11\n\n11\n\n11\n\n11\n\nMinutes\n\n50\n\n50\n\n50\n\n50\n\nSeconds\n\nIncluded in all plans, starting at MXN 139\n\n## Raw\n\n## Trailers\n\n1m 9s\n\nTRAILER\n\nTrailer: WWE Raw - November 2\n\n1m 5s\n\nTRAILER\n\nTrailer: WWE Raw - Episode June 1\n\n1m 5s\n\nTRAILER",
        "published_date": null,
        "query": "Netflix Standard plan: A Netflix Standard plan costs $15.49 per month. (as of 2026)",
        "is_authoritative": true,
-       "retrieved_at": "2026-11-12T17:22:55.878022Z"
+       "retrieved_at": "2026-11-13T09:20:32.027755Z"
       },
       {
-       "url": "https://about.netflix.com/news/netflix-launches-mobile-plan-for-india",
-       "title": "Netflix launches Mobile Plan for India at INR 199/month - About Netflix",
-       "content": "1. Download the Netflix app or visit the website www.netflix.com\n2. Select the mobile plan for INR 199/month\n3. Add account details and try the first month for free (for new members)\n\nIn addition, to the introduction of a new mobile plan, we\u2019ve adjusted prices for our three existing plans as follows:\n\n Mobile - INR 199/month (new tier)\n Basic - INR 499/month\n Standard - INR 649/month\n Premium - INR 799/mon [...] New Delhi, July 24, 2019: We\u2019re excited to announce the launch of a new mobile plan for India. At INR 199 per month, members will be able to enjoy all of Netflix\u2019s content\u2014uninterrupted and without ads\u2014in standard definition (SD) on one smartphone or tablet at a time. This is our fourth Indian plan, in addition to the existing basic, standard and premium plans. [...] About Netflix\n\nNetflix is the world's leading internet entertainment service with over 151 million paid memberships in over 190 countries enjoying TV series, documentaries and feature films across a wide variety of genres and languages. Members can watch as much as they want, anytime, anywhere, on any internet-connected screen. Members can play, pause and resume watching, all without commercials or commitments.",
-       "published_date": "Wed, 24 Jul 2019 00:00:00 GMT",
-       "query": "Netflix Standard plan: A Netflix Standard plan costs $15.49 per month. (as of 2026)",
-       "is_authoritative": true,
-       "retrieved_at": "2026-11-12T17:22:55.878022Z"
-      },
-      {
-       "url": "https://about.netflix.com/news/announcing-basic-with-ads-aus",
-       "title": "Netflix Starting From $6.99 Per Month - About Netflix",
-       "content": "What stays the same: A wide variety of great TV shows and movies; personalised viewing experience;  a wide range of TV and mobile devices; change or cancel your plan at any time.\n What\u2019s different: Video quality up to 720p/HD (now for both our Basic with Ads and Basic plans); average of 4 to 5 minutes of ads per hour; a limited number of movies and TV shows won't be available due to licensing restrictions, which we\u2019re working on; no ability to download titles. [...] Unmissable entertainment at unbeatable value: Basic with Ads will cost just $6.99 per month in Australia and will launch on 4 November.\n Available in 12 countries: Basic with Ads will be available in Australia, Brazil, Canada, France, Germany, Italy, Japan, Korea, Mexico, Spain, the UK and the US.\n A plan for every fan: Our current plans and members will not be impacted. Basic with Ads complements our existing ad-free Basic, Standard and Premium plans. [...] Basic with Ads will launch just 6 months after we first announced the option of a lower priced ads plan. None of this would have been possible without our team\u2019s hard work or Microsoft\u2019s extraordinary partnership. The switch from linear is happening at an ever increasing speed, with streaming now surpassing free-to-air and pay TV in the US. We\u2019re confident that with Netflix starting at $6.99 per month, we now have a price and plan for every fan. While it\u2019s still very early days, we\u2019re pleased",
+       "url": "https://about.netflix.com/news/announcing-basic-with-ads-us",
+       "title": "Netflix Starting From $6.99 a Month - About Netflix",
+       "content": "Unmissable entertainment at unbeatable value: Basic with Ads will cost just $6.99 a month in the US and launch on November 3 at 9 am PT.\n Available in 12 countries: Basic with Ads will be available in Australia, Brazil, Canada, France, Germany, Italy, Japan, Korea, Mexico, Spain, the UK and the US.\n A plan for every fan: Our current plans and members will not be impacted. Basic with Ads complements our existing ad-free Basic, Standard and Premium plans. [...] What stays the same: A wide variety of great TV shows and movies; personalized viewing experience; available on a wide range of TV and mobile devices; change or cancel your plan at any time.\n What\u2019s different: Video quality up to 720p/HD (now for both our Basic with Ads and Basic plans); average of 4 to 5 minutes of ads per hour; a limited number of movies and TV shows won't be available due to licensing restrictions, which we\u2019re working on; no ability to download titles. [...] Basic with Ads will launch just six months after we first announced the option of a lower priced ads plan. None of this would have been possible without our team\u2019s hard work or Microsoft\u2019s extraordinary partnership. The switch from linear is happening at an ever increasing speed, with streaming now surpassing broadcast and cable in the US. We\u2019re confident that with Netflix starting at $6.99 a month, we now have a price and plan for every fan. While it\u2019s still very early days, we\u2019re pleased with",
        "published_date": "Thu, 13 Oct 2022 00:00:00 GMT",
        "query": "Netflix Standard plan: A Netflix Standard plan costs $15.49 per month. (as of 2026)",
        "is_authoritative": true,
-       "retrieved_at": "2026-11-12T17:22:55.878022Z"
+       "retrieved_at": "2026-11-13T09:20:32.027755Z"
       },
       {
-       "url": "https://about.netflix.com/news/announcing-basic-with-ads-ca",
-       "title": "Netflix Starting From $5.99 a Month - About Netflix",
-       "content": "What stays the same: A wide variety of great TV shows and movies; personalized viewing experience; available on \u200b\u200ba wide range of TV and mobile devices; change or cancel your plan at any time.\n What\u2019s different:: Video quality up to 720p/HD (now for both our Basic with Ads and Basic plans); average of 4 to 5 minutes of ads per hour; a limited number of movies and TV shows won't be available due to licensing restrictions, which we\u2019re working on; no ability to download titles. [...] Unmissable entertainment at unbeatable value: Basic with Ads will cost just $5.99 a month in Canada and launch on November 1 at 9 am PT.\n Available in 12 countries: Basic with Ads will be available in Australia, Brazil, Canada, France, Germany, Italy, Japan, Korea, Mexico, Spain, the UK and the US.\n A plan for every fan: Our current plans and members will not be impacted.Basic with Ads complements our existing ad-free Basic, Standard and Premium plans. [...] Basic with Ads will launch just six months after we first announced the option of a lower priced ads plan. None of this would have been possible without our team\u2019s hard work or Microsoft\u2019s extraordinary partnership. The switch from linear is happening at an ever increasing speed, with streaming now surpassing broadcast and cable in the US. We\u2019re confident that with Netflix starting at $5.99 a month, we now have a price and plan for every fan. While it\u2019s still very early days, we\u2019re pleased with",
-       "published_date": "Thu, 13 Oct 2022 00:00:00 GMT",
+       "url": "https://www.netflix.com/ai/title/81703047",
+       "title": "Watch Unchosen | Netflix Official Site",
+       "content": "#### Subtitles\n\n#### Cast\n\n## You Might Also Like\n\n## Trending Now\n\n## A Plan To Suit Your Needs\n\n### Standard with ads\n\n## 1080p\n\nGood video quality\n\nLess ads than you might think\n\nMXN 139 /mo\n\n### Standard\n\n## 1080p\n\nGood video quality\n\nNo ads\n\nMXN 269 /mo\n\n### Premium\n\n## 4K + HDR\n\nBest video quality\n\nImmersive sound (spatial audio)\n\nNo ads\n\nMXN 369 /mo\n\nDiscover your next favorites, plus new releases every week\n\nQuestions? Call 800 953 9947\n\nNetflix Mexico",
+       "published_date": null,
        "query": "Netflix Standard plan: A Netflix Standard plan costs $15.49 per month. (as of 2026)",
        "is_authoritative": true,
-       "retrieved_at": "2026-11-12T17:22:55.878022Z"
+       "retrieved_at": "2026-11-13T09:20:32.027755Z"
       }
      ],
      "verdict": {
@@ -646,11 +628,12 @@
       "label": "changed",
       "supporting_quote": "The Standard plan (no ads, viewing on up to two devices simultaneously) is rising by $2, from $17.99/month to $19.99/month.",
       "supporting_url": "https://variety.com/2026/tv/news/netflix-raising-prices-second-time-in-a-year-1236700999",
-      "current_value": "$19.99",
+      "current_value": "19.99",
       "source_urls": [
-       "https://variety.com/2026/tv/news/netflix-raising-prices-second-time-in-a-year-1236700999"
+       "https://variety.com/2026/tv/news/netflix-raising-prices-second-time-in-a-year-1236700999",
+       "https://help.netflix.com/en/node/24926"
       ],
-      "reasoning": "The claim's $15.49 price is no longer current; the US Netflix Standard plan rose to $19.99/month in March 2026, per Variety and Netflix's own page. The Netflix page snippet lists Standard at $19.99/mo with no date, but Variety's March 2026 report supports the change.",
+      "reasoning": "The claim's $15.49 price is outdated; multiple sources state the US Standard plan is now $19.99/month, after increases in 2025 and 2026. The Instagram post also notes the $15.49 price was superseded.",
       "quote_verified": true
      },
      "freshness_score": 5.0,
@@ -661,11 +644,11 @@
    "answer_score": 50.0,
    "usage": {
     "model_calls": 3,
-    "model_cost_usd": 0.00143,
+    "model_cost_usd": 0.001467,
     "tavily_calls": 4,
-    "tavily_credits": 2,
-    "tavily_cache_hits": 2,
-    "latency_ms": 7024.5,
+    "tavily_credits": 4,
+    "tavily_cache_hits": 0,
+    "latency_ms": 5639.7,
     "models_used": [
      "claude-haiku-5-5"
     ],
