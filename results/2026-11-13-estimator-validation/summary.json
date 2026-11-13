@@ -1,0 +1,52 @@
+{
+  "population_claims": 1763,
+  "true_stale_rate": 0.2059,
+  "strata": 4,
+  "reps_per_size": 400,
+  "bootstrap_draws": 300,
+  "rank_score": "half-life P(stale), fitted per class (results/2026-11-12-ordering)",
+  "by_sample_size": {
+    "8": {
+      "mean_estimate": 0.2051,
+      "bias": -0.0008,
+      "rmse": 0.1138,
+      "ci95_coverage": 0.465,
+      "mean_ci_width": 0.1874
+    },
+    "18": {
+      "mean_estimate": 0.2027,
+      "bias": -0.0032,
+      "rmse": 0.0786,
+      "ci95_coverage": 0.74,
+      "mean_ci_width": 0.2238
+    },
+    "30": {
+      "mean_estimate": 0.21,
+      "bias": 0.0041,
+      "rmse": 0.0597,
+      "ci95_coverage": 0.89,
+      "mean_ci_width": 0.1987
+    },
+    "60": {
+      "mean_estimate": 0.2065,
+      "bias": 0.0006,
+      "rmse": 0.0401,
+      "ci95_coverage": 0.945,
+      "mean_ci_width": 0.1505
+    },
+    "120": {
+      "mean_estimate": 0.2072,
+      "bias": 0.0013,
+      "rmse": 0.0286,
+      "ci95_coverage": 0.945,
+      "mean_ci_width": 0.1091
+    },
+    "240": {
+      "mean_estimate": 0.2064,
+      "bias": 0.0005,
+      "rmse": 0.0184,
+      "ci95_coverage": 0.97,
+      "mean_ci_width": 0.0777
+    }
+  }
+}
