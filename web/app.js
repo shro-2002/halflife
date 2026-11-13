@@ -714,7 +714,7 @@ function confusionTable(confusion) {
 function budgetTable(budget) {
   const methods = ["model_p", "half_life", "random"].filter((m) => budget[m]);
   const ks = ["caught_at_25", "caught_at_50", "caught_at_100"];
-  return table("Stale claims caught when verifying the top 25 / 50 / 100% of answers (95% CI by source URL)",
+  return table("Stale claims caught when verifying the top 25 / 50 / 100% of claims (95% CI by source URL)",
     [{ label: "Ordering" }, { label: "@25%", num: true }, { label: "@50%", num: true }, { label: "@100%", num: true }],
     methods.map((m) => h("tr", { class: m === "model_p" ? "best" : null }, h("th", { scope: "row" }, METHODS[m]),
       ks.map((k) => (budget[m][k] ? ciCell(budget[m][k].point, budget[m][k].ci95_by_url) : h("td", { class: "num" }, "—"))))));
@@ -758,7 +758,7 @@ function detectorSection(summary, curves) {
       stat("Timeless searched", `${fmt.num(det.timeless_searched)} / ${fmt.num(det.timeless_n)}`)),
     summary.confusion ? confusionTable(summary.confusion) : null,
     h("h3", { style: { marginTop: "18px" } }, "Budget curve"),
-    curves ? chartSlot("detector-chart", "Line chart of stale claims caught against answers verified, for model, half-life, random and oracle orderings") : stateBox("error", "Curve unavailable", `${RESULTS.detectorCurves} did not load.`),
+    curves ? chartSlot("detector-chart", "Line chart of stale claims caught against claims verified, for model, half-life, random and oracle orderings") : stateBox("error", "Curve unavailable", `${RESULTS.detectorCurves} did not load.`),
     h("div", { class: "caption-box" }, h("p", null, "Haiku's own outdated-probability ranks better than the half-life model; it is the product default."), h("p", null, `Labelled set: ${summary.n_cases} cases, one annotator; eval date ${summary.eval_date}. CIs resample source URLs.`)),
     summary.budget ? budgetTable(summary.budget) : null,
     summary.cost_latency_by_budget_model_order ? costTable(summary.cost_latency_by_budget_model_order) : null,
@@ -772,7 +772,7 @@ function drawDetectorChart(curves) {
   drawChart("detector-chart", {
     type: "line",
     data: { labels: grid, datasets: curveDatasets(curves, ["model_p", "half_life", "random", "oracle_upper_bound"]) },
-    options: curveChartOptions("Answers verified, riskiest first (%)"),
+    options: curveChartOptions("Claims verified, riskiest first (%)"),
   });
 }
 
@@ -890,15 +890,17 @@ initTabs();
   try {
     const r = await fetch("/results/2026-11-12-detector/variance.json");
     if (!r.ok) return;
-    const v = (await r.json()).across_5_runs;
+    const data = await r.json();
+    const v = data.headline_live_runs, c = data.stability_check_cached_only;
     const place = () => {
       const head = document.getElementById("det-h");
       if (!head || document.getElementById("det-variance")) return Boolean(head);
+      const f = (x) => `${x.mean.toFixed(3)} (range ${x.min.toFixed(3)}–${x.max.toFixed(3)})`;
       const p = h("p", { class: "section-note", id: "det-variance" },
-        `Mean of 5 runs: precision ${v.precision.mean.toFixed(3)} (range ${v.precision.min.toFixed(3)}–${v.precision.max.toFixed(3)}), ` +
-        `recall ${v.recall.mean.toFixed(3)} (range ${v.recall.min.toFixed(3)}–${v.recall.max.toFixed(3)}); ` +
-        `stale caught @50% verified: model ${v.caught_at_50.model_p.mean.toFixed(3)}, half-life ${v.caught_at_50.half_life.mean.toFixed(3)}, random ${v.caught_at_50.random.mean.toFixed(3)}. ` +
-        "Recall varies because claim phrasing (and so the search query) changes between runs. Tables below: run 2.");
+        `Headline, live-search runs 1–2 (run 1 predates the numeric-equality bug fix): precision ${f(v.precision)}, recall ${f(v.recall)}; ` +
+        `stale caught @50% of claims verified: model ${v.caught_at_50.model_p.mean.toFixed(3)}, half-life ${v.caught_at_50.half_life.mean.toFixed(3)}, random ${v.caught_at_50.random.mean.toFixed(3)}. ` +
+        `Cached-evidence-only runs 3–5 (stability check, not averaged in): precision ${f(c.precision)}; recall ${f(c.recall)} is a lower bound, since unseen queries could not be searched. ` +
+        "Tables below: run 2.");
       head.after(p);
       return true;
     };

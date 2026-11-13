@@ -19,3 +19,4 @@ data/histories/raw/
 .hypothesis/
 data/gateway_summary.json
 data/seeded_requests.json
+.playwright-mcp/

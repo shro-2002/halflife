@@ -25,13 +25,17 @@ resamples of **source URLs** (82 URLs; stale/current pairs share URLs), not case
 | 3 | cached evidence only | 0.861 | 0.816 | 17 |
 | 4 | cached evidence only | 0.868 | 0.868 | 11 |
 | 5 | cached evidence only | 0.889 | 0.842 | 16 |
-| **mean (range)** | | **0.863** (0.841–0.889) | **0.884** (0.816–0.974) | |
 
-Recall varies because the extractor phrases each claim slightly differently on every run, so the search query and the retrieved evidence change; in the three cached-evidence runs, queries never seen before could not be searched and count as unverifiable, so their recall is a lower bound. Runs 3–5 used `--cached-evidence-only` (0 Tavily credits). Budget curve means: caught@25% model 0.438,
-half-life 0.365, random 0.224; caught@50% model 0.788, half-life 0.681, random 0.441 (ranges in `variance.json`).
-The README headline uses these means; the tables below are run 2 in detail.
+**Headline = live-search runs 1–2** (run 1 predates the numeric-equality bug fix): precision **0.847** (0.841–0.854),
+recall **0.948** (0.921–0.974); caught@25% of claims: model 0.470, half-life 0.383, random 0.239; caught@50%: model
+**0.831**, half-life 0.712, random 0.474.
 
-## Headline (run 2)
+**Cached-evidence-only runs 3–5 = precision stability check**, not averaged with the live runs: precision 0.873
+(0.861–0.889). Their recall, 0.842 (0.816–0.868), is a **lower bound**: the extractor phrases each claim slightly
+differently on every run, so search queries change, and in these runs a query never seen before could not be
+searched and counted as unverifiable. Runs 3–5 made 0 Tavily calls. All values: `variance.json`.
+
+## Run 2 in detail
 
 | Metric | Value | 95% CI (by source URL) |
 |---|---|---|
@@ -53,7 +57,7 @@ Confusion (run 2; rows = label, columns = outcome):
 "not searched" current cases are dated past events the extractor correctly marked as non-decaying
 (e.g. a release date), counted as not flagged.
 
-## Budget curve (run 2): stale claims caught vs answers verified
+## Budget curve (run 2): stale claims caught vs claims verified
 
 | Ordering | caught @25% | caught @50% | caught @100% |
 |---|---|---|---|

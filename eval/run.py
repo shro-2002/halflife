@@ -288,7 +288,7 @@ def plot(curves: dict, path: Path) -> None:
     for name, c in curves.items():
         col, lw, ls = style[name]
         ax.plot([g * 100 for g in GRID], [v * 100 for v in c], color=col, lw=lw, ls=ls, label=name)
-    ax.set_xlabel("answers verified (%)")
+    ax.set_xlabel("claims verified (%)")
     ax.set_ylabel("stale claims caught (%)")
     ax.set_title("Live detector, 108 labelled cases (eval date 2026-11-12)", fontsize=10)
     ax.grid(alpha=0.3)

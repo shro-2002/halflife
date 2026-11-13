@@ -2,49 +2,29 @@
 
 **Facts decay. Half-Life tells an AI gateway which answers to re-check, and when.**
 
-Half-Life sits beside a stock [Bifrost](https://github.com/maximhq/bifrost) gateway. It reads the traffic Bifrost
-already logs, finds time-sensitive claims in the answers (prices, versions, office holders, rates, laws), verifies
-the riskiest ones against live web sources through [Tavily](https://tavily.com), and reports a stale rate per model
-and virtual key. It also checks any single answer on demand, and (experimentally) sets a cache TTL per request.
+A [Bifrost](https://github.com/maximhq/bifrost) gateway reports what every request cost, but not whether the answer
+it served is still true.
 
-## 1. The operator problem
+Demo video: <link>
 
-Bifrost tells an operator what every virtual key cost, how long it took and whether it errored. It says nothing about
-whether what it served is still true. A model with a June 2026 knowledge cutoff will confidently state a policy
-rate or a "latest version" that changed in October. Checking every answer against the web costs extra model calls,
-searches and seconds, so nobody does it on production traffic. And Bifrost's cache uses one TTL for every answer,
-whether the question was the capital of France or the latest Python release.
+![Gateway view: stale rate among verified claims by model and virtual key, on seeded demo traffic](docs/img/gateway.png)
 
-## 2. What Half-Life adds
+- **Budgeted verification:** claims are ranked by the extractor model's own probability that they are outdated, then
+  checked against live Tavily search. Verifying half the claims caught **83%** of the stale ones, against 47% in
+  random order (108 labelled cases; mean of the two live runs).
+- **Traffic audit:** reads Bifrost's request logs and reports a stale rate per model and virtual key. On seeded
+  **demo traffic** the stale rate among verified claims ranged from **27% to 78%** across model × key slices.
+- **Decay-based cache TTL (experimental):** each kind of fact gets a fitted half-life, and the cache TTL is the time
+  until P(stale) reaches 5% — a software-version answer gets **6.2 days** (fitted half-life 83 days). Experimental
+  because the half-lives are not calibrated (see Limits).
 
-1. **Traffic audit (lead feature).** Reads recent requests from Bifrost's logging API, verifies the riskiest claims
-   under a budget, and stores **stale rate by model and virtual key** in a fact ledger
-   (`halflife/gateway/audit.py`). On 50 answers of **seeded demo traffic** through stock Bifrost, the stale rate
-   among verified claims ranged from 0.27 to 0.78 per (model, key) slice, with 29.7% of found claims verified
-   ([results](results/2026-11-12-gateway-audit/README.md)).
-
-   **How stale rate is computed.** For each (model, virtual key): *stale rate among verified claims* = claims with a
-   `changed` verdict ÷ claims verified, where "verified" means the verdict was `current` or `changed` (unverifiable
-   claims are excluded). The audit verifies only the riskiest claims, ranked across the whole run, up to a verification
-   budget — so this is **not** a stale rate over all traffic. The *verified share* (claims verified ÷ claims found) is
-   reported beside it.
-2. **Budgeted verification with a measured curve.** Claims are ranked by the extractor model's own probability that
-   the claim is outdated, so a budget is spent where staleness is likely. On 108 labelled cases, verifying the top
-   50% of answers caught **0.788** of stale claims on average over five runs (range 0.724–0.842; random order 0.441)
-   ([results](results/2026-11-12-detector/README.md)).
-3. **Decay-based cache TTL (experimental).** Each volatility class has a fitted half-life; the recommended TTL is the
-   time until P(stale) reaches 5%. A proxy puts that TTL on each request with Bifrost's own `x-bf-cache-ttl`
-   header (`halflife/gateway/proxy.py`). **Experimental:** the half-lives are not calibrated (see Limits).
-
-Plus a check API and UI (`POST /v1/check`), and a `check_freshness` MCP tool registered in Bifrost's MCP gateway.
-
-## 3. Quickstart (stock Bifrost, base profile, no Redis)
+## Quickstart (stock Bifrost, base profile, no Redis)
 
 Prerequisites: Python 3.11+, [uv](https://docs.astral.sh/uv/), Node.js 18+ (for `npx`), an Anthropic API key and a
 Tavily API key (free tier: 1,000 credits/month).
 
 ```bash
-git clone <this repo> halflife && cd halflife
+git clone https://github.com/shro-2002/halflife.git && cd halflife
 cp .env.example .env    # fill ANTHROPIC_API_KEY, TAVILY_API_KEY, BIFROST_ADMIN_USERNAME/PASSWORD, BIFROST_SETUP_TOKEN
                         # (HALFLIFE_CONTACT_URL only for the eval scripts: Wikidata wants a contact URL)
 uv sync
@@ -77,7 +57,38 @@ Optional pieces:
 - **MCP tool:** `uv run python -m halflife.gateway.mcp_server --register` serves `check_freshness` and adds it to
   Bifrost's MCP gateway, granted to the demo keys.
 
-## 4. Requirements map
+## What it looks like
+
+Checking one answer: each claim gets a verdict, a freshness score, the corrected value, and the verbatim evidence
+quote with its source, shown apart from the model's reasoning.
+
+![Check view: a stale Bank of England rate and Node.js version caught with corrected values and sources](docs/img/check.png)
+
+The Evidence view (`docs/img/evidence.png`) shows the budget curve and every measured table from `results/`.
+
+## Architecture
+
+```mermaid
+flowchart LR
+    App["Your apps<br/>(virtual keys)"] -->|chat| BF["Bifrost gateway<br/>(stock v2.5.1)"]
+    BF --> LLM["Anthropic<br/>claude-haiku-5-5 → fallback 4-5"]
+    BF -.->|request logs| Logs[("Bifrost logs<br/>GET /api/logs")]
+    Logs --> Audit["Half-Life audit<br/>sample · extract · rank · verify"]
+    UI["Half-Life API + UI<br/>POST /v1/check"] --> Pipe["Pipeline<br/>extract → rank → verify → score"]
+    Audit --> Pipe
+    MCP["check_freshness<br/>(MCP tool in Bifrost)"] --> Pipe
+    Pipe -->|"extract + judge<br/>(halflife-dev key)"| BF
+    Pipe -->|"search via relay<br/>/relay/tavily"| BF
+    BF -->|relay| Tavily["Tavily Search"]
+    Pipe --> Ledger[("Fact ledger<br/>SQLite: verdicts, half-lives")]
+    Audit -->|stale rate per model × key| Ledger
+    Proxy["TTL proxy (experimental)"] -->|"x-bf-cache-ttl"| BF
+```
+
+Every model call and every search goes through Bifrost, under one virtual key with a $10 budget; evidence is cached
+on disk per day so repeat checks cost no credits.
+
+## Requirements map
 
 | Requirement | Where |
 |---|---|
@@ -88,9 +99,9 @@ Optional pieces:
 | **B1** Real operator problem | stale rate per model and virtual key: `halflife/gateway/audit.py`; TTL proxy: `halflife/gateway/proxy.py` |
 | **B2** Public extension points | logging API (`GET /api/logs`, `/api/logs/{id}`), governance (virtual keys, budgets, relay and MCP grants), Relays, cache headers, MCP gateway — no Go plugin, no fork |
 | **B3** Reproducible on standard Bifrost | `scripts/bifrost.sh` (stock `npx @maximhq/bifrost`), `make setup`, `scripts/spike.sh`, `Dockerfile` |
-| **B4** Contribution quality | 146 offline tests + live tests (`make test`), CI (`.github/workflows/ci.yml`), `docs/UPSTREAM.md`, `CONTRIBUTING.md`, Apache-2.0 |
+| **B4** Contribution quality | 148 offline tests + live tests (`make test`), CI (`.github/workflows/ci.yml`), `docs/UPSTREAM.md`, `CONTRIBUTING.md`, Apache-2.0 |
 
-## 5. What Bifrost contributes, what Tavily contributes
+## What Bifrost contributes, what Tavily contributes
 
 **Bifrost** is the platform: it routes every model call (Anthropic provider, `claude-haiku-5-5` with automatic
 fallback to `claude-haiku-4-5`), enforces the virtual key's $10 budget, logs every request (which is what the audit
@@ -100,26 +111,29 @@ calls are governed and logged under the same virtual key, and serves `check_fres
 **Tavily** is the evidence: every verdict rests only on text Tavily returned, via an open-web search with a recency
 filter and a domain-restricted search on the official site when one is known. 1 credit per basic search.
 
-## 6. Results
+## Results
 
 All numbers come from files under `results/`; each folder has a README with the protocol and a reproduce command.
 
-**Live detector, 108 labelled cases** (eval date 2026-11-12), mean over five runs with the range beside it —
-[variance.json](results/2026-11-12-detector/variance.json), [results README](results/2026-11-12-detector/README.md)
+**Live detector, 108 labelled cases** (eval date 2026-11-12) — [variance.json](results/2026-11-12-detector/variance.json),
+[results README](results/2026-11-12-detector/README.md)
 
-| Metric | Mean of 5 runs | Range | One run's 95% CI (run 2, by source URL) |
-|---|---|---|---|
-| Precision | **0.863** | 0.841–0.889 | [0.742, 0.950] |
-| Recall | **0.884** | 0.816–0.974 | [0.828, 1.000] |
-| Timeless cases flagged | 0 of 25 in every run | | |
-
-Recall varies because the extractor phrases each claim slightly differently on every run, so the search query and the retrieved evidence change; in the three cached-evidence runs, queries never seen before could not be searched and count as unverifiable, so their recall is a lower bound.
-
-| Budget ordering | stale caught @25% (mean, range) | @50% (mean, range) |
+| Metric | Live runs 1–2: mean (range) | Run 2 95% CI (by source URL) |
 |---|---|---|
-| Haiku outdated-probability (default) | 0.438 (0.406–0.477) | 0.788 (0.724–0.842) |
-| Half-life | 0.365 (0.338–0.387) | 0.681 (0.646–0.715) |
-| Random | 0.224 (0.207–0.246) | 0.441 (0.406–0.487) |
+| Precision | **0.847** (0.841–0.854) | [0.742, 0.950] |
+| Recall | **0.948** (0.921–0.974) | [0.828, 1.000] |
+| Timeless cases flagged | 0 of 25 in every run | |
+
+Run 1 predates a bug fix (a "new" value numerically equal to the claimed one, 2.50% vs 2.5%, was not downgraded).
+Three further runs used cached evidence only, as a **precision stability check**: precision 0.873 (0.861–0.889);
+their recall, 0.842 (0.816–0.868), is a **lower bound**, because the extractor phrases claims slightly differently
+each run, and queries never seen before could not be searched. Live and cached-only runs are not averaged together.
+
+| Budget ordering (live runs 1–2) | stale caught @25% of claims | @50% of claims |
+|---|---|---|
+| Haiku outdated-probability (default) | 0.470 (0.462–0.477) | **0.831** (0.821–0.842) |
+| Half-life | 0.383 (0.379–0.387) | 0.712 (0.708–0.715) |
+| Random | 0.239 (0.233–0.246) | 0.474 (0.460–0.487) |
 
 **The model's own estimate ranks better than the half-life model.** On the time-travel ordering dataset
 ([results/2026-11-12-ordering](results/2026-11-12-ordering/README.md)), 300-claim sample:
@@ -130,14 +144,22 @@ Recall varies because the extractor phrases each claim slightly differently on e
 | Half-life (fitted per class) | 0.782 | 0.298 [0.238, 0.356] | 0.655 [0.556, 0.750] | 0.917 |
 | Class only / age only / random | 0.696 / 0.606 / 0.499 | | | |
 
-The gap holds on claims dated after the model's knowledge cutoff (0.827 vs 0.773), so it is not leakage. Half-life
-ordering beats random, age-only and class-only (all 95% CIs exclude zero), which is why it stays as the fallback and
-as the basis for TTL — but the product ranks by the model.
+The gap holds on claims dated after the model's knowledge cutoff (0.827 vs 0.773,
+[leakage_check.json](results/2026-11-12-ordering/leakage_check.json)), so it is not leakage. Half-life ordering beats
+random, age-only and class-only (all 95% CIs exclude zero), which is why it stays as the fallback and as the basis
+for TTL — but the product ranks by the model.
+
+**Gateway audit on seeded demo traffic** ([results/2026-11-12-gateway-audit](results/2026-11-12-gateway-audit/README.md)).
+*Stale rate among verified claims* = claims with a `changed` verdict ÷ claims verified, where "verified" means the
+verdict was `current` or `changed` (unverifiable claims are excluded). The audit verifies only the riskiest claims,
+ranked across the run, up to a verification budget, so this is **not** a stale rate over all traffic; the *verified
+share* (claims verified ÷ claims found) is reported beside it. On 50 seeded demo answers (2 keys × 2 models):
+stale rate among verified claims 0.27–0.78 per slice, 0.569 overall, with 29.7% of found claims verified.
 
 **Cost per check** ([results/2026-11-12-checks10](results/2026-11-12-checks10/README.md)): 10 multi-claim answers,
 $0.0011 and 2.8 Tavily credits per check, median latency 5.9 s (max 9.3 s), `reasoning: none` on Haiku 5.5.
 
-## 7. Limits
+## Limits
 
 - **Latency:** 5.9 s median per full check (extract + search + judge). The audit runs offline on logged traffic;
   the proxy returns the answer first and checks in the background.
@@ -161,7 +183,7 @@ $0.0011 and 2.8 Tavily credits per check, median latency 5.9 s (max 9.3 s), `rea
 knows within-class differences — a fast-moving package versus a slow one, an unstable government versus a stable one
 — that a single per-class half-life cannot express.
 
-## 8. Existing functionality (checked 2026-11-12)
+## Existing functionality (checked 2026-11-12)
 
 - **Bifrost** has exact-match and semantic caching with per-request TTL (`x-bf-cache-ttl`), but nothing computes the
   TTL from content. It has no freshness scoring or claim verification.
@@ -170,9 +192,9 @@ knows within-class differences — a fast-moving package versus a slow one, an u
   it needs no plugin or custom build (stock binary, public APIs only); it audits logged traffic offline and reports
   stale rate per model and virtual key; it spends a verification budget on the riskiest claims with a measured
   risk-coverage curve; and it ties cache TTL to fitted decay. The two are complementary: an inline checker could use
-  Half-Life's ranking to decide which answers to check. See [docs/UPSTREAM.md](docs/UPSTREAM.md).
+  Half-Life's ranking to decide which claims to check. See [docs/UPSTREAM.md](docs/UPSTREAM.md).
 
-## 9. AI usage disclosure
+## AI usage disclosure
 
 - **Built with Claude Code** (Claude Opus 5.5) as the lead agent, with Claude subagents for parallel workers and
   independent verifiers; every design decision and gate was approved by the human author.

@@ -3,7 +3,7 @@
 **Project:** Half-Life
 **Tracks:** Problem Statement 06 (Tavily: Stale-Answer Detector) and Problem Statement 04 (Bifrost: a feature the
 open-source gateway is missing), as one integrated product.
-**Repository:** <GitHub URL — filled at release>
+**Repository:** https://github.com/shro-2002/halflife
 **Demo video:** <URL — recorded by the author>
 
 ## Project description
@@ -20,8 +20,8 @@ Gateways report cost, latency and errors, but not whether what they served is st
 knowledge cutoff and state outdated prices, versions and office holders confidently. Verifying every answer costs
 extra model calls, searches and seconds, so nobody does it on production traffic; and gateway caches use one TTL for
 every answer regardless of how fast the facts in it decay. Half-Life gives operators a stale-rate metric per model and
-key from logged traffic, spends a verification budget where staleness is likely (measured: verifying half the answers
-caught 0.788 of stale claims on average over five runs, versus 0.441 for random order, on 108 labelled cases), and grounds every verdict in a
+key from logged traffic, spends a verification budget where staleness is likely (measured: verifying half the claims
+caught 83% of the stale ones, against 47% in random order, on 108 labelled cases; mean of the two live runs), and grounds every verdict in a
 verbatim quote from a retrieved source.
 
 ## Technologies used
@@ -58,8 +58,8 @@ verbatim quote from a retrieved source.
 
 | What | Number | File |
 |---|---|---|
-| Detector precision / recall (108 cases, mean of 5 runs) | 0.863 (0.841–0.889) / 0.884 (0.816–0.974) | results/2026-11-12-detector/variance.json |
-| Stale caught at 50% verified, mean of 5 runs: model / half-life / random | 0.788 / 0.681 / 0.441 | results/2026-11-12-detector/variance.json |
+| Detector precision / recall (108 cases, live runs 1–2) | 0.847 (0.841–0.854) / 0.948 (0.921–0.974); cached-only stability runs: precision 0.873, recall ≥ 0.816 (lower bound) | results/2026-11-12-detector/variance.json |
+| Stale caught at 50% of claims verified, live runs: model / half-life / random | 0.831 / 0.712 / 0.474 | results/2026-11-12-detector/variance.json |
 | Ordering AUC (300 claims): model / half-life / random | 0.826 / 0.782 / 0.499 | results/2026-11-12-ordering |
 | Cost per check (10 answers) | $0.0011, 2.8 Tavily credits, median 5.9 s | results/2026-11-12-checks10 |
 | Demo audit, seeded demo traffic (50 answers, 2 keys × 2 models) | stale rate among verified claims 0.27–0.78 per slice; 29.7% of found claims verified | results/2026-11-12-gateway-audit |

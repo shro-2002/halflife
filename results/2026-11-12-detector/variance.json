@@ -1,5 +1,5 @@
 {
-  "note": "Detector run-to-run variance. Runs 1-2 searched live; runs 3-5 used cached evidence only (no Tavily calls): a query not seen before could not be searched and counts as unverifiable, so their recall is a lower bound. Run 1 predates the numeric-equality bug fix.",
+  "note": "Headline = live-search runs (run1, run2); run1 predates the numeric-equality bug fix. Cached-evidence-only runs (run3-5) made no Tavily calls: queries not seen before could not be searched and count as unverifiable, so they are a precision stability check and their recall (and caught@k) are lower bounds. Live and cached-only runs are not averaged together.",
   "runs": {
     "run1": {
       "mode": "live search (cold cache)",
@@ -102,50 +102,106 @@
       }
     }
   },
-  "across_5_runs": {
+  "headline_live_runs": {
+    "runs": [
+      "run1",
+      "run2"
+    ],
     "precision": {
-      "mean": 0.863,
+      "mean": 0.847,
       "min": 0.841,
-      "max": 0.889
+      "max": 0.854
     },
     "recall": {
-      "mean": 0.884,
-      "min": 0.816,
+      "mean": 0.948,
+      "min": 0.921,
       "max": 0.974
     },
     "caught_at_25": {
       "model_p": {
-        "mean": 0.438,
-        "min": 0.406,
+        "mean": 0.47,
+        "min": 0.462,
         "max": 0.477
       },
       "half_life": {
-        "mean": 0.365,
-        "min": 0.338,
+        "mean": 0.383,
+        "min": 0.379,
         "max": 0.387
       },
       "random": {
-        "mean": 0.224,
-        "min": 0.207,
+        "mean": 0.239,
+        "min": 0.233,
         "max": 0.246
       }
     },
     "caught_at_50": {
       "model_p": {
-        "mean": 0.788,
-        "min": 0.724,
+        "mean": 0.831,
+        "min": 0.821,
         "max": 0.842
       },
       "half_life": {
-        "mean": 0.681,
-        "min": 0.646,
+        "mean": 0.712,
+        "min": 0.708,
         "max": 0.715
       },
       "random": {
-        "mean": 0.441,
-        "min": 0.406,
+        "mean": 0.474,
+        "min": 0.46,
         "max": 0.487
       }
     }
+  },
+  "stability_check_cached_only": {
+    "runs": [
+      "run3",
+      "run4",
+      "run5"
+    ],
+    "precision": {
+      "mean": 0.873,
+      "min": 0.861,
+      "max": 0.889
+    },
+    "recall": {
+      "mean": 0.842,
+      "min": 0.816,
+      "max": 0.868
+    },
+    "caught_at_25": {
+      "model_p": {
+        "mean": 0.418,
+        "min": 0.406,
+        "max": 0.424
+      },
+      "half_life": {
+        "mean": 0.354,
+        "min": 0.338,
+        "max": 0.362
+      },
+      "random": {
+        "mean": 0.213,
+        "min": 0.207,
+        "max": 0.22
+      }
+    },
+    "caught_at_50": {
+      "model_p": {
+        "mean": 0.759,
+        "min": 0.724,
+        "max": 0.816
+      },
+      "half_life": {
+        "mean": 0.661,
+        "min": 0.646,
+        "max": 0.681
+      },
+      "random": {
+        "mean": 0.42,
+        "min": 0.406,
+        "max": 0.435
+      }
+    },
+    "recall_is_lower_bound": true
   }
 }
