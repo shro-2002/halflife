@@ -18,3 +18,5 @@ jobs:
         run: uv run python eval/build_cases.py --check
       - name: Results regenerate from saved raw data (no spend)
         run: uv run python -m eval.run --offline > /dev/null
+      - name: Fair-baseline comparison regenerates from both live runs (no spend)
+        run: uv run python -m eval.fair_baseline > /dev/null

@@ -17,8 +17,10 @@ chunks, a shared plugin cache).
 samples recent answers, ranks claims by risk, verifies only the riskiest under a budget, and aggregates stale rate by
 `(model, virtual_key)`. The approaches are complementary: an inline checker could use the same risk ranking to decide
 which answers to check. Measured on 108 labelled cases, ranking by the extractor model's outdated-probability caught
-0.831 of stale claims when verifying half the claims (mean of two live runs; random: 0.474); full verification:
-precision 0.847, recall 0.948 (live runs; repo `results/2026-11-12-detector/variance.json`).
+0.831 of stale claims when verifying half the claims (mean of two live runs), against 0.694 for random order among
+time-sensitive claims (the fair baseline) and 0.474 for blind random; full verification, post-fix run: precision
+0.854, recall 0.921 (repo `results/2026-11-12-detector/fair_baseline.json` and `summary.json`; one annotator, cases
+pre-screened to facts Tavily could retrieve).
 
 ## What already works on stock Bifrost v2.5.1 (no changes needed)
 

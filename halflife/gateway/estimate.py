@@ -1,9 +1,12 @@
-"""Traffic-wide stale-rate estimate from a stratified random sample of claims.
+"""Estimated stale rate across the sampled answers, from a stratified random sample of their claims.
 
 The top-risk slice tells you where stale claims are, but not how many there are overall. A random sample does:
 claims are split into STRATA equal-count strata by rank score (quantiles), a sample is drawn from each stratum in
-proportion to its size, and the stale rate over ALL time-sensitive claims is the stratum-share-weighted mean of the
-per-stratum stale rates in the sample. Uncertainty: bootstrap, resampling within strata.
+proportion to its size, and the stale rate over all time-sensitive claims in the sampled answers is the
+stratum-share-weighted mean of the per-stratum stale rates in the sample (unbiased by construction under
+proportional allocation). Uncertainty: bootstrap, resampling claims within strata. Claims cluster within answers
+and the answers are the newest N in the window, so the interval does not cover answer-level clustering or the
+choice of answers.
 
 Unverifiable sampled claims are not dropped: the estimate is reported under both bounds (all current = low,
 all stale = high); the point estimate uses verified claims only.

@@ -1,4 +1,4 @@
-"""Traffic-wide stale-rate estimator: strata, allocation, weighting, bounds, interval. Offline."""
+"""Stale-rate estimator (stratified random sample): strata, allocation, weighting, bounds, interval. Offline."""
 
 import random
 

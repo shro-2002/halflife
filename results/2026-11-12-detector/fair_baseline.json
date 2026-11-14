@@ -1,0 +1,151 @@
+{
+  "note": "Recomputes run 1 (results/2026-11-12-detector/run1, before the numeric-equality fix) and run 2 (the headline\nfolder) from their raw.jsonl with eval.run, then writes fair_baseline.json: caught@25/50% for the model order,\nthe half-life order, random among time-sensitive cases (fair baseline: the product never searches timeless\nclaims or dated past events) and blind random, plus each order's lift over the fair baseline with a paired\nbootstrap 95% CI by source URL, per run and as the mean of the two runs.",
+  "runs": {
+    "run1": {
+      "caught": {
+        "model_p": {
+          "25": 0.477,
+          "50": 0.821
+        },
+        "half_life": {
+          "25": 0.379,
+          "50": 0.715
+        },
+        "random_time_sensitive": {
+          "25": 0.356,
+          "50": 0.712
+        },
+        "random": {
+          "25": 0.246,
+          "50": 0.487
+        }
+      },
+      "lift_over_random_time_sensitive": {
+        "model_p": {
+          "caught_at_25": {
+            "point": 0.121,
+            "ci95_by_url": [
+              0.032,
+              0.224
+            ],
+            "ci_excludes_zero": true
+          },
+          "caught_at_50": {
+            "point": 0.109,
+            "ci95_by_url": [
+              0.022,
+              0.197
+            ],
+            "ci_excludes_zero": true
+          }
+        },
+        "half_life": {
+          "caught_at_25": {
+            "point": 0.023,
+            "ci95_by_url": [
+              -0.071,
+              0.097
+            ],
+            "ci_excludes_zero": false
+          },
+          "caught_at_50": {
+            "point": 0.003,
+            "ci95_by_url": [
+              -0.067,
+              0.065
+            ],
+            "ci_excludes_zero": false
+          }
+        }
+      }
+    },
+    "run2": {
+      "caught": {
+        "model_p": {
+          "25": 0.462,
+          "50": 0.842
+        },
+        "half_life": {
+          "25": 0.387,
+          "50": 0.708
+        },
+        "random_time_sensitive": {
+          "25": 0.339,
+          "50": 0.675
+        },
+        "random": {
+          "25": 0.233,
+          "50": 0.46
+        }
+      },
+      "lift_over_random_time_sensitive": {
+        "model_p": {
+          "caught_at_25": {
+            "point": 0.123,
+            "ci95_by_url": [
+              0.031,
+              0.222
+            ],
+            "ci_excludes_zero": true
+          },
+          "caught_at_50": {
+            "point": 0.167,
+            "ci95_by_url": [
+              0.055,
+              0.232
+            ],
+            "ci_excludes_zero": true
+          }
+        },
+        "half_life": {
+          "caught_at_25": {
+            "point": 0.048,
+            "ci95_by_url": [
+              -0.033,
+              0.13
+            ],
+            "ci_excludes_zero": false
+          },
+          "caught_at_50": {
+            "point": 0.033,
+            "ci95_by_url": [
+              -0.027,
+              0.095
+            ],
+            "ci_excludes_zero": false
+          }
+        }
+      }
+    }
+  },
+  "mean_of_live_runs_1_2": {
+    "caught": {
+      "model_p": {
+        "25": 0.47,
+        "50": 0.831
+      },
+      "half_life": {
+        "25": 0.383,
+        "50": 0.712
+      },
+      "random_time_sensitive": {
+        "25": 0.348,
+        "50": 0.694
+      },
+      "random": {
+        "25": 0.239,
+        "50": 0.474
+      }
+    },
+    "lift_over_random_time_sensitive": {
+      "model_p": {
+        "25": 0.122,
+        "50": 0.137
+      },
+      "half_life": {
+        "25": 0.035,
+        "50": 0.018
+      }
+    }
+  }
+}

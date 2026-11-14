@@ -5,20 +5,35 @@
 A [Bifrost](https://github.com/maximhq/bifrost) gateway reports what every request cost, but not whether the answer
 it served is still true.
 
-Demo video: <link>
-
 ![Gateway view: stale rate among verified claims by model and virtual key, on seeded demo traffic](docs/img/gateway.png)
 
-- **Traffic-wide stale-rate estimate:** the audit spends part of its verification budget on a stratified random
-  sample of all time-sensitive claims in Bifrost's logged traffic and estimates the stale rate over all of them —
-  validated on 1,763 claims with known labels: unbiased at every sample size (|bias| ≤ 0.004) and 95% interval coverage 0.74 at 18 samples, 0.89 at 30, 0.945 at 60 — so aim for about 60 random samples ([validation](results/2026-11-13-estimator-validation/README.md)). On seeded **demo traffic**: **0.477**,
-  95% CI [0.369, 0.590]. The interval covers sampling error only: labels come from the detector (live-run precision 0.847, recall 0.948), and the population is the time-sensitive claims the extractor found in the sampled answers (75 of 177 extracted claims here; timeless facts and dated past events cannot go stale and are excluded).
-- **Budgeted verification:** claims are ranked by the extractor model's own probability that they are outdated, then
-  checked against live Tavily search. Verifying half the claims caught **83%** of the stale ones, against 47% in
-  random order (108 labelled cases; mean of the two live runs).
-- **Decay-based cache TTL (experimental):** each kind of fact gets a fitted half-life, and the cache TTL is the time
-  until P(stale) reaches 5% — a software-version answer gets **6.2 days** (fitted half-life 83 days). Experimental
-  because the half-lives are not calibrated (see Limits).
+*Gateway view on seeded demo traffic (2026-11-12 run). The bars are confounded: each model and key received
+different questions and has 9–15 verified claims, so they show the pipeline, not a model comparison.*
+
+What it does:
+
+- **Audits the traffic Bifrost already logged.** It reads answers through Bifrost's logging API, finds the
+  time-sensitive claims in them (prices, versions, office holders, rates, laws), and reports stale rates per model and
+  virtual key, plus an estimated stale rate across the sampled answers from a stratified random sample of their
+  claims. Stock Bifrost v2.5.1, public APIs only.
+- **Binds every verdict to quoted evidence.** Each claim is checked against live Tavily search; the verdict must quote
+  the retrieved text verbatim, code checks the quote, and a claim with no verified quote is reported as unverifiable,
+  never as current or changed.
+- **Ranks checks by risk.** The verification budget goes to the claims the extractor model rates most likely outdated;
+  timeless facts and dated past events are never searched.
+
+Support, measured on 108 hand-labelled cases (one annotator, cases pre-screened to facts Tavily could retrieve):
+
+- Detector, post-fix live run: precision **0.854** [0.742, 0.950], recall **0.921** [0.828, 1.000]; it also flags
+  13% of current claims as changed, so low true stale rates read high (see Results).
+- Stale claims caught when verifying half the claims (mean of the two live runs): **83%** risk-ranked, **69%** random
+  among time-sensitive claims (the fair baseline), 47% blind random. Lift over the fair baseline: **+14 points**
+  (per-run 95% CIs [+0.02, +0.20] and [+0.06, +0.23]). The half-life ordering adds no measurable lift over it.
+- Cost per check: $0.0011 model cost plus 2.8 Tavily credits (about $0.024 in total at Tavily's pay-as-you-go
+  price); median 5.9 s, run offline on logged traffic, never on the request path.
+
+Experimental: a **decay-based cache TTL** from fitted per-class half-lives (a software-version answer gets **6.2
+days**; fitted half-life 83 days). Experimental because the half-lives are not calibrated (see Limits).
 
 ## How it works
 
@@ -26,7 +41,7 @@ Demo video: <link>
 flowchart LR
     A["1 · Extract claims<br/>+ self-estimated risk"] --> B["2 · Split the budget"]
     B -->|"top-risk share"| B1["riskiest claims"]
-    B -->|"random share"| B2["stratified random sample<br/>→ traffic-wide estimate"]
+    B -->|"random share"| B2["stratified random sample<br/>→ estimated stale rate"]
     B1 --> C["3 · Tavily search<br/>open web + official site"]
     B2 --> C
     C --> D["4 · Judge<br/>evidence only"]
@@ -40,8 +55,9 @@ flowchart LR
    answer (any span not found verbatim is discarded) and, in the same call, estimates the probability each claim is
    outdated given the answer's as-of date.
 2. **Split the budget.** In the audit, one share of the budget goes to the riskiest claims and the rest to a random
-   sample stratified by rank score (4 quantile strata), which gives an unbiased traffic-wide estimate (default 30%;
-   aim for ≥ ~60 random samples). Within the top-risk share, claims are verified in order of that probability; the half-life
+   sample stratified by rank score (4 quantile strata), which gives an estimated stale rate across the sampled answers
+   (default 30%; aim for ≥ ~60 random samples, below which the interval undercovers). The sampled answers are the
+   newest N in the window, not a random draw of all traffic. Within the top-risk share, claims are verified in order of that probability; the half-life
    P(stale) = 1 − 2^(−age/h) is the fallback when the model gives no estimate. Timeless claims are never searched.
 3. **Tavily search.** Two searches per claim through a Bifrost relay — the open web with a recency filter, and the
    claim's official site when one is known — with a disk cache so repeat evidence costs no credits.
@@ -136,7 +152,7 @@ on disk per day so repeat checks cost no credits.
 | **B1** Real operator problem | stale rate per model and virtual key: `halflife/gateway/audit.py`; TTL proxy: `halflife/gateway/proxy.py` |
 | **B2** Public extension points | logging API (`GET /api/logs`, `/api/logs/{id}`), governance (virtual keys, budgets, relay and MCP grants), Relays, cache headers, MCP gateway — no Go plugin, no fork |
 | **B3** Reproducible on standard Bifrost | `scripts/bifrost.sh` (stock `npx @maximhq/bifrost`), `make setup`, `scripts/spike.sh`, `Dockerfile` |
-| **B4** Contribution quality | 158 offline tests + live tests (`make test`), CI (`.github/workflows/ci.yml`), `docs/UPSTREAM.md`, `CONTRIBUTING.md`, Apache-2.0 |
+| **B4** Contribution quality | 160 offline tests + live tests (`make test`), CI (`.github/workflows/ci.yml`), `docs/UPSTREAM.md`, `CONTRIBUTING.md`, Apache-2.0 |
 
 ## What Bifrost contributes, what Tavily contributes
 
@@ -152,25 +168,49 @@ filter and a domain-restricted search on the official site when one is known. 1 
 
 All numbers come from files under `results/`; each folder has a README with the protocol and a reproduce command.
 
-**Live detector, 108 labelled cases** (eval date 2026-11-12) — [variance.json](results/2026-11-12-detector/variance.json),
-[results README](results/2026-11-12-detector/README.md)
+**Live detector, 108 labelled cases** (eval date 2026-11-12; 38 stale, 45 current, 25 timeless) —
+[summary.json](results/2026-11-12-detector/summary.json), [results README](results/2026-11-12-detector/README.md).
+The cases were pre-screened: a case was kept only if a Tavily result stated its current truth verbatim, so recall is
+measured on facts Tavily can retrieve. One annotator.
 
-| Metric | Live runs 1–2: mean (range) | Run 2 95% CI (by source URL) |
-|---|---|---|
-| Precision | **0.847** (0.841–0.854) | [0.742, 0.950] |
-| Recall | **0.948** (0.921–0.974) | [0.828, 1.000] |
-| Timeless cases flagged | 0 of 25 in every run | |
+| Run | Precision (95% CI by source URL) | Recall (95% CI) | Current claims flagged as changed |
+|---|---|---|---|
+| **Run 2, after the bug fix (headline)** | **0.854** [0.742, 0.950] (35/41) | **0.921** [0.828, 1.000] (35/38) | 6 of 45 = 13% [5%, 23%] |
+| Run 1, before the fix (shown separately) | 0.841 [0.733, 0.944] | 0.974 [0.912, 1.000] | 7 of 45 = 16% |
+| Timeless cases flagged | 0 of 25 in every run | | |
 
 Run 1 predates a bug fix (a "new" value numerically equal to the claimed one, 2.50% vs 2.5%, was not downgraded).
 Three further runs used cached evidence only, as a **precision stability check**: precision 0.873 (0.861–0.889);
 their recall, 0.842 (0.816–0.868), is a **lower bound**, because the extractor phrases claims slightly differently
-each run, and queries never seen before could not be searched. Live and cached-only runs are not averaged together.
+each run, and queries never seen before could not be searched
+([variance.json](results/2026-11-12-detector/variance.json)). Live and cached-only runs are not averaged together.
 
-| Budget ordering (live runs 1–2) | stale caught @25% of claims | @50% of claims |
+**Measurement bias.** The detector flags some current claims as changed (run 2: 6 of 45 current cases, 13%; 6 of the
+36 it searched, 17%). A stale rate computed from its labels is therefore biased upward when the true rate is low:
+with recall 0.92, traffic that is truly 5% stale would read about 17–20%. The current cases here are deliberately hard
+(each is paired with a stale twin), so the false-flag rate on real traffic may be lower; it is not measured.
+
+**Budget ordering** (live runs 1–2; [fair_baseline.json](results/2026-11-12-detector/fair_baseline.json),
+`uv run python -m eval.fair_baseline`). Every curve ranks all 108 cases. The fair baseline orders the cases the
+extractor marked time-sensitive at random and the rest last, because the product never searches timeless claims or
+dated past events; blind random also spends budget on those.
+
+| Ordering | stale caught @25% of claims | @50% of claims |
 |---|---|---|
-| Haiku outdated-probability (default) | 0.470 (0.462–0.477) | **0.831** (0.821–0.842) |
+| Haiku outdated-probability (default) | 0.470 (runs 0.462–0.477) | **0.831** (0.821–0.842) |
 | Half-life | 0.383 (0.379–0.387) | 0.712 (0.708–0.715) |
-| Random | 0.239 (0.233–0.246) | 0.474 (0.460–0.487) |
+| **Random among time-sensitive (fair baseline)** | 0.348 (0.339–0.356) | **0.694** (0.675–0.712) |
+| Blind random | 0.239 (0.233–0.246) | 0.474 (0.460–0.487) |
+
+| Lift over the fair baseline | @25%: run 1 / run 2 (95% CI, paired bootstrap by URL) | @50%: run 1 / run 2 |
+|---|---|---|
+| Haiku outdated-probability | +0.121 [0.032, 0.224] / +0.123 [0.031, 0.222] | +0.109 [0.022, 0.197] / +0.167 [0.055, 0.232] |
+| Half-life | +0.023 [−0.071, 0.097] / +0.048 [−0.033, 0.130] | +0.003 [−0.067, 0.065] / +0.033 [−0.027, 0.095] |
+
+The model's ranking adds about 14 points at half budget over the fair baseline (mean of the two runs: 0.831 vs
+0.694), not the 36 points blind random suggests. **The half-life ordering shows no measurable lift over the fair
+baseline**: every interval spans zero. Run 2's own interval for the model order at 50% is [0.703, 0.938]. Each run's
+curves top out at that run's detector recall (0.92 in run 2, 0.97 in run 1).
 
 **The model's own estimate ranks better than the half-life model.** On the time-travel ordering dataset
 ([results/2026-11-12-ordering](results/2026-11-12-ordering/README.md)), 300-claim sample:
@@ -182,29 +222,46 @@ each run, and queries never seen before could not be searched. Live and cached-o
 | Class only / age only / random | 0.696 / 0.606 / 0.499 | | | |
 
 The gap holds on claims dated after the model's knowledge cutoff (0.827 vs 0.773,
-[leakage_check.json](results/2026-11-12-ordering/leakage_check.json)), so it is not leakage. Half-life ordering beats
-random, age-only and class-only (all 95% CIs exclude zero), which is why it stays as the fallback and as the basis
-for TTL — but the product ranks by the model.
+[leakage_check.json](results/2026-11-12-ordering/leakage_check.json)), so it is not leakage. On that dataset (no
+timeless claims to skip) half-life ordering beats random, age-only and class-only (all 95% CIs exclude zero), which
+is why it stays as the fallback and as the basis for TTL — but the product ranks by the model.
 
-**Traffic-wide estimate.** Validation ([results/2026-11-13-estimator-validation](results/2026-11-13-estimator-validation/README.md)):
-on 1,763 time-sensitive claims with known labels (true stale rate 0.206), the stratified estimator is unbiased at every
-sample size (|bias| ≤ 0.004); 95% interval coverage is 0.47 / 0.74 / 0.89 / 0.945 / 0.945 / 0.97 at 8 / 18 / 30 / 60 /
-120 / 240 samples. On seeded **demo traffic** (50 answers, budget 120 split 50/50, 60 of 75 time-sensitive claims
-sampled; [results/2026-11-13-gateway-audit](results/2026-11-13-gateway-audit/README.md)): **0.477**, 95% CI [0.369,
-0.590]; 0.428–0.528 with unverifiable claims counted all current / all stale. The interval covers sampling error only: labels come from the detector (live-run precision 0.847, recall 0.948), and the population is the time-sensitive claims the extractor found in the sampled answers. Per-slice estimates have 11–18
-samples each and are shown greyed, not reported as findings.
+**Estimator validation** ([results/2026-11-13-estimator-validation](results/2026-11-13-estimator-validation/README.md)):
+on 1,763 time-sensitive claims with known labels (true stale rate 0.206), 95% interval coverage by sample size is
+0.47 / 0.74 / 0.89 / 0.945 / 0.945 / 0.97 at 8 / 18 / 30 / 60 / 120 / 240 random samples, so read intervals as
+reliable from about 60 samples. The estimator (proportional stratified sampling, stratum-weighted mean) is unbiased
+by construction; the simulation agrees (|bias| ≤ 0.004). That says nothing about measurement bias: real labels come
+from the detector (see above).
 
-**Gateway audit, top-risk slice, on seeded demo traffic** ([results/2026-11-12-gateway-audit](results/2026-11-12-gateway-audit/README.md)).
-*Stale rate among verified claims* = claims with a `changed` verdict ÷ claims verified, where "verified" means the
-verdict was `current` or `changed` (unverifiable claims are excluded). The audit verifies only the riskiest claims,
-ranked across the run, up to a verification budget, so this is **not** a stale rate over all traffic; the *verified
-share* is reported beside it. On 50 seeded demo answers (2 keys × 2 models), this earlier run measured stale rate
-among verified claims 0.27–0.78 per slice, 0.569 overall, with 29.7% of all extracted claims verified (that run did not
-record the time-sensitive count). In the 2026-11-13 rerun: 32 changed of 63 verified = 0.508, and 63 of the 75
-time-sensitive claims (84%) got a verdict; the other 102 of 177 extracted claims are timeless or dated past events.
+**Gateway audit, seeded demo traffic** ([results/2026-11-13-gateway-audit](results/2026-11-13-gateway-audit/README.md)).
+The audit takes the newest 50 answers in the window, extracts their claims, and verifies two sets: the riskiest
+claims (top-risk slice) and a stratified random sample of all time-sensitive claims in those answers. The **estimated
+stale rate across the sampled answers** was **0.477**, 95% CI [0.369, 0.590] (0.428–0.528 with unverifiable claims
+counted all current / all stale). Read it as a property of the seeded question list, not of any real gateway: the 50
+answers come from 40 hand-picked questions in `halflife/gateway/seed.py` (28 about time-sensitive facts, 12 timeless)
+plus 10 more picked from that list by the J2 end-to-end test (8 time-sensitive, 2 timeless; 36 time-sensitive and
+14 timeless questions in all), alternating between two models, one of them `claude-haiku-4-5` with a February 2025
+knowledge cutoff, with no retrieval. Population: the 75 time-sensitive claims in those 50 answers (102 of the 177
+extracted claims are timeless or dated past events). Claims cluster within answers, and the bootstrap resamples
+claims, not answers, so the interval does not cover that clustering, nor the choice of the newest 50 answers. **The
+demo budget did not bind**: 120 claims against 75 time-sensitive claims, so 60 of 75 were sampled at random and 63 of
+75 (84%) got a verdict; the estimate and the top-risk figure (32 changed of 63 verified, 0.508) are close because the
+two sets nearly coincide.
 
-**Cost per check** ([results/2026-11-12-checks10](results/2026-11-12-checks10/README.md)): 10 multi-claim answers,
-$0.0011 and 2.8 Tavily credits per check, median latency 5.9 s (max 9.3 s), `reasoning: none` on Haiku 5.5.
+*Stale rate among verified claims* (top-risk slice) = claims with a `changed` verdict ÷ claims verified (verdict
+`current` or `changed`; unverifiable excluded). It is not a stale rate over all claims; the verified share is shown
+beside it. **Per-model and per-key figures are confounded, not a model comparison**: keys and models received
+different questions (the seed alternates them by question index) and each slice has 11–20 verified claims, so the
+bars show the pipeline working, not which model is fresher. An earlier run on the same answers
+([results/2026-11-12-gateway-audit](results/2026-11-12-gateway-audit/README.md)) measured 0.569 overall with 29.7% of
+extracted claims verified.
+
+**Cost per check** ([results/2026-11-12-checks10](results/2026-11-12-checks10/README.md)): 10 answers (17 claims),
+**$0.0011 model cost and 2.8 Tavily credits per check**, median latency 5.9 s (max 9.3 s), `reasoning: none` on Haiku
+5.5. At Tavily's pay-as-you-go price of $0.008 per credit
+([Tavily docs](https://docs.tavily.com/documentation/api-credits), checked 2026-11-14) the credits cost about $0.022,
+so a check costs about **$0.024**, roughly 95% of it search; monthly plans price credits at $0.0075–$0.005, and the
+free tier gives 1,000 credits a month.
 
 ## Limits
 

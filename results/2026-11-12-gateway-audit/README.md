@@ -22,6 +22,9 @@ reported beside it.
 | claude-haiku-5-5 | demo-support-bot | 13 | 46 | 9 | 0.196 | 7 | 0.778 |
 | **all (seeded demo traffic)** | | 50 | 172 | 51 | 0.297 | 29 | 0.569 |
 
+Per-row figures are confounded, not a model comparison: keys and models received different questions (the seed
+alternates them by question index) and each row has 9–15 verified claims.
+
 Run cost: 110 model calls, $0.0546 (token estimate), 88 Tavily credits (26 cache hits), 95.6 s wall time for 50
 answers with 51 claims verified (verification budget 60). The J2 done-check (`tests/test_gateway.py`, live) confirms the stored
 ledger stale rate equals the per-answer reports for 10 fresh requests.

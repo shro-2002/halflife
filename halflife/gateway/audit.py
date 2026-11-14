@@ -122,7 +122,7 @@ async def audit(bf: BifrostClient, model: ChatModel, searcher: Searcher, *, hour
     # Rank every time-sensitive claim across the run; verify the top `budget`.
     pool = [(ai, ci, ex.claims[ci], risks[ci]) for ai, (_, _, ex, risks) in enumerate(extracted) for ci in range(len(ex.claims))]
     # Budget split: (1 - random_share) to the riskiest claims, random_share to a stratified random sample of ALL
-    # time-sensitive claims (for the traffic-wide estimate). A claim in both sets is verified once.
+    # time-sensitive claims in the sampled answers (for the estimated stale rate). A claim in both sets is verified once.
     n_random = round(budget * random_share)
     order = select_for_verification([p[2] for p in pool], [p[3] for p in pool], budget - n_random)
     ts = [i for i, p in enumerate(pool) if is_time_sensitive(p[2])]
@@ -181,7 +181,7 @@ def _est_fields(e) -> dict:
 
 
 def add_estimates(rows, logs, pool, ts, stratum_of, sample, outcomes, extracted):
-    """Traffic-wide estimate per (model, key) and overall, from the random sample only."""
+    """Estimated stale rate across the sampled answers, per (model, key) and overall, from the random sample only."""
     def slice_key(i):
         lg = logs[pool[i][0]]
         return (lg["model"], lg["virtual_key"])
@@ -243,7 +243,7 @@ def main() -> None:
     ap.add_argument("--sample-cap", type=int, default=50)
     ap.add_argument("--budget", type=int, default=60, help="claims verified per run, riskiest first")
     ap.add_argument("--random-share", type=float, default=0.3,
-                    help="share of the budget for the stratified random sample behind the traffic-wide estimate; "
+                    help="share of the budget for the stratified random sample behind the estimated stale rate across the sampled answers; "
                          "aim for at least ~60 random samples (budget x share): below that the 95%% interval undercovers "
                          "(validation: 0.74 coverage at 18, 0.945 at 60; results/2026-11-13-estimator-validation)")
     ap.add_argument("--virtual-keys", default="", help="comma-separated virtual key names to audit (server-side log filter)")

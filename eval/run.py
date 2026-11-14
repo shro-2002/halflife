@@ -10,6 +10,8 @@ Protocol (fixed before running):
   any of its claims gets a `changed` verdict. `unverifiable` counts as "not flagged".
 - Budget curves are computed from the full-verification results: verifying the top k% of cases in a
   given order catches the stale cases among them that the detector flagged.
+- Fair baseline: random order among cases the extractor marked time-sensitive (the product never searches
+  timeless claims or dated past events), the rest last. Lift = ordering minus fair baseline, paired bootstrap.
 - Confidence intervals: bootstrap resampling source URLs (clusters), not cases, because stale/current
   pairs share a URL.
 """
@@ -148,8 +150,12 @@ def detector(rows: list[dict]) -> dict:
     fn = sum(r["label"] == "stale" and not r["flagged"] for r in ts)
     tn = sum(r["label"] == "current" and not r["flagged"] for r in ts)
     tl = [r for r in rows if r["label"] == "timeless"]
+    searched_current = sum(r["label"] == "current" and r["outcome"] != "not_searched" for r in ts)
     return {"n_time_sensitive": len(ts), "tp": tp, "fp": fp, "fn": fn, "tn": tn,
             "precision": tp / (tp + fp) if tp + fp else None, "recall": tp / (tp + fn) if tp + fn else None,
+            # current claims flagged as changed: what pushes a low true stale rate up
+            "false_flag_rate": fp / (fp + tn) if fp + tn else None,
+            "false_flag_rate_searched": fp / searched_current if searched_current else None,
             "unverifiable_rate": sum(r["outcome"] == "unverifiable" for r in ts) / len(ts) if ts else None,
             "timeless_n": len(tl), "timeless_flagged": sum(r["flagged"] for r in tl),
             "timeless_searched": sum(r["outcome"] != "not_searched" for r in tl)}
@@ -170,6 +176,39 @@ def avg_curve(rows, scores, reps, seed):
     rng = random.Random(seed)
     cs = [budget_curve(rows, scores, rng) for _ in range(reps)]
     return [statistics.fmean(col) for col in zip(*cs)]
+
+
+def time_sensitive_scores(rows: list[dict]) -> list[float]:
+    """Fair baseline: 1 for cases the extractor sent to search, 0 otherwise; ties broken at random."""
+    return [1.0 if r["outcome"] != "not_searched" else 0.0 for r in rows]
+
+
+ORDERINGS = {
+    "model_p": lambda rows: [r["model_p"] for r in rows],
+    "half_life": lambda rows: half_life_scores(rows),
+    "random_time_sensitive": time_sensitive_scores,
+}
+
+
+def order_scores(rows: list[dict], name: str) -> list[float]:
+    return ORDERINGS[name](rows)
+
+
+def lift_over_fair(rows: list[dict], name: str, k: int, reps: int = 20) -> float | None:
+    """caught@k of `name` minus caught@k of random-among-time-sensitive, on the same rows."""
+    if not any(r["label"] == "stale" for r in rows):
+        return None
+    fair = avg_curve(rows, time_sensitive_scores(rows), reps, SEED)[k]
+    return avg_curve(rows, order_scores(rows, name), reps, SEED)[k] - fair
+
+
+def lift_entry(rows: list[dict], curves: dict, name: str, k: int) -> dict:
+    """Point lift from the full curves, 95% CI from a paired bootstrap of source URLs."""
+    def stat(sample: list[dict]) -> float | None:
+        return lift_over_fair(sample, name, k)
+    ci = cluster_boot(rows, stat)
+    return {"point": round(curves[name][k] - curves["random_time_sensitive"][k], 3),
+            "ci95_by_url": ci, "ci_excludes_zero": ci[0] > 0 or ci[1] < 0}
 
 
 def costs_at(rows: list[dict], scores: list[float], frac: float) -> dict:
@@ -233,21 +272,27 @@ def offline() -> dict:
         conf[r["label"]][r["outcome"]] += 1
     model_s, hl_s = [r["model_p"] for r in rows], half_life_scores(rows)
     curves = {"model_p": avg_curve(rows, model_s, 200, SEED), "half_life": avg_curve(rows, hl_s, 200, SEED),
+              "random_time_sensitive": avg_curve(rows, time_sensitive_scores(rows), 200, SEED),
               "random": avg_curve(rows, [0.0] * len(rows), 200, SEED)}
     n_stale = sum(r["label"] == "stale" for r in rows)
     curves["oracle_upper_bound"] = [min(1.0, g * len(rows) / n_stale) * det["recall"] for g in GRID]
 
     def catch(order_key, k):
         def f(sample):
-            sc = [r["model_p"] for r in sample] if order_key == "model_p" else half_life_scores(sample)
-            return avg_curve(sample, sc, 5, SEED)[k] if any(r["label"] == "stale" for r in sample) else None
+            if not any(r["label"] == "stale" for r in sample):
+                return None
+            return avg_curve(sample, order_scores(sample, order_key), 5, SEED)[k]
         return f
 
     budget = {}
     for name, sc in (("model_p", model_s), ("half_life", hl_s)):
         budget[name] = {f"caught_at_{k}": {"point": round(curves[name][k], 3), "ci95_by_url": cluster_boot(rows, catch(name, k))}
                         for k in (25, 50, 100)}
+    budget["random_time_sensitive"] = {f"caught_at_{k}": {"point": round(curves["random_time_sensitive"][k], 3)}
+                                       for k in (25, 50, 100)}
     budget["random"] = {f"caught_at_{k}": {"point": round(curves["random"][k], 3)} for k in (25, 50, 100)}
+    lift = {name: {f"caught_at_{k}": lift_entry(rows, curves, name, k) for k in (25, 50)}
+            for name in ("model_p", "half_life")}
     cost = {f"{k}%": costs_at(rows, model_s, k / 100) for k in (25, 50, 100)}
 
     per_class = {}
@@ -263,9 +308,15 @@ def offline() -> dict:
         "eval_date": EVAL_DATE.isoformat(), "n_cases": len(rows), "n_stale": n_stale,
         "detector": {**det, "precision_ci95_by_url": cluster_boot(rows, lambda s: detector(s)["precision"]),
                      "recall_ci95_by_url": cluster_boot(rows, lambda s: detector(s)["recall"]),
+                     "false_flag_rate_ci95_by_url": cluster_boot(rows, lambda s: detector(s)["false_flag_rate"]),
                      "n_source_urls": len({r["source_url"] for r in rows})},
         "confusion": {k: dict(v) for k, v in conf.items()},
-        "budget": budget, "cost_latency_by_budget_model_order": cost, "per_class": per_class,
+        "budget": budget,
+        "lift_over_random_time_sensitive": {
+            "note": "caught@k minus random order among cases the extractor marked time-sensitive (the product never "
+                    "searches the others); 95% CI from a paired bootstrap of source URLs",
+            **lift},
+        "cost_latency_by_budget_model_order": cost, "per_class": per_class,
         "half_lives_used": "J0.5 fitted (results/2026-11-12-ordering) where available, else prior guesses",
     }
     spend_path = OUT / "live_spend.json"
@@ -283,7 +334,8 @@ def plot(curves: dict, path: Path) -> None:
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
     fig, ax = plt.subplots(figsize=(6.4, 4.8))
-    style = {"model_p": ("#1d4ed8", 2.4, "-"), "half_life": ("#c2410c", 2.0, "-"), "random": ("#6b7280", 1.4, "--"),
+    style = {"model_p": ("#1d4ed8", 2.4, "-"), "half_life": ("#c2410c", 2.0, "-"),
+             "random_time_sensitive": ("#374151", 1.6, "-."), "random": ("#6b7280", 1.4, "--"),
              "oracle_upper_bound": ("#9ca3af", 1.0, ":")}
     for name, c in curves.items():
         col, lw, ls = style[name]

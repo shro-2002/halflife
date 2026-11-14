@@ -1,4 +1,4 @@
-"""Validate the traffic-wide stale-rate estimator where true labels are known (J0.5 ordering dataset).
+"""Validate the stratified stale-rate estimator where true labels are known (J0.5 ordering dataset).
 
     uv run python -m eval.estimator_validation
 
@@ -52,14 +52,19 @@ def main() -> None:
            "bootstrap_draws": BOOT, "rank_score": "half-life P(stale), fitted per class (results/2026-11-12-ordering)",
            "by_sample_size": rows}
     (OUT / "summary.json").write_text(json.dumps(out, indent=2))
-    lines = ["# Estimator validation — traffic-wide stale rate", "",
+    lines = ["# Estimator validation — stratified stale-rate estimate", "",
              "Reproduce: `uv run python -m eval.estimator_validation` (no spend). Population: "
              f"{len(pop)} time-sensitive claims from the time-travel dataset (true stale rate {truth:.4f}). Each row: "
              f"{REPS} stratified samples (4 rank-score strata, proportional allocation), bootstrap 95% interval ({BOOT} draws).", "",
-             "| sample size | bias | RMSE | 95% CI coverage | mean CI width |", "|---|---|---|---|---|"]
-    lines += [f"| {n} | {v['bias']:+.4f} | {v['rmse']:.4f} | {v['ci95_coverage']:.3f} | {v['mean_ci_width']:.3f} |" for n, v in rows.items()]
-    lines += ["", "Bias is near zero at every size. Coverage below 0.95 at small sizes is the usual undercoverage of a "
-              "percentile bootstrap on very few draws per stratum; read small-sample intervals as optimistic."]
+             "**What this tests: interval coverage by sample size.** Read the audit's 95% interval as reliable from "
+             "about 60 random samples; below that it is too narrow.", "",
+             "| sample size | 95% CI coverage | mean CI width | RMSE | bias |", "|---|---|---|---|---|"]
+    lines += [f"| {n} | {v['ci95_coverage']:.3f} | {v['mean_ci_width']:.3f} | {v['rmse']:.4f} | {v['bias']:+.4f} |" for n, v in rows.items()]
+    lines += ["", "Coverage below 0.95 at small sizes is the usual undercoverage of a percentile bootstrap on very few "
+              "draws per stratum; read small-sample intervals as optimistic.", "",
+              "Bias: a proportionally allocated stratified mean is unbiased by construction, so the near-zero bias column "
+              "checks the implementation, not a finding. It says nothing about measurement bias: in the audit, labels "
+              "come from the detector, which flags some current claims as changed (results/2026-11-12-detector)."]
     (OUT / "README.md").write_text("\n".join(lines) + "\n")
 
 

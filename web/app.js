@@ -48,7 +48,8 @@ const METHODS = {
   model_ts: "Model time-sensitivity",
   class_only: "Class only",
   age_only: "Age only",
-  random: "Random",
+  random_time_sensitive: "Random among time-sensitive (fair baseline)",
+  random: "Blind random",
   oracle_upper_bound: "Oracle (upper bound)",
 };
 const METHOD_STYLE = {
@@ -58,6 +59,7 @@ const METHOD_STYLE = {
   model_ts: { color: "--warn", width: 2 },
   class_only: { color: "--ok", width: 2 },
   age_only: { color: "--neutral", width: 2 },
+  random_time_sensitive: { color: "--ink", width: 2, dash: [8, 3] },
   random: { color: "--ink-2", width: 1.5, dash: [4, 4] },
   oracle_upper_bound: { color: "--ok", width: 1.5, dash: [2, 3] },
 };
@@ -99,7 +101,7 @@ function stateBox(kind, title, ...lines) {
     h("h3", null, title), ...lines.map((line) => (line instanceof Node ? line : h("p", null, line))));
 }
 
-// Traffic-wide estimate from the stratified random sample: "12.3% [5.0–20.1%]", unverifiable bounds on hover.
+// Estimated stale rate across the sampled answers (stratified random sample): "12.3% [5.0–20.1%]", unverifiable bounds on hover.
 function estText(e) {
   if (!e || e.est_stale_rate === null || e.est_stale_rate === undefined) return "not estimated";
   const ci = e.est_ci95 ? ` [${fmt.pct(e.est_ci95[0], 0)}–${fmt.pct(e.est_ci95[1], 0)}]` : "";
@@ -634,6 +636,14 @@ function drawGatewayChart(charted) {
   });
 }
 
+// A budget at or above the number of time-sensitive claims verifies nearly all of them: say so.
+function bindNote(summary, timeSensitive) {
+  const budget = summary.verification_budget;
+  if (!budget || !timeSensitive || budget < timeSensitive) return null;
+  return h("p", { class: "demo-banner", role: "note" }, h("span", { class: "badge" }, "BUDGET DID NOT BIND"),
+    ` Budget ${budget} claims against ${timeSensitive} time-sensitive claims: nearly every claim was verified, so this run shows the pipeline, not a budgeted sample, and the estimate and the top-risk figure nearly coincide.`);
+}
+
 function renderGateway(summary) {
   const out = document.getElementById("gateway-out");
   const rows = Array.isArray(summary.rows) ? summary.rows : [];
@@ -646,16 +656,17 @@ function renderGateway(summary) {
 
   out.replaceChildren(...[
     h("h2", null, "Stale rate among verified claims, by model and virtual key"),
-    h("p", { class: "section-note" }, "Half-Life samples answers from Bifrost's own logs and extracts every factual claim; only time-sensitive claims (not timeless facts or dated past events) can go stale, so they are the population for both verification and the estimate. Stale rate among verified claims = claims whose current value changed ÷ claims verified (verdict current or changed; unverifiable excluded). Only the riskiest claims, up to the verification budget, are verified, so this is not a stale rate over all traffic; the verified share is shown beside it. The estimated stale rate comes from a stratified random sample of all time-sensitive claims. The 95% interval covers sampling error only: labels come from the detector (live-run precision 0.847, recall 0.948), and the population is the time-sensitive claims the extractor found in the sampled answers. Per-slice estimates are greyed: too few samples to read."),
+    h("p", { class: "section-note" }, "Half-Life reads the newest answers in Bifrost's own logs (not a random draw of all traffic) and extracts every factual claim; only time-sensitive claims (not timeless facts or dated past events) can go stale, so they are the population for both verification and the estimate. Stale rate among verified claims = claims whose current value changed ÷ claims verified (verdict current or changed; unverifiable excluded), on the riskiest claims up to the budget, so it is not a stale rate over all claims. The estimated stale rate across the sampled answers comes from a stratified random sample of their time-sensitive claims. Its 95% interval covers claim-level sampling error only: claims cluster within answers, and labels come from the detector (post-fix run: precision 0.854, recall 0.921; it flags 13% of current claims as changed, so low true stale rates read high)."),
+    bindNote(summary, sum("time_sensitive_claims")),
     summary.recorded ? h("div", { class: "demo-banner", role: "note" }, h("span", { class: "badge" }, "RECORDED"),
       ` Replay mode: the saved audit from ${fmt.when(summary.generated_at)}, not a live audit.`) : null,
     allDemo ? h("div", { class: "demo-banner", role: "note" }, demoBadge(),
-      " Every row below comes from seeded demo virtual keys (demo-*), not real user traffic.") : null,
+      " Every row below comes from seeded demo virtual keys (demo-*), not real user traffic. The seeded questions were hand-picked, mostly time-sensitive, and half went to a model with a February 2025 cutoff, so these rates describe that question list, not any real gateway.") : null,
     h("div", { class: "meta-row" },
       h("span", null, `window ${fmt.when(summary.window_start)} → ${fmt.when(summary.window_end)}`),
       h("span", null, `generated ${fmt.when(summary.generated_at)}`)),
     h("dl", { class: "stats", style: { marginTop: "14px" } },
-      stat("Estimated stale rate, all time-sensitive claims", estText(summary.estimate_overall)),
+      stat("Estimated stale rate across the sampled answers", estText(summary.estimate_overall), "time-sensitive claims in the answers read"),
       stat("Stale among verified (top-risk slice)", verified ? fmt.pct(changed / verified, 1) : "—"),
       stat("Time-sensitive claims", fmt.num(sum("time_sensitive_claims")), `of ${fmt.num(sum("claims_found"))} extracted; the population for verification and the estimate`),
       stat("Share of time-sensitive claims verified", sum("time_sensitive_claims") ? fmt.pct(verified / sum("time_sensitive_claims"), 1) : "—"),
@@ -667,11 +678,12 @@ function renderGateway(summary) {
       stat("Sample cap", fmt.num(summary.sample_cap), "answers per audit run"),
       stat("Verification budget", fmt.num(summary.verification_budget), "claims searched per run")),
     rows.length ? chartSlot("gateway-chart", "Bar chart of stale rate by model and virtual key") : stateBox("", "No traffic in this window", "The audit found no gateway logs to sample."),
+    rows.length > 1 ? h("p", { class: "hint" }, h("strong", null, "Confounded, not a model comparison: "), "each slice can receive different questions and has few verified claims, so differences between bars do not show which model or key serves more stale content.") : null,
     charted.length < rows.length ? h("p", { class: "hint" }, `${rows.length - charted.length} slice(s) not charted: nothing verified there.`) : null,
     (summary.errors || []).length ? h("details", { class: "audit-errors" },
       h("summary", null, `Audit errors (${summary.errors.length}) — failures recorded, not hidden`),
       errorList("", summary.errors)) : null,
-    rows.length ? table("Stale rate per model and virtual key",
+    rows.length ? table("Stale rate per model and virtual key (slices confounded: different questions, few claims each)",
       ["Model", "Virtual key", "Answers seen", "Checked", "Claims extracted", "Time-sensitive", "Verified", "Changed", "Estimated stale (95% CI)", "Verified share", "Stale among verified", "Mean score"]
         .map((label, i) => ({ label, num: i >= 2 })),
       rows.map(staleRateRow)) : null,
@@ -726,12 +738,25 @@ function confusionTable(confusion) {
 }
 
 function budgetTable(budget) {
-  const methods = ["model_p", "half_life", "random"].filter((m) => budget[m]);
+  const methods = ["model_p", "half_life", "random_time_sensitive", "random"].filter((m) => budget[m]);
   const ks = ["caught_at_25", "caught_at_50", "caught_at_100"];
   return table("Stale claims caught when verifying the top 25 / 50 / 100% of claims (95% CI by source URL)",
     [{ label: "Ordering" }, { label: "@25%", num: true }, { label: "@50%", num: true }, { label: "@100%", num: true }],
     methods.map((m) => h("tr", { class: m === "model_p" ? "best" : null }, h("th", { scope: "row" }, METHODS[m]),
       ks.map((k) => (budget[m][k] ? ciCell(budget[m][k].point, budget[m][k].ci95_by_url) : h("td", { class: "num" }, "—"))))));
+}
+
+// Lift of each ordering over random-among-time-sensitive: the product never searches the other cases.
+function liftTable(lift) {
+  const methods = ["model_p", "half_life"].filter((m) => lift[m]);
+  const pts = (x) => (isNil(x) ? "—" : `${x >= 0 ? "+" : "−"}${Math.abs(x * 100).toFixed(1)} pts`);
+  const cell = (v) => h("td", { class: "num" }, pts(v.point),
+    h("span", { class: "ci" }, ` [${pts(v.ci95_by_url[0])}, ${pts(v.ci95_by_url[1])}]`),
+    v.ci_excludes_zero ? null : h("span", { class: "muted" }, " spans 0"));
+  return table("Lift over the fair baseline (random among time-sensitive claims), 95% CI by source URL",
+    [{ label: "Ordering" }, { label: "@25%", num: true }, { label: "@50%", num: true }],
+    methods.map((m) => h("tr", { class: m === "model_p" ? "best" : null }, h("th", { scope: "row" }, METHODS[m]),
+      ["caught_at_25", "caught_at_50"].map((k) => cell(lift[m][k])))));
 }
 
 function costTable(costs) {
@@ -764,17 +789,21 @@ function detectorSection(summary, curves) {
   const det = summary.detector || {};
   return h("section", { "aria-labelledby": "det-h" },
     h("h2", { id: "det-h" }, `Live detector (${summary.n_cases} labelled cases)`),
-    h("p", { class: "section-note" }, `${summary.n_cases} hand-labelled answers (${summary.n_stale} stale) run end to end through Bifrost and Tavily on ${summary.eval_date}. CIs are bootstrapped by source URL because many cases share a URL.`),
+    h("p", { class: "section-note" }, `${summary.n_cases} hand-labelled answers (${summary.n_stale} stale, one annotator) run end to end through Bifrost and Tavily on ${summary.eval_date}. Cases were pre-screened: each was kept only if a Tavily result states its current truth verbatim, so recall is measured on facts Tavily can retrieve. CIs are bootstrapped by source URL because many cases share a URL.`),
     h("dl", { class: "stats" },
       stat("Precision", fmt.pct(det.precision, 1), `95% CI ${fmt.ci(det.precision_ci95_by_url)}`),
       stat("Recall", fmt.pct(det.recall, 1), `95% CI ${fmt.ci(det.recall_ci95_by_url)}`),
+      stat("Current claims flagged changed", fmt.pct(det.false_flag_rate, 1), `95% CI ${fmt.ci(det.false_flag_rate_ci95_by_url)}; low true stale rates read high`),
       stat("Unverifiable", fmt.pct(det.unverifiable_rate, 1)),
       stat("Timeless searched", `${fmt.num(det.timeless_searched)} / ${fmt.num(det.timeless_n)}`)),
     summary.confusion ? confusionTable(summary.confusion) : null,
     h("h3", { style: { marginTop: "18px" } }, "Budget curve"),
-    curves ? chartSlot("detector-chart", "Line chart of stale claims caught against claims verified, for model, half-life, random and oracle orderings") : stateBox("error", "Curve unavailable", `${RESULTS.detectorCurves} did not load.`),
-    h("div", { class: "caption-box" }, h("p", null, "Haiku's own outdated-probability ranks better than the half-life model; it is the product default."), h("p", null, `Labelled set: ${summary.n_cases} cases, one annotator; eval date ${summary.eval_date}. CIs resample source URLs.`)),
+    curves ? chartSlot("detector-chart", "Line chart of stale claims caught against claims verified, for model, half-life, random among time-sensitive, blind random and oracle orderings") : stateBox("error", "Curve unavailable", `${RESULTS.detectorCurves} did not load.`),
+    h("div", { class: "caption-box" },
+      h("p", null, "Compare against random order among time-sensitive claims, not blind random: the product never searches timeless claims or dated past events. Haiku's own outdated-probability beats that fair baseline; the half-life ordering shows no measurable lift over it (its intervals span zero). Every curve tops out at the detector's recall."),
+      h("p", null, `Labelled set: ${summary.n_cases} cases, one annotator; eval date ${summary.eval_date}. CIs resample source URLs.`)),
     summary.budget ? budgetTable(summary.budget) : null,
+    summary.lift_over_random_time_sensitive ? liftTable(summary.lift_over_random_time_sensitive) : null,
     summary.cost_latency_by_budget_model_order ? costTable(summary.cost_latency_by_budget_model_order) : null,
     summary.per_class ? perClassTable(summary.per_class) : null,
     h("p", { class: "hint" }, "Details: ", safeLink(`${DETECTOR_DIR}/errors.md`, "errors.md"), " · ", safeLink(`${DETECTOR_DIR}/README.md`, "README.md")));
@@ -785,7 +814,7 @@ function drawDetectorChart(curves) {
   const grid = (curves.grid || []).map((x) => Math.round(x * 100));
   drawChart("detector-chart", {
     type: "line",
-    data: { labels: grid, datasets: curveDatasets(curves, ["model_p", "half_life", "random", "oracle_upper_bound"]) },
+    data: { labels: grid, datasets: curveDatasets(curves, ["model_p", "half_life", "random_time_sensitive", "random", "oracle_upper_bound"]) },
     options: curveChartOptions("Claims verified, riskiest first (%)"),
   });
 }
@@ -899,22 +928,25 @@ initTabs();
   } catch (_) { /* mode banner is optional */ }
 })();
 
-// Detector variance (five runs) next to the run-2 detail in the Evidence view.
+// Detector runs and fair-baseline means next to the run-2 detail in the Evidence view.
 (async () => {
   try {
-    const r = await fetch("/results/2026-11-12-detector/variance.json");
-    if (!r.ok) return;
-    const data = await r.json();
-    const v = data.headline_live_runs, c = data.stability_check_cached_only;
+    const [vr, fr] = await Promise.all([fetch(`${DETECTOR_DIR}/variance.json`), fetch(`${DETECTOR_DIR}/fair_baseline.json`)]);
+    if (!vr.ok || !fr.ok) return;
+    const data = await vr.json();
+    const fair = (await fr.json()).mean_of_live_runs_1_2;
+    const r1 = data.runs.run1, c = data.stability_check_cached_only;
     const place = () => {
       const head = document.getElementById("det-h");
       if (!head || document.getElementById("det-variance")) return Boolean(head);
       const f = (x) => `${x.mean.toFixed(3)} (range ${x.min.toFixed(3)}–${x.max.toFixed(3)})`;
+      const m = fair.caught;
       const p = h("p", { class: "section-note", id: "det-variance" },
-        `Headline, live-search runs 1–2 (run 1 predates the numeric-equality bug fix): precision ${f(v.precision)}, recall ${f(v.recall)}; ` +
-        `stale caught @50% of claims verified: model ${v.caught_at_50.model_p.mean.toFixed(3)}, half-life ${v.caught_at_50.half_life.mean.toFixed(3)}, random ${v.caught_at_50.random.mean.toFixed(3)}. ` +
-        `Cached-evidence-only runs 3–5 (stability check, not averaged in): precision ${f(c.precision)}; recall ${f(c.recall)} is a lower bound, since unseen queries could not be searched. ` +
-        "Tables below: run 2.");
+        "Tables below: run 2, after the numeric-equality bug fix (headline). " +
+        `Run 1, before the fix, shown separately: precision ${r1.precision.toFixed(3)}, recall ${r1.recall.toFixed(3)}. ` +
+        `Stale caught @50% of claims verified, mean of live runs 1–2: model ${m.model_p["50"].toFixed(3)}, random among time-sensitive (fair baseline) ${m.random_time_sensitive["50"].toFixed(3)}, ` +
+        `blind random ${m.random["50"].toFixed(3)}, half-life ${m.half_life["50"].toFixed(3)} (no measurable lift over the fair baseline). ` +
+        `Cached-evidence-only runs 3–5 (stability check, not averaged in): precision ${f(c.precision)}; recall ${f(c.recall)} is a lower bound, since unseen queries could not be searched.`);
       head.after(p);
       return true;
     };
