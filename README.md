@@ -149,7 +149,7 @@ on disk per day so repeat checks cost no credits.
 | **B1** Real operator problem | stale rate per model and virtual key: `halflife/gateway/audit.py`; TTL proxy: `halflife/gateway/proxy.py` |
 | **B2** Public extension points | logging API (`GET /api/logs`, `/api/logs/{id}`), governance (virtual keys, budgets, relay and MCP grants), Relays, cache headers, MCP gateway — no Go plugin, no fork |
 | **B3** Reproducible on standard Bifrost | `scripts/bifrost.sh` (stock `npx @maximhq/bifrost`), `make setup`, `scripts/spike.sh`, `Dockerfile` |
-| **B4** Contribution quality | 160 offline tests + live tests (`make test`), CI (`.github/workflows/ci.yml`), `docs/UPSTREAM.md`, `CONTRIBUTING.md`, Apache-2.0 |
+| **B4** Contribution quality | 160 offline tests + live tests (`make test`), CI (`.github/workflows/ci.yml`), `docs/UPSTREAM.md` (filed as [maximhq/bifrost#10039](https://github.com/maximhq/bifrost/issues/10039)), `CONTRIBUTING.md`, Apache-2.0 |
 
 ## What Bifrost contributes, what Tavily contributes
 
@@ -297,7 +297,9 @@ knows within-class differences — a fast-moving package versus a slow one, an u
   it needs no plugin or custom build (stock binary, public APIs only); it audits logged traffic offline and reports
   stale rate per model and virtual key; it spends a verification budget on the riskiest claims with a measured
   risk-coverage curve; and it ties cache TTL to fitted decay. The two are complementary: an inline checker could use
-  Half-Life's ranking to decide which claims to check. See [docs/UPSTREAM.md](docs/UPSTREAM.md).
+  Half-Life's ranking to decide which claims to check. Filed upstream as
+  **[maximhq/bifrost#10039](https://github.com/maximhq/bifrost/issues/10039)** (proposal text:
+  [docs/UPSTREAM.md](docs/UPSTREAM.md)).
 
 ## AI usage disclosure
 

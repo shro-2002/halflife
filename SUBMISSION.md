@@ -4,6 +4,8 @@
 **Tracks:** Problem Statement 06 (Tavily: Stale-Answer Detector) and Problem Statement 04 (Bifrost: a feature the
 open-source gateway is missing), as one integrated product.
 **Repository:** https://github.com/shro-2002/halflife
+**Upstream issue:** [maximhq/bifrost#10039](https://github.com/maximhq/bifrost/issues/10039), a feature request for an
+exclusion filter on log queries and a reasoning-docs fix (proposal text: `docs/UPSTREAM.md`).
 
 ## Project description
 
