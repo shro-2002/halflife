@@ -5,10 +5,7 @@
 A [Bifrost](https://github.com/maximhq/bifrost) gateway reports what every request cost, but not whether the answer
 it served is still true.
 
-![Gateway view: stale rate among verified claims by model and virtual key, on seeded demo traffic](docs/img/gateway.png)
-
-*Gateway view on seeded demo traffic (2026-11-12 run). The bars are confounded: each model and key received
-different questions and has 9–15 verified claims, so they show the pipeline, not a model comparison.*
+![Gateway view in replay mode: the estimated stale rate across the sampled answers with its 95% interval, audit counts, and stale share among verified claims per model and virtual key, on seeded demo traffic](docs/img/gateway.png)
 
 What it does:
 
