@@ -2,6 +2,8 @@
 
 **Facts decay. Half-Life tells an AI gateway which answers to re-check, and when.**
 
+**Demo video:** https://youtu.be/0BJx83UlPSU
+
 A [Bifrost](https://github.com/maximhq/bifrost) gateway reports what every request cost, but not whether the answer
 it served is still true.
 
@@ -308,5 +310,8 @@ knows within-class differences — a fast-moving package versus a slow one, an u
 - **Inside the product:** Claude Haiku 5.5 (via Bifrost) extracts claims, rates how likely each is outdated, and judges
   claims against Tavily evidence; Claude Haiku 4.5 is the automatic fallback. Verdicts are constrained in code to
   verbatim quotes from retrieved evidence.
+- **Demo video narration:** generated with ElevenLabs (voice Matilda, `eleven_multilingual_v2`) from the author's
+  approved script, then edited into a real screen recording of the running app in replay mode (no live checks, no
+  Tavily credits spent).
 
 Licence: Apache-2.0 (same as Bifrost). Contributing: [CONTRIBUTING.md](CONTRIBUTING.md).

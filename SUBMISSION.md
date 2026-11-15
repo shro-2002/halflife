@@ -4,6 +4,7 @@
 **Tracks:** Problem Statement 06 (Tavily: Stale-Answer Detector) and Problem Statement 04 (Bifrost: a feature the
 open-source gateway is missing), as one integrated product.
 **Repository:** https://github.com/shro-2002/halflife
+**Demo video:** https://youtu.be/0BJx83UlPSU
 **Upstream issue:** [maximhq/bifrost#10039](https://github.com/maximhq/bifrost/issues/10039), a feature request for an
 exclusion filter on log queries and a reasoning-docs fix (proposal text: `docs/UPSTREAM.md`).
 
@@ -57,6 +58,9 @@ baseline is about 14 points, and the half-life ordering shows no measurable lift
 - **Claude subagents** (spawned from Claude Code) for parallel workers (extractor, verifier, ledger, labelled cases, UI)
   and independent verifiers (correctness, API currency against live docs, source re-checks, fresh-eyes quickstart).
 - Automated security review and Semgrep findings raised during the build were fixed and are recorded in the git history.
+- **ElevenLabs** for the demo video narration (voice Matilda, `eleven_multilingual_v2`), generated from the author's
+  approved script and edited into a real screen recording of the running app in replay mode (no live checks, no
+  Tavily credits spent).
 - All judgment calls (scope, positioning, label approval, release) were made by the human author.
 
 ## Key results (all from `results/`)
